@@ -1,0 +1,305 @@
+/* LearnVastora-style CSS for Bookings Pages */
+
+.cambly-bg {
+  background: var(--background);
+  min-height: 100vh;
+}
+
+.cambly-navbar {
+  background: var(--white);
+  box-shadow: var(--shadow);
+}
+
+.cambly-brand {
+  color: var(--primary) !important;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.cambly-nav-link {
+  color: var(--primary) !important;
+  font-weight: 500;
+}
+
+.cambly-nav-link:hover {
+  color: var(--accent) !important;
+}
+
+.cambly-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+/* Ensure calendar table stretches full width */
+table {
+  width: 100%;
+}
+
+.cambly-title {
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+.cambly-stats-bar {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow);
+}
+
+.cambly-stat {
+  color: var(--white);
+}
+
+.cambly-stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.cambly-stat-label {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.cambly-tabs {
+  border-bottom: 2px solid #e9ecef;
+  margin-bottom: 2rem;
+}
+
+.cambly-tab {
+  border: none !important;
+  background: none !important;
+  color: var(--primary) !important;
+  font-weight: 500;
+  padding: 1rem 1.5rem !important;
+  margin-right: 0.5rem;
+  border-radius: 10px 10px 0 0 !important;
+  transition: all 0.3s ease;
+}
+
+.cambly-tab:hover {
+  color: var(--accent) !important;
+  background: rgba(124, 58, 237, 0.08) !important;
+}
+
+.cambly-tab.active {
+  color: var(--accent) !important;
+  background: var(--white) !important;
+  border-bottom: 3px solid var(--accent) !important;
+}
+
+.cambly-card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: var(--white);
+}
+
+.cambly-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(124,58,237,0.15);
+}
+
+.cambly-btn {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  border: none;
+  color: var(--white);
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow);
+}
+
+.cambly-btn:hover {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+  color: var(--white);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(124,58,237,0.18);
+}
+
+.cambly-btn-outline {
+  background: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.cambly-btn-outline:hover {
+  background: var(--primary);
+  color: var(--white);
+  transform: translateY(-1px);
+}
+
+.cambly-btn-outline-danger {
+  background: transparent;
+  border: 2px solid #dc3545;
+  color: #dc3545;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.cambly-btn-outline-danger:hover {
+  background: #dc3545;
+  color: var(--white);
+  transform: translateY(-1px);
+}
+
+.cambly-btn-orange {
+  background: #ff9800 !important;
+  color: #fff !important;
+  font-weight: 700;
+  border-radius: 12px;
+  border: none;
+  padding: 0.5em 1.5em;
+  box-shadow: 0 2px 8px rgba(124,58,237,0.08);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.cambly-btn-orange:hover, .cambly-btn-orange:focus {
+  background: #e07c00 !important;
+  color: #fff !important;
+  box-shadow: 0 4px 16px rgba(124,58,237,0.13);
+}
+
+.cambly-avatar {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-size: 1.2rem;
+}
+
+.cambly-controls {
+  margin-bottom: 2rem;
+}
+
+.cambly-bookings-list {
+  margin-bottom: 2rem;
+}
+
+.cambly-accent-bar {
+  width: 8px;
+  min-width: 8px;
+  border-radius: 10px 0 0 10px;
+  margin-right: 1.5rem;
+  background: #eee;
+  display: block;
+}
+.cambly-accent-upcoming .cambly-accent-bar {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+}
+.cambly-accent-completed .cambly-accent-bar {
+  background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
+}
+.cambly-accent-cancelled .cambly-accent-bar {
+  background: linear-gradient(135deg, #bdbdbd 0%, #757575 100%);
+}
+.cambly-accent-pending .cambly-accent-bar {
+  background: linear-gradient(135deg, #ede9fe 0%, var(--accent) 100%);
+}
+@media (max-width: 768px) {
+  .cambly-accent-bar {
+    margin-right: 0.75rem;
+    width: 6px;
+    min-width: 6px;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .cambly-stats-bar {
+    padding: 1.5rem;
+  }
+  
+  .cambly-stat-number {
+    font-size: 2rem;
+  }
+  
+  .cambly-title {
+    font-size: 1.5rem;
+  }
+} 
+
+/* LearnVastora Booking Calendar Enhancements */
+
+.badge.bg-warning {
+  transition: transform 0.15s cubic-bezier(.4,2,.6,1), box-shadow 0.15s;
+  box-shadow: 0 2px 8px rgba(124,58,237,0.08);
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+}
+.badge.bg-warning:hover, .badge.bg-warning:focus {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 0 6px 24px rgba(124,58,237,0.18);
+  z-index: 10;
+}
+
+.cambly-mini-profile {
+  position: absolute;
+  left: 110%;
+  top: 0;
+  min-width: 260px;
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  padding: 1.2em 1.2em 1em 1.2em;
+  z-index: 9999;
+  animation: fadeInProfile 0.18s cubic-bezier(.4,2,.6,1);
+  border: 2px solid var(--primary);
+  color: #222;
+  font-family: var(--font);
+  opacity: 1;
+}
+.cambly-mini-profile .avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 0.5em;
+  border: 2px solid var(--primary);
+}
+.cambly-mini-profile .name {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--primary);
+}
+.cambly-mini-profile .bio {
+  font-size: 0.98rem;
+  color: #444;
+  margin-bottom: 0.7em;
+}
+.cambly-mini-profile .book-again-btn {
+  background: var(--primary);
+  color: var(--white);
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  padding: 0.5em 1.2em;
+  box-shadow: 0 2px 8px rgba(124,58,237,0.08);
+  transition: background 0.2s;
+  margin-top: 0.5em;
+}
+.cambly-mini-profile .book-again-btn:hover {
+  background: #e07c00;
+}
+
+@keyframes fadeInProfile {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+} 

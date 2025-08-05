@@ -1,0 +1,258 @@
+/* Messages Page Styles */
+.learnvastora-bg {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  min-height: 100vh;
+}
+
+.conversations-list {
+  background: white;
+  border-radius: 0;
+}
+
+.conversation-item {
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid #f1f3f4;
+}
+
+.conversation-item:hover {
+  background-color: #f8f9fa;
+}
+
+.conversation-item.active {
+  background-color: #e3f2fd;
+  border-left: 4px solid var(--primary);
+}
+
+.conversation-avatar {
+  flex-shrink: 0;
+}
+
+.conversation-avatar img {
+  border: 2px solid #e9ecef;
+}
+
+.conversation-avatar .rounded-circle {
+  border: 2px solid #e9ecef;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.message-bubble {
+  margin-bottom: 1rem;
+}
+
+.message-bubble .bg-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%) !important;
+}
+
+.message-bubble .bg-light {
+  background: #f8f9fa !important;
+  border: 1px solid #e9ecef;
+}
+
+.message-content {
+  word-wrap: break-word;
+  line-height: 1.4;
+}
+
+/* Custom scrollbar for conversations */
+.conversations-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.conversations-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.conversations-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.conversations-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Message input styling */
+.form-control {
+  border-radius: 25px;
+  border: 2px solid #e9ecef;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.25);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.btn-primary:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+}
+
+.btn-primary:disabled {
+  background: #6c757d;
+  transform: none;
+}
+
+/* Badge styling */
+.badge {
+  font-size: 0.75rem;
+  padding: 0.35em 0.65em;
+}
+
+.badge.bg-danger {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+}
+
+.badge.bg-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%) !important;
+}
+
+/* Button styling */
+.btn-outline-primary {
+  border-color: var(--primary);
+  color: var(--primary);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-primary:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.btn-outline-secondary {
+  border-color: #6c757d;
+  color: #6c757d;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-secondary:hover {
+  background: #6c757d;
+  border-color: #6c757d;
+  color: white;
+}
+
+/* Text utilities */
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.min-w-0 {
+  min-width: 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .conversation-item {
+    padding: 1rem !important;
+  }
+  
+  .conversation-avatar {
+    margin-right: 0.75rem !important;
+  }
+  
+  .conversation-avatar img,
+  .conversation-avatar .rounded-circle {
+    width: 40px !important;
+    height: 40px !important;
+  }
+  
+  .message-bubble .d-inline-block {
+    max-width: 85% !important;
+  }
+  
+  .btn-primary {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Animation for new messages */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-bubble {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Loading states */
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Focus states for accessibility */
+.conversation-item:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+}
+
+.form-control:focus {
+  outline: none;
+}
+
+/* Dark mode support (if needed) */
+@media (prefers-color-scheme: dark) {
+  .learnvastora-bg {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  }
+  
+  .conversations-list {
+    background: #2d2d2d;
+  }
+  
+  .conversation-item {
+    border-bottom-color: #404040;
+  }
+  
+  .conversation-item:hover {
+    background-color: #404040;
+  }
+  
+  .conversation-item.active {
+    background-color: #1e3a5f;
+  }
+  
+  .message-bubble .bg-light {
+    background: #404040 !important;
+    border-color: #555;
+  }
+  
+  .form-control {
+    background: #2d2d2d;
+    border-color: #555;
+    color: #fff;
+  }
+} 

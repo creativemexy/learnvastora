@@ -1,26 +1,174 @@
-@import "tailwindcss";
+/* Import Bootstrap CSS first */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+/* Import Bootstrap Icons CSS */
+@import 'bootstrap-icons/font/bootstrap-icons.css';
 
+/* LearnVastora Branding & Theme (your existing custom styles) */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --cambly-orange: #ff9800;
+  --cambly-orange-dark: #e07c00;
+  --cambly-white: #fff;
+  --cambly-gray-light: #f8f9fa;
+  --cambly-gray: #e0e0e0;
+  --cambly-gray-dark: #bdbdbd;
+  --cambly-text: #222;
+  --cambly-shadow: 0 4px 24px rgba(255,152,0,0.08), 0 1.5px 6px rgba(0,0,0,0.04);
+  --cambly-radius: 18px;
+  --cambly-font: 'Inter', 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html, body {
+  font-family: var(--cambly-font);
+  background: var(--cambly-gray-light);
+  color: var(--cambly-text);
+  min-height: 100vh;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* LearnVastora Buttons */
+.btn, .cambly-btn {
+  background: var(--cambly-orange);
+  color: var(--cambly-white) !important;
+  border: none;
+  border-radius: var(--cambly-radius);
+  font-weight: 700;
+  box-shadow: var(--cambly-shadow);
+  padding: 0.7em 2em;
+  transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+}
+.btn:hover, .cambly-btn:hover, .btn:focus, .cambly-btn:focus {
+  background: var(--cambly-orange-dark);
+  color: var(--cambly-white) !important;
+  box-shadow: 0 6px 32px rgba(255,152,0,0.12);
+}
+.btn:disabled, .cambly-btn:disabled, .btn.disabled, .cambly-btn.disabled {
+  background: var(--cambly-gray);
+  color: var(--cambly-gray-dark) !important;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.cambly-btn-outline {
+  background: var(--cambly-white);
+  color: var(--cambly-orange) !important;
+  border: 2px solid var(--cambly-orange);
+  border-radius: var(--cambly-radius);
+  font-weight: 700;
+  box-shadow: var(--cambly-shadow);
+  padding: 0.7em 2em;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+.cambly-btn-outline:hover, .cambly-btn-outline:focus {
+  background: var(--cambly-orange);
+  color: var(--cambly-white) !important;
+  border-color: var(--cambly-orange-dark);
+}
+
+/* Cards & Modals */
+.card, .cambly-card, .modal-content {
+  background: var(--cambly-white);
+  border-radius: var(--cambly-radius);
+  box-shadow: var(--cambly-shadow);
+  border: none;
+}
+.card-header, .modal-header {
+  background: var(--cambly-white);
+  border-bottom: 1px solid var(--cambly-gray);
+  border-radius: var(--cambly-radius) var(--cambly-radius) 0 0;
+}
+.card-body, .modal-body {
+  background: var(--cambly-white);
+  border-radius: 0 0 var(--cambly-radius) var(--cambly-radius);
+}
+
+/* Navbar & Pills */
+.cambly-navbar-custom {
+  background: var(--cambly-white);
+  border-bottom: 3px solid var(--cambly-orange);
+  box-shadow: 0 2px 8px rgba(255,152,0,0.04);
+}
+.cambly-nav-pill {
+  color: var(--cambly-orange);
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.5em 1.5em;
+  margin-right: 0.5em;
+  background: transparent;
+  transition: background 0.2s, color 0.2s;
+}
+.cambly-nav-pill.active, .cambly-nav-pill:hover {
+  background: var(--cambly-orange);
+  color: var(--cambly-white);
+}
+
+/* Stats Bar */
+.cambly-stats-bar {
+  background: var(--cambly-white);
+  border-radius: var(--cambly-radius);
+  box-shadow: var(--cambly-shadow);
+  padding: 1.5em 1em;
+  margin-bottom: 1.5em;
+}
+.cambly-stat-number {
+  color: var(--cambly-orange);
+  font-size: 2.2rem;
+  font-weight: 800;
+}
+.cambly-stat-label {
+  color: var(--cambly-gray-dark);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* Calendar & Badges */
+.cambly-calendar-wrapper {
+  background: var(--cambly-white);
+  border-radius: var(--cambly-radius);
+  box-shadow: var(--cambly-shadow);
+}
+.badge.bg-warning {
+  background: var(--cambly-orange) !important;
+  color: var(--cambly-white) !important;
+  font-weight: 600;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(255,152,0,0.08);
+}
+
+/* Modal overrides for LearnVastora style */
+.modal-content {
+  border-radius: var(--cambly-radius);
+  box-shadow: var(--cambly-shadow);
+  border: none;
+}
+.modal-header {
+  border-bottom: 1px solid var(--cambly-gray);
+  background: var(--cambly-white);
+  border-radius: var(--cambly-radius) var(--cambly-radius) 0 0;
+}
+.modal-footer {
+  background: var(--cambly-white);
+  border-radius: 0 0 var(--cambly-radius) var(--cambly-radius);
+}
+
+/* Misc */
+::-webkit-scrollbar {
+  width: 8px;
+  background: var(--cambly-gray-light);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--cambly-gray);
+  border-radius: 8px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .cambly-card, .card, .modal-content, .cambly-stats-bar, .cambly-calendar-wrapper {
+    border-radius: 12px;
+    padding: 1em;
+  }
+  .btn, .cambly-btn, .cambly-btn-outline {
+    padding: 0.7em 1em;
+    font-size: 1rem;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+/* Import Inter and Nunito fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Nunito:wght@400;700;900&display=swap');

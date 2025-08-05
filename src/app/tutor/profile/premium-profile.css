@@ -1,0 +1,659 @@
+/* Premium Profile Page Styles */
+.premium-profile-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Animated Background */
+.profile-animated-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.profile-floating-shapes {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.profile-shape {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  animation: float 20s infinite ease-in-out;
+}
+
+.profile-shape-1 {
+  width: 80px;
+  height: 80px;
+  top: 10%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.profile-shape-2 {
+  width: 120px;
+  height: 120px;
+  top: 60%;
+  right: 15%;
+  animation-delay: 5s;
+}
+
+.profile-shape-3 {
+  width: 60px;
+  height: 60px;
+  bottom: 20%;
+  left: 20%;
+  animation-delay: 10s;
+}
+
+.profile-shape-4 {
+  width: 100px;
+  height: 100px;
+  top: 30%;
+  right: 40%;
+  animation-delay: 15s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  25% { transform: translateY(-20px) rotate(90deg); }
+  50% { transform: translateY(-10px) rotate(180deg); }
+  75% { transform: translateY(-30px) rotate(270deg); }
+}
+
+.profile-gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 152, 0, 0.1) 0%,
+    rgba(255, 87, 34, 0.1) 50%,
+    rgba(156, 39, 176, 0.1) 100%
+  );
+}
+
+/* Main Content */
+.profile-main-content {
+  position: relative;
+  z-index: 1;
+  padding-top: 80px;
+  min-height: calc(100vh - 80px);
+}
+
+/* Premium Header */
+.profile-header {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 3rem 0;
+  margin-bottom: 2rem;
+}
+
+.profile-header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  text-align: center;
+}
+
+.profile-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ff9800, #ff5722);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-subtitle {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 2rem;
+  font-weight: 300;
+}
+
+.profile-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.profile-progress-bar {
+  width: 300px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.profile-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff9800, #ff5722);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.profile-progress-text {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Content Wrapper */
+.profile-content-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+}
+
+/* Profile Photo Section */
+.profile-photo-section {
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+}
+
+/* Premium Card */
+.premium-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.premium-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+}
+
+.premium-card-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.premium-card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.premium-card-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+/* Profile Photo Content */
+.profile-photo-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.profile-photo-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.profile-photo-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.profile-photo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-photo-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #ff9800, #ff5722);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.profile-photo-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+/* Upload Area */
+.profile-upload-area {
+  width: 100%;
+}
+
+.profile-upload-zone {
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.profile-upload-zone:hover,
+.profile-upload-zone.drag-over {
+  border-color: #ff9800;
+  background: rgba(255, 152, 0, 0.1);
+  transform: scale(1.02);
+}
+
+.upload-icon {
+  font-size: 3rem;
+  color: #ff9800;
+  margin-bottom: 1rem;
+}
+
+.profile-upload-zone h4 {
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.profile-upload-zone p {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 1rem;
+}
+
+.upload-requirements {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Profile Form Section */
+.profile-form-section {
+  min-height: 600px;
+}
+
+/* Tabs */
+.profile-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.profile-tab {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.profile-tab:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.profile-tab.active {
+  background: linear-gradient(135deg, #ff9800, #ff5722);
+  color: #fff;
+  border-color: #ff9800;
+  box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+}
+
+/* Tab Content */
+.profile-tab-content {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Form Sections */
+.form-section {
+  margin-bottom: 2.5rem;
+}
+
+.form-section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.required {
+  color: #ff5722;
+}
+
+/* Premium Inputs */
+.premium-input {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.premium-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.premium-input:focus {
+  outline: none;
+  border-color: #ff9800;
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.2);
+}
+
+.premium-input:focus::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Input Group */
+.input-group {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.input-prefix {
+  padding: 1rem 1.25rem;
+  background: rgba(255, 152, 0, 0.2);
+  color: #ff9800;
+  font-weight: 600;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.input-group .premium-input {
+  border: none;
+  background: transparent;
+  flex: 1;
+}
+
+.input-group .premium-input:focus {
+  box-shadow: none;
+}
+
+/* Form Help */
+.form-help {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+/* Form Actions */
+.profile-form-actions {
+  margin-top: 3rem;
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Premium Buttons */
+.premium-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.premium-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.premium-button:hover::before {
+  left: 100%;
+}
+
+.premium-button.primary {
+  background: linear-gradient(135deg, #ff9800, #ff5722);
+  color: #fff;
+  box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+}
+
+.premium-button.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(255, 152, 0, 0.4);
+}
+
+.premium-button.secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.premium-button.secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.premium-button.danger {
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+  color: #fff;
+}
+
+.premium-button.danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(244, 67, 54, 0.4);
+}
+
+.premium-button.small {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.premium-button.large {
+  padding: 1.25rem 3rem;
+  font-size: 1.1rem;
+}
+
+.premium-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Premium Spinner */
+.premium-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.premium-spinner.small {
+  width: 16px;
+  height: 16px;
+  border-width: 2px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Premium Loading */
+.premium-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+/* Premium Alert */
+.premium-alert {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 2rem;
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.premium-alert.danger {
+  border-color: rgba(244, 67, 54, 0.3);
+  background: rgba(244, 67, 54, 0.1);
+}
+
+.premium-alert h3 {
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.premium-alert p {
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .profile-content-wrapper {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .profile-photo-section {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-title {
+    font-size: 2.5rem;
+  }
+  
+  .profile-subtitle {
+    font-size: 1rem;
+  }
+  
+  .profile-content-wrapper {
+    padding: 0 1rem;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .profile-tabs {
+    justify-content: center;
+  }
+  
+  .profile-tab {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .premium-card {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-header {
+    padding: 2rem 0;
+  }
+  
+  .profile-title {
+    font-size: 2rem;
+  }
+  
+  .profile-tabs {
+    flex-direction: column;
+  }
+  
+  .profile-tab {
+    text-align: center;
+  }
+} 

@@ -1,0 +1,394 @@
+/* Payment Success Page Styles */
+
+/* Navbar Styles - Matching tutors page */
+.learnvastora-header {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  padding: 1rem 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.learnvastora-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.learnvastora-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--white);
+  text-decoration: none;
+}
+
+.learnvastora-nav-menu {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 2rem;
+}
+
+.learnvastora-nav-menu li a {
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.3s ease;
+}
+
+.learnvastora-nav-menu li a:hover {
+  opacity: 0.8;
+}
+
+.learnvastora-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Language Selector Dropdown */
+.learnvastora-language-selector {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--white);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.learnvastora-language-selector:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.learnvastora-language-selector .fa-chevron-down {
+  transition: transform 0.3s ease;
+}
+
+.learnvastora-language-selector .fa-chevron-down.rotate {
+  transform: rotate(180deg);
+}
+
+.learnvastora-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--white);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  z-index: 1000;
+  margin-top: 0.5rem;
+  overflow: hidden;
+}
+
+.learnvastora-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: #333;
+}
+
+.learnvastora-dropdown-item:hover {
+  background-color: rgba(124, 58, 237, 0.1);
+}
+
+.learnvastora-dropdown-item.active {
+  background-color: rgba(124, 58, 237, 0.2);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Notification Styles */
+.learnvastora-notification-container {
+  position: relative;
+}
+
+.learnvastora-notification-btn {
+  position: relative;
+  background: var(--white);
+  color: var(--primary);
+  border: none;
+  padding: 0.5rem;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.learnvastora-notification-btn:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
+.learnvastora-notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #dc3545;
+  color: var(--white);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.learnvastora-notification-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: var(--white);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  min-width: 300px;
+  z-index: 1000;
+  margin-top: 0.5rem;
+  overflow: hidden;
+}
+
+.learnvastora-notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  background: #f8f9fa;
+}
+
+.learnvastora-notification-header h6 {
+  margin: 0;
+  font-weight: 600;
+  color: #333;
+}
+
+.learnvastora-mark-all-read {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.learnvastora-mark-all-read:hover {
+  background-color: rgba(124, 58, 237, 0.1);
+}
+
+.learnvastora-notification-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.learnvastora-notification-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-bottom: 1px solid #f0f0f0;
+  position: relative;
+}
+
+.learnvastora-notification-item:hover {
+  background-color: #f8f9fa;
+}
+
+.learnvastora-notification-item.unread {
+  background-color: rgba(124, 58, 237, 0.05);
+}
+
+.learnvastora-notification-item.unread:hover {
+  background-color: rgba(124, 58, 237, 0.1);
+}
+
+.learnvastora-notification-content {
+  flex: 1;
+}
+
+.learnvastora-notification-content p {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.875rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.learnvastora-notification-content small {
+  color: #666;
+  font-size: 0.75rem;
+}
+
+.learnvastora-notification-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+  margin-left: 0.5rem;
+}
+
+.learnvastora-no-notifications {
+  padding: 2rem;
+  text-align: center;
+  color: #666;
+}
+
+.learnvastora-no-notifications p {
+  margin: 0;
+  font-style: italic;
+}
+
+/* Payment Success Card Styles */
+.payment-success-card,
+.payment-error-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 3rem 2rem;
+  box-shadow: 0 8px 32px rgba(124, 58, 237, 0.1);
+  border: 2px solid rgba(124, 58, 237, 0.1);
+}
+
+.success-icon,
+.error-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+}
+
+.success-icon {
+  color: #28a745;
+}
+
+.error-icon {
+  color: #dc3545;
+}
+
+.success-details,
+.error-details {
+  background: rgba(124, 58, 237, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.success-details p,
+.error-details p {
+  margin-bottom: 0.5rem;
+  color: #666;
+}
+
+.success-details p:last-child,
+.error-details p:last-child {
+  margin-bottom: 0;
+}
+
+/* Fixed Button Styles with Better Contrast */
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  border: none;
+  color: var(--white) !important;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+  color: var(--white) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+  text-decoration: none;
+}
+
+.btn-outline-primary {
+  background: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary) !important;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-outline-primary:hover {
+  background: var(--primary);
+  color: var(--white) !important;
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.text-success {
+  color: #28a745 !important;
+}
+
+.text-danger {
+  color: #dc3545 !important;
+}
+
+.lead {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .learnvastora-navbar {
+    padding: 0 1rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .learnvastora-nav-menu {
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .payment-success-card,
+  .payment-error-card {
+    padding: 2rem 1.5rem;
+  }
+  
+  .success-icon,
+  .error-icon {
+    font-size: 3rem;
+  }
+  
+  .lead {
+    font-size: 1.1rem;
+  }
+
+  .learnvastora-dropdown {
+    min-width: 180px;
+  }
+  
+  .learnvastora-notification-dropdown {
+    min-width: 280px;
+    right: -50px;
+  }
+  
+  .learnvastora-nav-right {
+    gap: 0.5rem;
+  }
+} 

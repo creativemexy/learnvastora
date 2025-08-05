@@ -1,0 +1,840 @@
+/* LearnVastora Wallet Page Styles */
+:root {
+  --primary: #7c3aed; /* Indigo */
+  --accent: #a21caf;  /* Vivid Purple */
+  --white: #fff;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.learnvastora-bg {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+/* Container centering */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+/* Responsive container widths */
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1320px;
+  }
+}
+
+@media (max-width: 1399px) {
+  .container {
+    max-width: 1140px;
+  }
+}
+
+@media (max-width: 1199px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+@media (max-width: 991px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+@media (max-width: 767px) {
+  .container {
+    max-width: 540px;
+  }
+}
+
+/* Navbar Styles - Same as tutors page */
+.learnvastora-header {
+  background: var(--white);
+  border-bottom: 3px solid var(--primary);
+  padding: 1rem 0;
+  box-shadow: var(--shadow);
+}
+
+.learnvastora-logo {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: var(--primary);
+  letter-spacing: 1px;
+}
+
+.learnvastora-nav-menu {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.learnvastora-nav-item {
+  text-decoration: none;
+  color: var(--accent);
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.learnvastora-nav-item:hover {
+  color: var(--primary);
+  background: rgba(124, 58, 237, 0.1);
+}
+
+.learnvastora-nav-item.active {
+  color: var(--primary);
+  border-bottom: 2px solid var(--primary);
+}
+
+.learnvastora-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.learnvastora-subscribe-btn {
+  background: var(--primary);
+  color: var(--white);
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.learnvastora-subscribe-btn:hover {
+  background: var(--accent);
+  transform: translateY(-2px);
+}
+
+.learnvastora-icon-btn {
+  background: var(--white);
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.learnvastora-icon-btn:hover {
+  background: var(--primary);
+  color: var(--white);
+}
+
+.learnvastora-profile-btn {
+  background: var(--primary);
+  color: var(--white);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.learnvastora-profile-btn:hover {
+  background: var(--accent);
+  transform: scale(1.1);
+}
+
+.learnvastora-logout-btn {
+  background: var(--white);
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.learnvastora-logout-btn:hover {
+  background: var(--accent);
+  color: var(--white);
+  transform: translateY(-2px);
+}
+
+.learnvastora-header-box {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+}
+
+.learnvastora-title {
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: -1px;
+}
+
+.learnvastora-subtitle {
+  color: var(--accent);
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* Balance Card */
+.learnvastora-balance-card {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  border-radius: 20px;
+  padding: 2rem;
+  color: var(--white);
+  box-shadow: 0 8px 32px rgba(124, 58, 237, 0.3);
+  text-align: center;
+}
+
+.learnvastora-balance-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.learnvastora-balance-icon {
+  font-size: 2rem;
+  margin-right: 1rem;
+  opacity: 0.9;
+}
+
+.learnvastora-balance-header h3 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+/* Dynamic Animations and Real-time Updates */
+.learnvastora-balance-amount {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.5s ease;
+  animation: balanceUpdate 0.5s ease-out;
+}
+
+@keyframes balanceUpdate {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Loading States */
+.btn.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Real-time Updates */
+.learnvastora-transaction-item {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Refresh Button Animation */
+.learnvastora-btn-outline:hover .fa-sync-alt {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Payment Method Updates */
+.learnvastora-payment-method-item {
+  transition: all 0.3s ease;
+}
+
+.learnvastora-payment-method-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.15);
+}
+
+/* Modal Animations */
+.learnvastora-modal-overlay {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.learnvastora-modal {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Real-time Status Indicators */
+.learnvastora-balance-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.learnvastora-balance-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.learnvastora-balance-card.updating::before {
+  left: 100%;
+}
+
+/* Transaction Status Animations */
+.badge {
+  animation: badgePulse 0.3s ease-out;
+}
+
+@keyframes badgePulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Dynamic Loading States */
+.learnvastora-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  z-index: 10;
+}
+
+/* Real-time Balance Updates */
+.learnvastora-balance-update {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--primary);
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Payment Methods Card */
+.learnvastora-payment-methods-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  height: 100%;
+}
+
+.learnvastora-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(124, 58, 237, 0.1);
+}
+
+.learnvastora-card-header h3 {
+  color: var(--primary);
+  font-weight: 700;
+  margin: 0;
+}
+
+.learnvastora-payment-methods-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.learnvastora-payment-method-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border: 2px solid rgba(124, 58, 237, 0.1);
+  border-radius: 12px;
+  background: rgba(124, 58, 237, 0.02);
+  transition: all 0.3s ease;
+}
+
+.learnvastora-payment-method-item:hover {
+  border-color: var(--primary);
+  background: rgba(124, 58, 237, 0.05);
+  transform: translateY(-2px);
+}
+
+.learnvastora-payment-method-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.learnvastora-payment-method-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-size: 1.5rem;
+}
+
+.learnvastora-payment-method-details h5 {
+  color: var(--primary);
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+}
+
+.learnvastora-payment-method-details p {
+  color: #666;
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.learnvastora-default-badge {
+  background: var(--accent);
+  color: var(--white);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.learnvastora-payment-method-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Transactions Card */
+.learnvastora-transactions-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: var(--shadow);
+}
+
+.learnvastora-transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.learnvastora-transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border: 1px solid rgba(124, 58, 237, 0.1);
+  border-radius: 12px;
+  background: rgba(124, 58, 237, 0.02);
+  transition: all 0.3s ease;
+}
+
+.learnvastora-transaction-item:hover {
+  border-color: var(--primary);
+  background: rgba(124, 58, 237, 0.05);
+}
+
+.learnvastora-transaction-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.learnvastora-transaction-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-size: 1.2rem;
+}
+
+.learnvastora-transaction-details h5 {
+  color: var(--primary);
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+}
+
+.learnvastora-transaction-tutor {
+  color: var(--accent);
+  margin: 0 0 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+.learnvastora-transaction-amount {
+  text-align: right;
+}
+
+.learnvastora-amount {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.learnvastora-amount.text-success {
+  color: #28a745 !important;
+}
+
+.learnvastora-amount.text-primary {
+  color: var(--primary) !important;
+}
+
+/* Empty States */
+.learnvastora-empty-state {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #666;
+}
+
+.learnvastora-empty-icon {
+  font-size: 3rem;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.learnvastora-empty-state p {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Buttons */
+.learnvastora-btn {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  border: none;
+  color: var(--white);
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+}
+
+.learnvastora-btn:hover {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+  color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+}
+
+.learnvastora-btn-outline {
+  background: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary) !important;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.learnvastora-btn-outline:hover {
+  background: var(--primary);
+  color: var(--white) !important;
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.learnvastora-btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.learnvastora-btn-danger {
+  background: #dc3545 !important;
+  border-color: #dc3545 !important;
+  color: var(--white) !important;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.learnvastora-btn-danger:hover {
+  background: #c82333 !important;
+  border-color: #bd2130 !important;
+  color: var(--white) !important;
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.learnvastora-btn-danger i {
+  color: var(--white) !important;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.learnvastora-btn-danger:hover i {
+  color: var(--white) !important;
+}
+
+/* Modal */
+.learnvastora-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.learnvastora-modal {
+  background: var(--white);
+  border-radius: 20px;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.learnvastora-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid rgba(124, 58, 237, 0.1);
+}
+
+.learnvastora-modal-header h3 {
+  color: var(--primary);
+  font-weight: 700;
+  margin: 0;
+}
+
+.learnvastora-modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.learnvastora-modal-close:hover {
+  background: rgba(124, 58, 237, 0.1);
+  color: var(--primary);
+}
+
+.learnvastora-modal-body {
+  padding: 2rem;
+}
+
+.learnvastora-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid rgba(124, 58, 237, 0.1);
+}
+
+/* Form Controls */
+.form-control, .form-select {
+  border: 2px solid rgba(124, 58, 237, 0.2);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.25);
+}
+
+.form-label {
+  color: var(--primary);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Badge Styles */
+.badge.bg-success {
+  background-color: var(--primary) !important;
+}
+
+.badge.bg-warning {
+  background-color: var(--accent) !important;
+  color: var(--white) !important;
+}
+
+.badge.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .learnvastora-title {
+    font-size: 2rem;
+  }
+  
+  .learnvastora-balance-amount {
+    font-size: 2.5rem;
+  }
+  
+  .learnvastora-balance-actions {
+    flex-direction: column;
+  }
+  
+  .learnvastora-card-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
+  .learnvastora-payment-method-item {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
+  .learnvastora-payment-method-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  
+  .learnvastora-transaction-item {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
+  .learnvastora-transaction-amount {
+    text-align: left;
+    width: 100%;
+  }
+  
+  .learnvastora-modal {
+    margin: 1rem;
+    max-height: calc(100vh - 2rem);
+  }
+} 
+
+/* Wallet Info Section */
+.learnvastora-wallet-info {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 1rem;
+  margin-top: 1rem;
+}
+
+.learnvastora-info-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.learnvastora-info-item:last-child {
+  margin-bottom: 0;
+}
+
+.learnvastora-info-item i {
+  font-size: 0.8rem;
+  min-width: 16px;
+}
+
+.learnvastora-info-item span {
+  line-height: 1.3;
+} 

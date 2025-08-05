@@ -1,0 +1,72 @@
+.cambly-bg {
+  background: #fff3e0;
+}
+.cambly-gradient-bar {
+  background: linear-gradient(90deg, #ffb75e 0%, #ff7c2a 100%);
+  border-radius: 0 0 18px 18px;
+  min-height: 70px;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 12px rgba(255, 152, 0, 0.08);
+}
+.stat-block {
+  min-width: 160px;
+  margin-right: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+.stat-label {
+  font-size: 1rem;
+  color: #fff9;
+  font-weight: 500;
+}
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+.cambly-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(255, 152, 0, 0.08);
+  border: none;
+  padding: 1.2rem 1.2rem 1rem 1.2rem;
+  margin-bottom: 1rem;
+}
+.cambly-card .btn-warning, .cambly-card .btn-outline-warning {
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 0.35rem 1.2rem;
+  background: #ff9800;
+  color: #fff;
+  border: none;
+  transition: background 0.2s, color 0.2s;
+}
+.cambly-card .btn-warning:hover, .cambly-card .btn-outline-warning:hover {
+  background: #ff7c2a;
+  color: #fff;
+}
+.cambly-card .btn-outline-warning {
+  background: #fff;
+  color: #ff9800;
+  border: 2px solid #ff9800;
+}
+.cambly-card .btn-outline-warning:hover {
+  background: #ff9800;
+  color: #fff;
+}
+.cambly-card .table {
+  background: transparent;
+}
+@media (min-width: 992px) {
+  aside.col-lg-2 {
+    position: sticky;
+    top: 90px;
+    height: fit-content;
+  }
+}
+@media (max-width: 991px) {
+  aside.col-lg-2 {
+    margin-bottom: 2rem;
+  }
+} 

@@ -1,0 +1,375 @@
+/* LearnVastora-style CSS for Calendar */
+:root {
+  --primary: #7c3aed; /* Indigo */
+  --accent: #a21caf;  /* Vivid Purple */
+  --white: #fff;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.learnvastora-bg {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  min-height: 100vh;
+}
+
+.learnvastora-header {
+  background: var(--white);
+  border-bottom: 3px solid var(--primary);
+  padding: 1rem 0;
+  box-shadow: var(--shadow);
+}
+
+.learnvastora-logo {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: var(--primary);
+  letter-spacing: 1px;
+}
+
+.learnvastora-nav-menu {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.learnvastora-nav-item {
+  text-decoration: none;
+  color: var(--accent);
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.learnvastora-nav-item:hover {
+  color: var(--primary);
+  background: rgba(124, 58, 237, 0.1);
+}
+
+.learnvastora-nav-item.active {
+  color: var(--primary);
+  border-bottom: 2px solid var(--primary);
+}
+
+.learnvastora-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.learnvastora-subscribe-btn {
+  background: var(--primary);
+  color: var(--white);
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.learnvastora-subscribe-btn:hover {
+  background: var(--accent);
+  transform: translateY(-2px);
+}
+
+.learnvastora-icon-btn {
+  background: var(--white);
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.learnvastora-icon-btn:hover {
+  background: var(--primary);
+  color: var(--white);
+}
+
+.learnvastora-profile-btn {
+  background: var(--primary);
+  color: var(--white);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.learnvastora-profile-btn:hover {
+  background: var(--accent);
+  transform: scale(1.1);
+}
+
+.learnvastora-logout-btn {
+  background: var(--white);
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.learnvastora-logout-btn:hover {
+  background: var(--accent);
+  color: var(--white);
+  transform: translateY(-2px);
+}
+
+/* Calendar-specific CSS with approved colors */
+.cambly-bg {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  min-height: 100vh;
+}
+
+.cambly-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.cambly-title {
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+.cambly-stats-bar {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  border-radius: 15px;
+  padding: 2.5rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.2);
+  color: var(--white);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.cambly-stat {
+  text-align: center;
+  flex: 1;
+  min-width: 120px;
+}
+
+.cambly-stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--white);
+}
+
+.cambly-stat-label {
+  font-size: 1rem;
+  opacity: 0.95;
+  font-weight: 500;
+  color: var(--white);
+}
+
+.cambly-btn {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  border: none;
+  color: var(--white);
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+}
+
+.cambly-btn:hover {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+  color: var(--white);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+}
+
+.cambly-btn-outline {
+  background: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.cambly-btn-outline:hover {
+  background: var(--primary);
+  color: var(--white);
+  transform: translateY(-1px);
+}
+
+.cambly-month-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.cambly-month {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.cambly-mini-profile {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(124, 58, 237, 0.1);
+  max-width: 280px;
+  z-index: 1000;
+}
+
+.cambly-mini-profile .avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+  object-fit: cover;
+}
+
+.cambly-mini-profile .name {
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.cambly-mini-profile .bio {
+  font-size: 0.875rem;
+  color: rgba(124, 58, 237, 0.6);
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.calendar-today {
+  background: var(--accent) !important;
+  color: var(--white) !important;
+}
+
+/* View type selector styles */
+.btn-group .btn {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.btn-group .btn.cambly-btn {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  color: var(--white);
+  border-color: var(--primary);
+}
+
+.btn-group .btn.cambly-btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-group .btn.cambly-btn-outline:hover {
+  background: var(--primary);
+  color: var(--white);
+}
+
+/* Weekly view styles */
+.weekly-view .col {
+  border-right: 1px solid rgba(124, 58, 237, 0.1);
+}
+
+.weekly-view .col:last-child {
+  border-right: none;
+}
+
+/* Daily view styles */
+.daily-view .row {
+  border-bottom: 1px solid rgba(124, 58, 237, 0.1);
+}
+
+.daily-view .row:last-child {
+  border-bottom: none;
+}
+
+/* Calendar table styles */
+.table th {
+  border-bottom: 2px solid var(--primary);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.table td {
+  border: 1px solid rgba(124, 58, 237, 0.1);
+  vertical-align: top;
+}
+
+/* Badge styles with approved colors */
+.badge.bg-success {
+  background-color: var(--primary) !important;
+}
+
+.badge.bg-warning {
+  background-color: var(--accent) !important;
+  color: var(--white) !important;
+}
+
+.badge.bg-primary {
+  background-color: var(--primary) !important;
+}
+
+.badge.bg-danger {
+  background-color: var(--accent) !important;
+  color: var(--white) !important;
+}
+
+.badge.bg-info {
+  background-color: var(--accent) !important;
+  color: var(--white) !important;
+}
+
+@media (max-width: 768px) {
+  .cambly-stats-bar {
+    flex-direction: column;
+    padding: 1.5rem 1rem;
+  }
+  .cambly-stat-number {
+    font-size: 2rem;
+  }
+  .cambly-title {
+    font-size: 1.5rem;
+  }
+  .cambly-month {
+    font-size: 1.25rem;
+  }
+  
+  .learnvastora-nav-menu {
+    display: none;
+  }
+  
+  .btn-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .btn-group .btn {
+    border-radius: 8px !important;
+    margin-bottom: 0.25rem;
+  }
+  
+  .weekly-view .col {
+    border-right: none;
+    border-bottom: 1px solid rgba(124, 58, 237, 0.1);
+    margin-bottom: 1rem;
+  }
+} 

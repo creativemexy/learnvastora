@@ -1,0 +1,481 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id                String      @id @default(uuid())
+  name              String
+  email             String      @unique
+  password          String
+  role              Role        @default(STUDENT)
+  active            Boolean     @default(true)
+  isOnline          Boolean     @default(false)
+  lastSeen          DateTime    @default(now())
+  createdAt         DateTime    @default(now())
+  photo             String?     // Profile photo URL
+  
+  // Additional profile fields
+  language          String?     // Learning language
+  country           String?     // User's country
+  bio               String?     // User's bio
+  languageLevel     String?     // Language proficiency level
+  courseInterests   String[]    // Array of course interests
+  tutorPreferences  Json?       // JSON object for tutor preferences
+  learningGoals     Json?       // JSON object for learning goals
+  preferences       Json?       // JSON object for user preferences
+  
+  tutorProfile      TutorProfile?
+  bookingsAsStudent Booking[]   @relation("StudentBookings")
+  bookingsAsTutor   Booking[]   @relation("TutorBookings")
+  reviewsGiven      Review[]    @relation("StudentReviews")
+  reviewsReceived   Review[]    @relation("TutorReviews")
+  payments          Payment[]
+  messagesSent      Message[]   @relation("SentMessages")
+  accounts          Account[]
+  sessions          Session[]   // NextAuth sessions
+  availability      Availability[]
+  notifications     Notification[]
+  sessionRecordings SessionRecording[]
+  slots             Slot[]
+  connectedBanks    ConnectedBank[]
+  userBadges        UserBadge[]
+  resourceDownloads ResourceDownload[]
+  resourceFavorites ResourceFavorite[]
+  resourceRatings   ResourceRating[]
+  payouts           Payout[]
+  adminActivities   AdminActivity[]
+  userAchievements  UserAchievement[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+enum Role {
+  STUDENT
+  TUTOR
+  ADMIN
+  SUPER_ADMIN
+}
+
+model Availability {
+  id        String   @id @default(cuid())
+  userId    String
+  dayOfWeek Int      // 0-6 (Sunday-Saturday)
+  startTime String   // HH:MM format
+  endTime   String   // HH:MM format
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Booking {
+  id              String     @id @default(uuid())
+  student         User       @relation("StudentBookings", fields: [studentId], references: [id])
+  studentId       String
+  tutor           User       @relation("TutorBookings", fields: [tutorId], references: [id])
+  tutorId         String
+  scheduledAt     DateTime
+  status          BookingStatus @default(PENDING)
+  duration        Int        @default(60) // Duration in minutes
+  price           Float      @default(25.00) // Price in USD
+  isInstant       Boolean    @default(false)
+  review          Review?    @relation("BookingReview")
+  reviewId        String?    @unique
+  createdAt       DateTime   @default(now())
+  payment         Payment?
+  messages        Message[]
+  sessionRecordings SessionRecording[]
+  paymentReference String?   // Payment gateway reference
+  paymentMethod   String?    // PAYPAL, PAYSTACK, FLUTTERWAVE
+  paidAt         DateTime?   // When payment was completed
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model Payment {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  booking   Booking  @relation(fields: [bookingId], references: [id])
+  bookingId String   @unique
+  amount    Float
+  status    PaymentStatus @default(PENDING)
+  createdAt DateTime @default(now())
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  booking   Booking  @relation("BookingReview", fields: [bookingId], references: [id])
+  bookingId String   @unique
+  student   User     @relation("StudentReviews", fields: [studentId], references: [id])
+  studentId String
+  tutor     User     @relation("TutorReviews", fields: [tutorId], references: [id])
+  tutorId   String
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  booking   Booking  @relation(fields: [bookingId], references: [id])
+  bookingId String
+  sender    User     @relation("SentMessages", fields: [senderId], references: [id])
+  senderId  String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+  data      Json?            // Additional data
+  createdAt DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum NotificationType {
+  SESSION_REMINDER
+  SESSION_CANCELLED
+  SESSION_RESCHEDULED
+  NEW_MESSAGE
+  PAYMENT_RECEIVED
+  REVIEW_RECEIVED
+  SYSTEM_UPDATE
+  INSTANT_BOOKING_REQUEST
+  INSTANT_BOOKING_ACCEPTED
+}
+
+model TutorProfile {
+  id            String   @id @default(uuid())
+  user          User     @relation(fields: [userId], references: [id])
+  userId        String   @unique
+  bio           String?
+  introVideoUrl String?
+  skills        String[]
+  subjects      String[] // Subjects the tutor can teach
+  languages     String[] // Languages the tutor can teach
+  experience    Int?     // Years of experience
+  education     String?  // Educational background
+  hourlyRate    Float?   // Hourly rate in USD
+  rating        Float?   // Average rating (1-5)
+  totalSessions Int?     // Total number of sessions completed
+  accent        String?  // Accent information
+  isPro         Boolean  @default(false) // Pro tutor status
+  isSupertutor  Boolean  @default(false) // Super tutor status
+  availability  Json?
+  payoutSettings Json?   // Payout configuration (bank details, PayPal email, etc.)
+  instantBookingEnabled Boolean @default(false)
+  instantBookingPrice   Float?  // Price for instant sessions
+  responseTime         Int?     // Average response time in minutes
+  
+  // Enhanced profile fields
+  teachingMethods    String?  // Teaching methodology and approach
+  specializations    String?  // Areas of specialization
+  certifications     String?  // Teaching certifications
+  achievements       String?  // Awards and achievements
+  testimonials      String?  // Student testimonials
+  materials         String?  // Teaching materials and resources
+  lessonDuration    Int?     // Default lesson duration in minutes
+  maxStudents       Int?     // Maximum students per session
+  trialLesson       String?  // Trial lesson policy
+  cancellationPolicy String? // Cancellation policy
+  timezone          String?  // Tutor's timezone
+  socialLinks       Json?    // Social media and website links
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model SessionRecording {
+  id        String   @id @default(uuid())
+  sessionId String
+  userId    String
+  url       String
+  fileName  String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  booking   Booking  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+}
+
+model Slot {
+  id          String   @id @default(uuid())
+  tutorId     String
+  date        DateTime? // null for recurring
+  dayOfWeek   Int?      // 0-6 for recurring
+  startTime   String
+  endTime     String
+  type        String    // 'priority' | 'available'
+  isRecurring Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tutor       User      @relation(fields: [tutorId], references: [id])
+}
+
+model ConnectedBank {
+  id            String   @id @default(uuid())
+  tutorId       String
+  bankName      String
+  accountNumber String
+  routingNumber String?
+  bankLogo      String?
+  balance       Float    @default(0)
+  connected     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  tutor         User     @relation(fields: [tutorId], references: [id])
+  payouts       Payout[]
+}
+
+model Badge {
+  id          String   @id @default(uuid())
+  key         String   @unique // Unique identifier for the badge
+  name        String   // Display name
+  description String   // Description of how to earn the badge
+  icon        String   // Icon name or URL
+  category    BadgeCategory
+  color       String   // Hex color for the badge
+  criteria    Json     // Criteria for earning the badge (e.g., {"sessions": 10, "streak": 7})
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userBadges UserBadge[]
+}
+
+model UserBadge {
+  id        String       @id @default(cuid())
+  userId    String
+  badgeId   String
+  earnedAt  DateTime     @default(now())
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge     Badge        @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badgeId])
+}
+
+// Teaching Resource Models
+model TeachingResource {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  type        ResourceType
+  category    String
+  difficulty  Difficulty
+  duration    Int      // in minutes
+  thumbnail   String?  // URL to thumbnail image
+  url         String?  // URL to resource file
+  language    String
+  ageGroup    AgeGroup
+  tags        String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isActive    Boolean  @default(true)
+  
+  // Relations
+  downloads   ResourceDownload[]
+  favorites   ResourceFavorite[]
+  ratings     ResourceRating[]
+}
+
+model ResourceDownload {
+  id           String   @id @default(cuid())
+  tutorId      String
+  resourceId   String
+  downloadedAt DateTime @default(now())
+  
+  tutor        User             @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  resource     TeachingResource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  @@unique([tutorId, resourceId])
+}
+
+model ResourceFavorite {
+  id         String   @id @default(cuid())
+  tutorId    String
+  resourceId String
+  favoritedAt DateTime @default(now())
+  
+  tutor      User             @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  resource   TeachingResource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  @@unique([tutorId, resourceId])
+}
+
+model ResourceRating {
+  id         String   @id @default(cuid())
+  tutorId    String
+  resourceId String
+  rating     Int      // 1-5 stars
+  ratedAt    DateTime @default(now())
+  
+  tutor      User             @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  resource   TeachingResource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  @@unique([tutorId, resourceId])
+}
+
+// Payout Management Models
+model Payout {
+  id            String        @id @default(cuid())
+  tutorId       String
+  bankAccountId String?
+  amount        Float
+  status        PayoutStatus  @default(PENDING)
+  method        String        // 'bank', 'paypal', etc.
+  reference     String        @unique // Unique reference number
+  createdAt     DateTime      @default(now())
+  processedAt   DateTime?
+  notes         String?
+  
+  tutor         User          @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  bankAccount   ConnectedBank? @relation(fields: [bankAccountId], references: [id], onDelete: SetNull)
+}
+
+enum PayoutStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum ResourceType {
+  LESSON_PLAN
+  WORKSHEET
+  VIDEO
+  PRESENTATION
+  QUIZ
+  GAME
+  TEMPLATE
+  GUIDE
+  AUDIO
+  INTERACTIVE
+}
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum AgeGroup {
+  KIDS
+  TEENS
+  ADULTS
+  ALL
+}
+
+enum BadgeCategory {
+  ACHIEVEMENT
+  MILESTONE
+  SPECIAL
+  SEASONAL
+} 
+
+model AdminActivity {
+  id        String   @id @default(uuid())
+  adminId   String
+  action    String
+  details   Json?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  admin User @relation(fields: [adminId], references: [id], onDelete: Cascade)
+}
+
+model GlobalSettings {
+  id        Int      @id @default(1)
+  settings  Json     // JSON object containing all global settings
+  version   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SettingsBackup {
+  id        String   @id @default(uuid())
+  backupId  String   @unique
+  settings  Json     // JSON object containing backed up settings
+  version   String
+  createdBy String
+  createdAt DateTime @default(now())
+} 
+
+model UserAchievement {
+  id          String   @id @default(cuid())
+  userId      String
+  achievementId String
+  isUnlocked  Boolean  @default(false)
+  progress    Int      @default(0) // 0-100
+  current     Int      @default(0)
+  unlockedAt  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+  @@index([userId])
+  @@index([achievementId])
+} 

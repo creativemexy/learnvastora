@@ -1,0 +1,552 @@
+/* Admin Components Styles */
+
+/* Common Admin Page Styles */
+.admin-sessions-page,
+.admin-financial-page,
+.admin-system-page {
+  padding: 20px;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+/* Session Management Styles */
+.admin-sessions-header,
+.admin-financial-header,
+.admin-system-header {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.admin-sessions-header-content,
+.admin-financial-header-content,
+.admin-system-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-sessions-header-left h1,
+.admin-financial-header-left h1,
+.admin-system-header-left h1 {
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.admin-sessions-subtitle,
+.admin-financial-subtitle,
+.admin-system-subtitle {
+  margin: 0;
+  color: #64748b;
+  font-size: 16px;
+}
+
+.admin-sessions-header-right,
+.admin-financial-header-right,
+.admin-system-header-right {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.admin-view-all-btn,
+.admin-export-btn,
+.admin-save-btn {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.admin-view-all-btn:hover,
+.admin-export-btn:hover,
+.admin-save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+.admin-save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Session Filters */
+.admin-sessions-filters {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: end;
+}
+
+/* Session Stats */
+.admin-sessions-stats {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Session Table */
+.admin-sessions-table-container {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.admin-sessions-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-sessions-table th {
+  background: #f8fafc;
+  padding: 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.admin-sessions-table td {
+  padding: 16px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.admin-sessions-table tr:hover {
+  background: #f8fafc;
+}
+
+/* Session Info */
+.session-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.session-id {
+  font-weight: 600;
+  color: #1e293b;
+  font-family: monospace;
+}
+
+.session-type {
+  font-size: 12px;
+  color: #64748b;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* View Button */
+.view-btn {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.view-btn:hover {
+  background: #bfdbfe;
+}
+
+/* No Sessions */
+.no-sessions {
+  text-align: center;
+  padding: 60px 20px;
+  color: #64748b;
+}
+
+.no-sessions i {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+/* Session Pagination */
+.admin-sessions-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Financial Management Styles */
+.period-select {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  background: white;
+  transition: border-color 0.3s ease;
+}
+
+.period-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Financial Stats */
+.admin-financial-stats {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card {
+  text-align: center;
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card.revenue {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  border-color: #3b82f6;
+}
+
+.stat-card.transactions {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  border-color: #10b981;
+}
+
+.stat-card.average {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-color: #f59e0b;
+}
+
+.stat-card.pending {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  border-color: #ef4444;
+}
+
+.stat-icon {
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.stat-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.stat-change {
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.stat-change.positive {
+  color: #10b981;
+}
+
+.stat-change.negative {
+  color: #ef4444;
+}
+
+.stat-change.neutral {
+  color: #6b7280;
+}
+
+/* Financial Chart */
+.admin-financial-chart {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.chart-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.chart-legend {
+  display: flex;
+  gap: 16px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.legend-color.revenue {
+  background: #3b82f6;
+}
+
+.legend-color.transactions {
+  background: #10b981;
+}
+
+.chart-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #64748b;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 2px dashed #d1d5db;
+}
+
+.chart-placeholder i {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+/* Financial Transactions */
+.admin-financial-transactions {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.transactions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.transactions-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.view-all-link {
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.view-all-link:hover {
+  text-decoration: underline;
+}
+
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.transaction-item {
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.transaction-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.transaction-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.transaction-amount {
+  text-align: right;
+}
+
+.amount {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 16px;
+}
+
+.status {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.transaction-date {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 8px;
+}
+
+.transaction-type {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+/* System Management Styles */
+.admin-system-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.settings-section {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.settings-section h3 {
+  margin: 0 0 20px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 12px;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.setting-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.setting-item label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.setting-input,
+.setting-select {
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+  background: white;
+}
+
+.setting-input:focus,
+.setting-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.setting-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .admin-sessions-header-content,
+  .admin-financial-header-content,
+  .admin-system-header-content {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+  
+  .admin-sessions-filters {
+    flex-direction: column;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .admin-sessions-table {
+    font-size: 14px;
+  }
+  
+  .admin-sessions-table th,
+  .admin-sessions-table td {
+    padding: 12px 8px;
+  }
+  
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .transaction-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .transaction-amount {
+    text-align: left;
+  }
+} 
