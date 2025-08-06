@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import './tutor-management.css';
 
 interface Tutor {
   id: string;
@@ -195,94 +196,62 @@ const TutorManagement: React.FC = () => {
 
   return (
     <div className="tutor-management-container">
-      {/* Header Section */}
-      <div className="tutor-header">
-        <div className="header-content">
-          <h2 className="premium-heading">👨‍🏫 Tutor Management</h2>
-          <p className="premium-text">Manage and monitor all tutors on the platform</p>
-        </div>
-        <button 
-          className="btn btn-primary premium-btn"
-          onClick={() => setShowAddModal(true)}
-        >
-          <span className="btn-icon">➕</span>
-          Add New Tutor
-        </button>
+      {/* Header */}
+      <div className="tutor-management-header">
+        <h1 className="premium-heading">👨‍🏫 Tutor Management</h1>
+        <p className="premium-text">Manage and monitor all tutors on the platform</p>
       </div>
 
-      {/* Statistics Cards */}
-      <div className="tutor-stats-grid">
-        <div className="stat-card glass-effect">
-          <div className="stat-icon total">📊</div>
-          <div className="stat-content">
-            <div className="stat-value">{stats.total}</div>
-            <div className="stat-label">Total Tutors</div>
-          </div>
+      {/* Controls */}
+      <div className="tutor-controls">
+        <div className="control-left">
+          <button 
+            className="btn btn-primary"
+            onClick={() => setShowAddModal(true)}
+          >
+            <span className="btn-icon">➕</span>
+            Add New Tutor
+          </button>
+          
+          <button 
+            className="btn btn-secondary"
+            onClick={() => {
+              showNotification('info', 'Export functionality coming soon');
+            }}
+          >
+            <span className="btn-icon">📤</span>
+            Export Tutors
+          </button>
         </div>
-        <div className="stat-card glass-effect">
-          <div className="stat-icon active">✅</div>
-          <div className="stat-content">
-            <div className="stat-value">{stats.active}</div>
-            <div className="stat-label">Active Tutors</div>
-          </div>
-        </div>
-        <div className="stat-card glass-effect">
-          <div className="stat-icon new">🆕</div>
-          <div className="stat-content">
-            <div className="stat-value">{stats.newThisMonth}</div>
-            <div className="stat-label">New This Month</div>
-          </div>
-        </div>
-        <div className="stat-card glass-effect">
-          <div className="stat-icon rating">⭐</div>
-          <div className="stat-content">
-            <div className="stat-value">{stats.averageRating.toFixed(1)}</div>
-            <div className="stat-label">Avg Rating</div>
-          </div>
-        </div>
-        <div className="stat-card glass-effect">
-          <div className="stat-icon sessions">🎯</div>
-          <div className="stat-content">
-            <div className="stat-value">{stats.totalSessions}</div>
-            <div className="stat-label">Total Sessions</div>
-          </div>
-        </div>
-        <div className="stat-card glass-effect">
-          <div className="stat-icon inactive">⏸️</div>
-          <div className="stat-content">
-            <div className="stat-value">{stats.inactive}</div>
-            <div className="stat-label">Inactive Tutors</div>
-          </div>
-        </div>
-      </div>
 
-      {/* Filters Section */}
-      <div className="tutor-filters glass-effect">
-        <div className="filter-group">
-          <input
-            type="text"
-            placeholder="Search tutors..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="tutor-search-input"
-          />
+        <div className="control-center">
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Search tutors..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+            <span className="search-icon">🔍</span>
+          </div>
         </div>
-        <div className="filter-group">
+
+        <div className="control-right">
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="tutor-filter-select"
+            className="filter-select"
           >
             <option value="all">All Status</option>
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
           </select>
-        </div>
-        <div className="filter-group">
+
           <select
             value={subjectFilter}
             onChange={(e) => setSubjectFilter(e.target.value)}
-            className="tutor-filter-select"
+            className="filter-select"
           >
             <option value="all">All Subjects</option>
             <option value="math">Mathematics</option>
@@ -294,93 +263,180 @@ const TutorManagement: React.FC = () => {
         </div>
       </div>
 
+      {/* Stats Cards */}
+      <div className="tutor-stats-grid">
+        <div className="stat-card premium-hover">
+          <div className="stat-icon total">📊</div>
+          <div className="stat-content">
+            <div className="stat-value">{stats.total}</div>
+            <div className="stat-label">Total Tutors</div>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon active">✅</div>
+          <div className="stat-content">
+            <div className="stat-value">{stats.active}</div>
+            <div className="stat-label">Active Tutors</div>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon new">🆕</div>
+          <div className="stat-content">
+            <div className="stat-value">{stats.newThisMonth}</div>
+            <div className="stat-label">New This Month</div>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon rating">⭐</div>
+          <div className="stat-content">
+            <div className="stat-value">{stats.averageRating.toFixed(1)}</div>
+            <div className="stat-label">Avg Rating</div>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon sessions">🎯</div>
+          <div className="stat-content">
+            <div className="stat-value">{stats.totalSessions}</div>
+            <div className="stat-label">Total Sessions</div>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon inactive">⏸️</div>
+          <div className="stat-content">
+            <div className="stat-value">{stats.inactive}</div>
+            <div className="stat-label">Inactive Tutors</div>
+          </div>
+        </div>
+      </div>
+
       {/* Tutors List */}
-      <div className="tutors-grid">
-        {filteredTutors.length === 0 ? (
-          <div className="no-tutors glass-effect">
-            <div className="no-data-icon">👨‍🏫</div>
-            <h3>No tutors found</h3>
-            <p>Try adjusting your search criteria or add a new tutor</p>
+      <div className="tutors-list-container">
+        {loading ? (
+          <div className="loading-overlay">
+            <div className="loading-spinner"></div>
+            <p>Loading tutors...</p>
+          </div>
+        ) : error ? (
+          <div className="error-container">
+            <div className="error-icon">⚠️</div>
+            <div className="error-message">{error}</div>
+            <button className="retry-btn" onClick={fetchTutors}>
+              Retry
+            </button>
+          </div>
+        ) : filteredTutors.length === 0 ? (
+          <div className="empty-state">
+            <div className="empty-icon">👨‍🏫</div>
+            <h3 className="empty-title">No Tutors Found</h3>
+            <p className="empty-subtitle">Try adjusting your search criteria or add a new tutor</p>
           </div>
         ) : (
-          filteredTutors.map((tutor) => (
-            <div key={tutor.id} className="tutor-card glass-effect premium-hover">
-              <div className="tutor-header-card">
-                <div className="tutor-avatar">
-                  {tutor.name.charAt(0).toUpperCase()}
-                </div>
-                <div className="tutor-info">
-                  <h3 className="tutor-name">{tutor.name}</h3>
-                  <p className="tutor-email">{tutor.email}</p>
-                  <div className="tutor-status-badge">
-                    {tutor.active ? (
-                      <span className="status-active">✅ Active</span>
+          <>
+            {/* List Header */}
+            <div className="tutors-list-header">
+              <div className="list-header-item">Tutor</div>
+              <div className="list-header-item">Rating</div>
+              <div className="list-header-item">Subjects</div>
+              <div className="list-header-item">Rate</div>
+              <div className="list-header-item">Sessions</div>
+              <div className="list-header-item">Status</div>
+              <div className="list-header-item">Actions</div>
+            </div>
+
+            {/* Tutors List */}
+            <div className="tutors-list">
+              {filteredTutors.map((tutor) => (
+                <div key={tutor.id} className="tutor-card premium-hover">
+                  {/* Tutor Info */}
+                  <div className="tutor-info">
+                    <div className="tutor-avatar">
+                      {tutor.name.charAt(0).toUpperCase()}
+                    </div>
+                    
+                    <div className="tutor-details">
+                      <div className="tutor-name">{tutor.name}</div>
+                      <div className="tutor-email">{tutor.email}</div>
+                    </div>
+                  </div>
+
+                  {/* Rating */}
+                  <div className="tutor-rating">
+                    <div className="rating-stars">
+                      ⭐ {tutor.tutorProfile?.rating || 0}
+                    </div>
+                  </div>
+
+                  {/* Subjects */}
+                  <div className="tutor-subjects">
+                    {tutor.tutorProfile?.subjects && tutor.tutorProfile.subjects.length > 0 ? (
+                      <div className="subjects-tags">
+                        {tutor.tutorProfile.subjects.slice(0, 2).map((subject, index) => (
+                          <span key={index} className="subject-tag">{subject}</span>
+                        ))}
+                        {tutor.tutorProfile.subjects.length > 2 && (
+                          <span className="subject-tag more">+{tutor.tutorProfile.subjects.length - 2}</span>
+                        )}
+                      </div>
                     ) : (
-                      <span className="status-inactive">⏸️ Inactive</span>
+                      <span className="no-subjects">No subjects</span>
                     )}
                   </div>
+
+                  {/* Rate */}
+                  <div className="tutor-rate">
+                    ${tutor.tutorProfile?.hourlyRate || 0}/hr
+                  </div>
+
+                  {/* Sessions */}
+                  <div className="tutor-sessions">
+                    {tutor.tutorProfile?.totalSessions || 0} sessions
+                  </div>
+
+                  {/* Status */}
+                  <div className="tutor-status">
+                    <span className={`status-badge ${tutor.active ? 'active' : 'inactive'}`}>
+                      {tutor.active ? '✅ Active' : '⏸️ Inactive'}
+                    </span>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="tutor-actions">
+                    <button 
+                      className="action-btn view-btn"
+                      onClick={() => handleEditTutor(tutor)}
+                      title="View Tutor"
+                    >
+                      👁️
+                    </button>
+                    
+                    <button 
+                      className="action-btn edit-btn"
+                      onClick={() => handleEditTutor(tutor)}
+                      title="Edit Tutor"
+                    >
+                      ✏️
+                    </button>
+                    
+                    <button 
+                      className="action-btn toggle-btn"
+                      onClick={() => handleStatusToggle(tutor.id, tutor.active)}
+                      title={tutor.active ? 'Deactivate Tutor' : 'Activate Tutor'}
+                    >
+                      {tutor.active ? '⏸️' : '✅'}
+                    </button>
+                    
+                    <button 
+                      className="action-btn delete-btn"
+                      onClick={() => handleDeleteTutor(tutor)}
+                      title="Delete Tutor"
+                    >
+                      🗑️
+                    </button>
+                  </div>
                 </div>
-              </div>
-              
-              <div className="tutor-details">
-                {tutor.tutorProfile && (
-                  <>
-                    <div className="tutor-bio">
-                      <p>{tutor.tutorProfile.bio || 'No bio available'}</p>
-                    </div>
-                    <div className="tutor-stats">
-                      <div className="tutor-stat">
-                        <span className="stat-label">Rating:</span>
-                        <span className="stat-value">⭐ {tutor.tutorProfile.rating || 0}</span>
-                      </div>
-                      <div className="tutor-stat">
-                        <span className="stat-label">Sessions:</span>
-                        <span className="stat-value">🎯 {tutor.tutorProfile.totalSessions || 0}</span>
-                      </div>
-                      <div className="tutor-stat">
-                        <span className="stat-label">Rate:</span>
-                        <span className="stat-value">💰 ${tutor.tutorProfile.hourlyRate || 0}/hr</span>
-                      </div>
-                    </div>
-                    {tutor.tutorProfile.subjects && tutor.tutorProfile.subjects.length > 0 && (
-                      <div className="tutor-subjects">
-                        <span className="subjects-label">Subjects:</span>
-                        <div className="subjects-tags">
-                          {tutor.tutorProfile.subjects.slice(0, 3).map((subject, index) => (
-                            <span key={index} className="subject-tag">{subject}</span>
-                          ))}
-                          {tutor.tutorProfile.subjects.length > 3 && (
-                            <span className="subject-tag more">+{tutor.tutorProfile.subjects.length - 3} more</span>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
-              
-              <div className="tutor-actions">
-                <button
-                  className="btn btn-secondary btn-sm"
-                  onClick={() => handleEditTutor(tutor)}
-                >
-                  ✏️ Edit
-                </button>
-                <button
-                  className="btn btn-secondary btn-sm"
-                  onClick={() => handleStatusToggle(tutor.id, tutor.active)}
-                >
-                  {tutor.active ? '⏸️ Deactivate' : '✅ Activate'}
-                </button>
-                <button
-                  className="btn btn-danger btn-sm"
-                  onClick={() => handleDeleteTutor(tutor)}
-                >
-                  🗑️ Delete
-                </button>
-              </div>
+              ))}
             </div>
-          ))
+          </>
         )}
       </div>
 

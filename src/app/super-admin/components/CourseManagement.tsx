@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
+import './course-management.css';
 
 interface Course {
   id: string;
@@ -364,129 +365,241 @@ export default function CourseManagement({ showNotification }: CourseManagementP
 
   return (
     <div className="course-management-container">
-      {/* Premium Header */}
-      <div className="premium-header">
-        <div className="header-content">
-          <div className="header-left">
-            <div className="header-icon">📚</div>
-            <div className="header-text">
-              <h1 className="premium-title">Course Management</h1>
-              <p className="premium-subtitle">Manage all teaching resources and course content</p>
-            </div>
+      {/* Header */}
+      <div className="course-management-header">
+        <h1 className="premium-heading">📚 Course Management</h1>
+        <p className="premium-text">Manage all teaching resources and course content</p>
+      </div>
+
+      {/* Controls */}
+      <div className="course-controls">
+        <div className="control-left">
+          <button 
+            className="btn btn-primary"
+            onClick={() => setShowCreateResourceModal(true)}
+          >
+            <span className="btn-icon">➕</span>
+            Add New Resource
+          </button>
+          
+          <button 
+            className="btn btn-secondary"
+            onClick={() => {
+              showNotification('info', 'Export functionality coming soon');
+            }}
+          >
+            <span className="btn-icon">📤</span>
+            Export Data
+          </button>
+        </div>
+
+        <div className="control-center">
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Search courses and resources..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+            <span className="search-icon">🔍</span>
           </div>
-          <div className="header-stats">
-            <div className="stat-card">
-              <div className="stat-icon">📊</div>
-              <div className="stat-content">
-                <div className="stat-value">{stats.total}</div>
-                <div className="stat-label">Total Resources</div>
-              </div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-icon">✅</div>
-              <div className="stat-content">
-                <div className="stat-value">{stats.published}</div>
-                <div className="stat-label">Published</div>
-              </div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-icon">📝</div>
-              <div className="stat-content">
-                <div className="stat-value">{stats.draft}</div>
-                <div className="stat-label">Drafts</div>
-              </div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-icon">⏳</div>
-              <div className="stat-content">
-                <div className="stat-value">{stats.pending}</div>
-                <div className="stat-label">Pending</div>
-              </div>
-            </div>
+        </div>
+
+        <div className="control-right">
+          <select
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
+            className="filter-select"
+          >
+            <option value="all">All Types</option>
+            <option value="course">Courses</option>
+            <option value="resource">Resources</option>
+          </select>
+
+          <select
+            value={difficultyFilter}
+            onChange={(e) => setDifficultyFilter(e.target.value)}
+            className="filter-select"
+          >
+            <option value="all">All Difficulties</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+          </select>
+
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="filter-select"
+          >
+            <option value="all">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="published">Published</option>
+            <option value="draft">Draft</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Stats Grid */}
+      <div className="course-stats-grid">
+        <div className="stat-card premium-hover">
+          <div className="stat-icon courses">📚</div>
+          <div className="stat-content">
+            <div className="stat-value">{stats.total}</div>
+            <div className="stat-label">Total Resources</div>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon published">✅</div>
+          <div className="stat-content">
+            <div className="stat-value">{stats.published}</div>
+            <div className="stat-label">Published</div>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon draft">📝</div>
+          <div className="stat-content">
+            <div className="stat-value">{stats.draft}</div>
+            <div className="stat-label">Drafts</div>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon enrollments">⏳</div>
+          <div className="stat-content">
+            <div className="stat-value">{stats.pending}</div>
+            <div className="stat-label">Pending</div>
           </div>
         </div>
       </div>
 
-      {/* Tab Switcher */}
-      <div className="tab-switcher">
+      {/* Tabs */}
+      <div className="course-tabs">
         <button
-          className={`tab-btn${activeTab === 'courses' ? ' active' : ''}`}
+          className={`course-tab${activeTab === 'courses' ? ' active' : ''}`}
           onClick={() => setActiveTab('courses')}
         >
+          <span className="course-tab-icon">📚</span>
           Courses
         </button>
         <button
-          className={`tab-btn${activeTab === 'resources' ? ' active' : ''}`}
+          className={`course-tab${activeTab === 'resources' ? ' active' : ''}`}
           onClick={() => setActiveTab('resources')}
         >
+          <span className="course-tab-icon">📖</span>
           Teaching Resources
         </button>
       </div>
 
       {/* Course Management Section */}
       {activeTab === 'courses' && (
-        <div className="courses-section">
-          <div className="courses-header">
-            <h2>Courses</h2>
-          </div>
+        <div className="course-content-grid">
           {loading ? (
-            <div className="loading-container">
+            <div className="loading-overlay">
               <div className="loading-spinner"></div>
-              <p className="loading-text">Loading courses...</p>
+              <p>Loading courses...</p>
             </div>
           ) : error ? (
             <div className="error-container">
               <div className="error-icon">❌</div>
-              <p className="error-text">{error}</p>
-              <button onClick={fetchCourses} className="retry-button">
-                Try Again
+              <div className="error-message">{error}</div>
+              <button className="retry-btn" onClick={fetchCourses}>
+                Retry
               </button>
             </div>
           ) : !Array.isArray(courses) || courses.length === 0 ? (
-            <div className="empty-container">
+            <div className="empty-state">
               <div className="empty-icon">📚</div>
-              <h3 className="empty-title">No courses found</h3>
-              <p className="empty-text">Click "+ Add New Course" to create your first course.</p>
+              <h3 className="empty-title">No Courses Found</h3>
+              <p className="empty-subtitle">Click &quot;+ Add New Course&quot; to create your first course.</p>
             </div>
           ) : (
-            <div className="courses-grid">
-              {courses.map((course) => (
-                <div key={course.id} className="course-card">
-                  <div className="course-header">
-                    <div className="course-title">{course.title}</div>
-                    <div className="course-status">
-                      <span className={`status-badge ${course.isActive ? 'active' : 'inactive'}`}>{course.isActive ? 'Active' : 'Inactive'}</span>
-                      <span className={`status-badge ${course.isPublished ? 'published' : 'draft'}`}>{course.isPublished ? 'Published' : 'Draft'}</span>
+            courses.map((course) => (
+              <div key={course.id} className="course-card premium-hover">
+                <div className="course-card-header">
+                  <div className="course-card-title">{course.title}</div>
+                  <div className="course-card-category">{course.category}</div>
+                </div>
+                
+                <div className="course-card-body">
+                  <div className="course-card-description">{course.description}</div>
+                  
+                  <div className="course-card-meta">
+                    <div className="meta-item">
+                      <span className="meta-label">Difficulty:</span>
+                      <span className={`meta-value difficulty-badge ${getDifficultyColor(course.difficulty)}`}>{course.difficulty}</span>
+                    </div>
+                    <div className="meta-item">
+                      <span className="meta-label">Duration:</span>
+                      <span className="meta-value">{course.duration} min</span>
+                    </div>
+                    <div className="meta-item">
+                      <span className="meta-label">Language:</span>
+                      <span className="meta-value">{course.language}</span>
+                    </div>
+                    <div className="meta-item">
+                      <span className="meta-label">Price:</span>
+                      <span className="meta-value">₦{course.price}</span>
                     </div>
                   </div>
-                  <div className="course-content">
-                    <div className="course-meta">
-                      <span>Category: {course.category}</span>
-                      <span>Difficulty: {course.difficulty}</span>
-                      <span>Duration: {course.duration} min</span>
-                      <span>Language: {course.language}</span>
-                      <span>Price: ₦{course.price}</span>
-                    </div>
-                    <div className="course-description">{course.description}</div>
-                    {course._count && (
-                      <div className="course-stats">
-                        <span>Enrollments: {course._count.enrollments}</span>
-                        <span>Lessons: {course._count.lessons}</span>
-                        <span>Reviews: {course._count.reviews}</span>
+                  
+                  {course._count && (
+                    <div className="course-card-stats">
+                      <div className="course-stat-item">
+                        <span className="course-stat-value">{course._count.enrollments}</span>
+                        <span className="course-stat-label">Enrollments</span>
                       </div>
-                    )}
+                      <div className="course-stat-item">
+                        <span className="course-stat-value">{course._count.lessons}</span>
+                        <span className="course-stat-label">Lessons</span>
+                      </div>
+                      <div className="course-stat-item">
+                        <span className="course-stat-value">{course._count.reviews}</span>
+                        <span className="course-stat-label">Reviews</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="course-card-footer">
+                  <div className="course-status">
+                    <span className={`course-status ${course.isActive ? 'published' : 'draft'}`}>
+                      {course.isActive ? '✅ Active' : '⏸️ Inactive'}
+                    </span>
+                    <span className={`course-status ${course.isPublished ? 'published' : 'draft'}`}>
+                      {course.isPublished ? '📤 Published' : '📝 Draft'}
+                    </span>
                   </div>
+                  
                   <div className="course-actions">
-                    <button className="action-button edit" onClick={() => openEditModal(course)}>
-                      ✏️ Edit
+                    <button 
+                      className="course-action-btn view"
+                      onClick={() => openEditModal(course)}
+                      title="View Course"
+                    >
+                      👁️
                     </button>
-                    <button className="action-button delete" onClick={() => handleDeleteCourse(course.id)}>
-                      🗑️ Delete
+                    
+                    <button 
+                      className="course-action-btn edit"
+                      onClick={() => openEditModal(course)}
+                      title="Edit Course"
+                    >
+                      ✏️
+                    </button>
+                    
+                    <button 
+                      className="course-action-btn delete"
+                      onClick={() => handleDeleteCourse(course.id)}
+                      title="Delete Course"
+                    >
+                      🗑️
                     </button>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))
           )}
           {/* Pagination for courses */}
           {totalPages > 1 && (
@@ -578,98 +691,98 @@ export default function CourseManagement({ showNotification }: CourseManagementP
         </div>
       )}
 
-      {/* Teaching Resources Section (existing) */}
+      {/* Teaching Resources Section */}
       {activeTab === 'resources' && (
-        <div className="resources-section">
-          <div className="resources-header">
-            <h2>Teaching Resources</h2>
-            <button className="create-resource-btn" onClick={() => setShowCreateResourceModal(true)}>
-              + Add New Resource
-            </button>
-          </div>
+        <div className="resource-grid">
           {loading ? (
-            <div className="loading-container">
+            <div className="loading-overlay">
               <div className="loading-spinner"></div>
-              <p className="loading-text">Loading resources...</p>
+              <p>Loading resources...</p>
             </div>
           ) : error ? (
             <div className="error-container">
               <div className="error-icon">❌</div>
-              <p className="error-text">{error}</p>
-              <button onClick={fetchResources} className="retry-button">
-                Try Again
+              <div className="error-message">{error}</div>
+              <button className="retry-btn" onClick={fetchResources}>
+                Retry
               </button>
             </div>
           ) : !Array.isArray(resources) || resources.length === 0 ? (
-            <div className="empty-container">
-              <div className="empty-icon">📚</div>
-              <h3 className="empty-title">No resources found</h3>
-              <p className="empty-text">Click "+ Add New Resource" to create your first resource.</p>
+            <div className="empty-state">
+              <div className="empty-icon">📖</div>
+              <h3 className="empty-title">No Resources Found</h3>
+              <p className="empty-subtitle">Click &quot;+ Add New Resource&quot; to create your first resource.</p>
             </div>
           ) : (
-            <>
-              <div className="resources-grid">
-                {Array.isArray(resources) && resources.map((resource) => (
-                  <div key={resource.id} className="resource-card">
-                    <div className="resource-header">
-                      <div className="resource-type-icon">
-                        {getTypeIcon(resource.type)}
-                      </div>
-                      <div className="resource-status">
-                        <span className={`status-badge ${resource.isActive ? 'active' : 'inactive'}`}>{resource.isActive ? 'Active' : 'Inactive'}</span>
-                      </div>
+            Array.isArray(resources) && resources.map((resource) => (
+              <div key={resource.id} className="resource-card premium-hover">
+                <div className="resource-header">
+                  <div className="resource-icon">
+                    {getTypeIcon(resource.type)}
+                  </div>
+                  <div className="resource-type">{resource.type}</div>
+                </div>
+                
+                <div className="resource-title">{resource.title}</div>
+                <div className="resource-description">{resource.description}</div>
+                
+                <div className="resource-meta">
+                  <div className="meta-item">
+                    <span className="meta-label">Category:</span>
+                    <span className="meta-value">{resource.category}</span>
+                  </div>
+                  <div className="meta-item">
+                    <span className="meta-label">Difficulty:</span>
+                    <span className={`meta-value difficulty-badge ${getDifficultyColor(resource.difficulty)}`}>{resource.difficulty}</span>
+                  </div>
+                  <div className="meta-item">
+                    <span className="meta-label">Duration:</span>
+                    <span className="meta-value">{resource.duration} min</span>
+                  </div>
+                  <div className="meta-item">
+                    <span className="meta-label">Language:</span>
+                    <span className="meta-value">{resource.language}</span>
+                  </div>
+                </div>
+                
+                {resource._count && (
+                  <div className="resource-stats">
+                    <div className="stat-item">
+                      <span className="stat-icon">❤️</span>
+                      <span className="stat-value">{resource._count.favorites}</span>
                     </div>
-                    <div className="resource-content">
-                      <h3 className="resource-title">{resource.title}</h3>
-                      <p className="resource-description">{resource.description}</p>
-                      <div className="resource-meta">
-                        <div className="meta-item">
-                          <span className="meta-label">Category:</span>
-                          <span className="meta-value">{resource.category}</span>
-                        </div>
-                        <div className="meta-item">
-                          <span className="meta-label">Difficulty:</span>
-                          <span className={`meta-value difficulty-badge ${getDifficultyColor(resource.difficulty)}`}>{resource.difficulty}</span>
-                        </div>
-                        <div className="meta-item">
-                          <span className="meta-label">Duration:</span>
-                          <span className="meta-value">{resource.duration} min</span>
-                        </div>
-                        <div className="meta-item">
-                          <span className="meta-label">Language:</span>
-                          <span className="meta-value">{resource.language}</span>
-                        </div>
-                      </div>
-                      {resource._count && (
-                        <div className="resource-stats">
-                          <div className="stat-item">
-                            <span className="stat-icon">❤️</span>
-                            <span className="stat-value">{resource._count.favorites}</span>
-                          </div>
-                          <div className="stat-item">
-                            <span className="stat-icon">⭐</span>
-                            <span className="stat-value">{resource._count.ratings}</span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    <div className="resource-actions">
-                      <button className="action-button edit">
-                        <span className="action-icon">✏️</span>
-                        Edit
-                      </button>
-                      <button className="action-button view">
-                        <span className="action-icon">👁️</span>
-                        View
-                      </button>
-                      <button className="action-button delete">
-                        <span className="action-icon">🗑️</span>
-                        Delete
-                      </button>
+                    <div className="stat-item">
+                      <span className="stat-icon">⭐</span>
+                      <span className="stat-value">{resource._count.ratings}</span>
                     </div>
                   </div>
-                ))}
+                )}
+                
+                <div className="resource-actions">
+                  <button 
+                    className="resource-action-btn view"
+                    title="View Resource"
+                  >
+                    👁️
+                  </button>
+                  
+                  <button 
+                    className="resource-action-btn edit"
+                    title="Edit Resource"
+                  >
+                    ✏️
+                  </button>
+                  
+                  <button 
+                    className="resource-action-btn delete"
+                    title="Delete Resource"
+                  >
+                    🗑️
+                  </button>
+                </div>
               </div>
+            ))
+          )}
               {/* Pagination for resources */}
               {totalPages > 1 && (
                 <div className="pagination">
@@ -692,8 +805,6 @@ export default function CourseManagement({ showNotification }: CourseManagementP
                   </button>
                 </div>
               )}
-            </>
-          )}
           {/* Create Resource Modal */}
           {showCreateResourceModal && (
             <div className="modal-overlay">

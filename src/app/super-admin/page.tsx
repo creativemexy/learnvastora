@@ -120,6 +120,17 @@ export default function SuperAdminDashboard() {
   const [isOnline, setIsOnline] = useState(true);
   const [connectionStatus, setConnectionStatus] = useState<'connected' | 'disconnected' | 'reconnecting'>('connected');
   const [notifications, setNotifications] = useState<Array<{type: 'success' | 'error' | 'info', message: string, id: string}>>([]);
+  const [updateStatus, setUpdateStatus] = useState<{
+    hasChanges: boolean;
+    lastCommit: string;
+    lastCommitMessage: string;
+    lastCommitDate: string;
+    deploymentStatus: 'idle' | 'checking' | 'updating' | 'completed' | 'failed';
+    deploymentMessage: string;
+    oracleInstanceStatus: 'online' | 'offline' | 'updating';
+  } | null>(null);
+  const [isCheckingUpdates, setIsCheckingUpdates] = useState(false);
+  const [isDeploying, setIsDeploying] = useState(false);
 
   // Network status monitoring
   useEffect(() => {
@@ -227,6 +238,70 @@ export default function SuperAdminDashboard() {
     fetchSuperAdminData();
     setLastUpdate(new Date());
     showNotification('success', 'Data refreshed manually');
+  }, [fetchSuperAdminData, showNotification]);
+
+  // Update system functions
+  const checkForUpdates = useCallback(async () => {
+    try {
+      setIsCheckingUpdates(true);
+      const response = await fetch('/api/super-admin/update-system', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'check-updates' })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setUpdateStatus(data.data);
+        if (data.data.hasChanges) {
+          showNotification('info', 'Updates available from GitHub');
+        } else {
+          showNotification('success', 'System is up to date');
+        }
+      } else {
+        showNotification('error', 'Failed to check for updates');
+      }
+    } catch (error) {
+      console.error('Check updates error:', error);
+      showNotification('error', 'Failed to check for updates');
+    } finally {
+      setIsCheckingUpdates(false);
+    }
+  }, [showNotification]);
+
+  const deployUpdates = useCallback(async () => {
+    try {
+      setIsDeploying(true);
+      setUpdateStatus(prev => prev ? { ...prev, deploymentStatus: 'updating' } : null);
+      
+      const response = await fetch('/api/super-admin/update-system', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'deploy-updates' })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setUpdateStatus(data.data);
+        showNotification('success', 'System updated successfully');
+        // Refresh data after update
+        setTimeout(() => {
+          fetchSuperAdminData();
+          setLastUpdate(new Date());
+        }, 2000);
+      } else {
+        setUpdateStatus(prev => prev ? { ...prev, deploymentStatus: 'failed' } : null);
+        showNotification('error', data.error || 'Failed to deploy updates');
+      }
+    } catch (error) {
+      console.error('Deploy updates error:', error);
+      setUpdateStatus(prev => prev ? { ...prev, deploymentStatus: 'failed' } : null);
+      showNotification('error', 'Failed to deploy updates');
+    } finally {
+      setIsDeploying(false);
+    }
   }, [fetchSuperAdminData, showNotification]);
 
   // Dynamic tab switching with data preloading
@@ -387,17 +462,21 @@ export default function SuperAdminDashboard() {
             
             <button 
               className="btn btn-primary update-btn"
-              onClick={manualRefresh}
-              disabled={loading}
+              onClick={checkForUpdates}
+              disabled={isCheckingUpdates || isDeploying}
               style={{
-                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                background: isCheckingUpdates || isDeploying 
+                  ? 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)'
+                  : updateStatus?.hasChanges 
+                    ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)'
+                    : 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
                 color: 'white',
                 border: 'none',
                 padding: '0.75rem 1.5rem',
                 borderRadius: '10px',
                 fontSize: '0.9rem',
                 fontWeight: '600',
-                cursor: 'pointer',
+                cursor: isCheckingUpdates || isDeploying ? 'not-allowed' : 'pointer',
                 transition: 'all 0.3s ease',
                 display: 'flex',
                 alignItems: 'center',
@@ -406,9 +485,11 @@ export default function SuperAdminDashboard() {
                 marginLeft: '1rem'
               }}
               onMouseEnter={(e) => {
-                const target = e.target as HTMLButtonElement;
-                target.style.transform = 'translateY(-2px)';
-                target.style.boxShadow = '0 6px 20px rgba(16, 185, 129, 0.4)';
+                if (!isCheckingUpdates && !isDeploying) {
+                  const target = e.target as HTMLButtonElement;
+                  target.style.transform = 'translateY(-2px)';
+                  target.style.boxShadow = '0 6px 20px rgba(16, 185, 129, 0.4)';
+                }
               }}
               onMouseLeave={(e) => {
                 const target = e.target as HTMLButtonElement;
@@ -416,9 +497,50 @@ export default function SuperAdminDashboard() {
                 target.style.boxShadow = '0 4px 15px rgba(16, 185, 129, 0.3)';
               }}
             >
-              <span>🔄</span>
-              Update
+              <span>
+                {isCheckingUpdates ? '⏳' : isDeploying ? '🔄' : updateStatus?.hasChanges ? '⚠️' : '🔄'}
+              </span>
+              {isCheckingUpdates ? 'Checking...' : isDeploying ? 'Updating...' : updateStatus?.hasChanges ? 'Update Available' : 'Check Updates'}
             </button>
+            
+            {updateStatus?.hasChanges && (
+              <button 
+                className="btn btn-warning deploy-btn"
+                onClick={deployUpdates}
+                disabled={isDeploying}
+                style={{
+                  background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                  color: 'white',
+                  border: 'none',
+                  padding: '0.75rem 1.5rem',
+                  borderRadius: '10px',
+                  fontSize: '0.9rem',
+                  fontWeight: '600',
+                  cursor: isDeploying ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.3s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  boxShadow: '0 4px 15px rgba(245, 158, 11, 0.3)',
+                  marginLeft: '0.5rem'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isDeploying) {
+                    const target = e.target as HTMLButtonElement;
+                    target.style.transform = 'translateY(-2px)';
+                    target.style.boxShadow = '0 6px 20px rgba(245, 158, 11, 0.4)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  const target = e.target as HTMLButtonElement;
+                  target.style.transform = 'translateY(0)';
+                  target.style.boxShadow = '0 4px 15px rgba(245, 158, 11, 0.3)';
+                }}
+              >
+                <span>{isDeploying ? '⏳' : '🚀'}</span>
+                {isDeploying ? 'Deploying...' : 'Deploy Updates'}
+              </button>
+            )}
           </div>
         </div>
       

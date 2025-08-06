@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import './analytics-reports.css';
 
 interface OverviewData {
   totalUsers: number;
@@ -212,399 +213,302 @@ export default function AnalyticsManagement({ showNotification }: AnalyticsManag
 
   const getStatusBadge = (status: string) => {
     const colors: { [key: string]: string } = {
-      'PENDING': 'bg-yellow-100 text-yellow-800',
-      'CONFIRMED': 'bg-blue-100 text-blue-800',
-      'IN_PROGRESS': 'bg-purple-100 text-purple-800',
-      'COMPLETED': 'bg-green-100 text-green-800',
-      'CANCELLED': 'bg-red-100 text-red-800',
-      'PAID': 'bg-green-100 text-green-800',
-      'FAILED': 'bg-red-100 text-red-800'
+      'PENDING': 'pending',
+      'CONFIRMED': 'success',
+      'IN_PROGRESS': 'pending',
+      'COMPLETED': 'success',
+      'CANCELLED': 'failed',
+      'PAID': 'success',
+      'FAILED': 'failed'
     };
-    return colors[status] || 'bg-gray-100 text-gray-800';
+    return colors[status] || 'pending';
   };
 
   const getHealthColor = (value: number, threshold: number) => {
-    return value >= threshold ? 'text-green-600' : 'text-red-600';
+    return value >= threshold ? 'positive' : 'negative';
   };
 
   return (
-    <div className="super-admin-analytics-management">
-      <div className="super-admin-card">
-        <div className="super-admin-card-header">
-          <h3>Analytics & Reports</h3>
-          <div className="super-admin-card-actions">
-            <select
-              value={period}
-              onChange={(e) => setPeriod(e.target.value)}
-              className="super-admin-select"
-            >
-              <option value="7d">Last 7 Days</option>
-              <option value="30d">Last 30 Days</option>
-              <option value="90d">Last 90 Days</option>
-              <option value="1y">Last Year</option>
-            </select>
-            <select
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              className="super-admin-select"
-            >
-              <option value="overview">Overview</option>
-              <option value="users">User Analytics</option>
-              <option value="sessions">Session Analytics</option>
-              <option value="revenue">Revenue Analytics</option>
-              <option value="tutors">Tutor Analytics</option>
-            </select>
-            <button 
-              className="super-admin-btn secondary"
-              onClick={() => {
-                showNotification('info', 'Export functionality coming soon');
-              }}
-            >
-              <i className="fas fa-download"></i>
-              Export Report
-            </button>
-            <button 
-              className="super-admin-btn primary"
-              onClick={fetchAnalytics}
-            >
-              <i className="fas fa-sync-alt"></i>
-              Refresh
-            </button>
-          </div>
+    <div className="analytics-container">
+      {/* Header */}
+      <div className="analytics-header">
+        <h1 className="premium-heading">📊 Analytics & Reports</h1>
+        <p className="premium-text">Comprehensive insights and data analysis for platform performance</p>
+      </div>
+
+      {/* Controls */}
+      <div className="analytics-controls">
+        <div className="control-left">
+          <select
+            value={period}
+            onChange={(e) => setPeriod(e.target.value)}
+            className="filter-select"
+          >
+            <option value="7d">Last 7 Days</option>
+            <option value="30d">Last 30 Days</option>
+            <option value="90d">Last 90 Days</option>
+            <option value="1y">Last Year</option>
+          </select>
+          
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            className="filter-select"
+          >
+            <option value="overview">Overview</option>
+            <option value="users">User Analytics</option>
+            <option value="sessions">Session Analytics</option>
+            <option value="revenue">Revenue Analytics</option>
+            <option value="tutors">Tutor Analytics</option>
+          </select>
         </div>
-        <div className="super-admin-card-body">
-          {loading ? (
-            <div className="super-admin-loading">
-              <div className="super-admin-spinner"></div>
-              <p>Loading analytics...</p>
-            </div>
-          ) : (
-            <>
-              {/* Platform Health */}
-              {platformHealth && (
-                <div className="super-admin-platform-health">
-                  <h4>Platform Health</h4>
-                  <div className="super-admin-health-metrics">
-                    <div className="super-admin-health-metric">
-                      <span className="super-admin-health-label">Uptime:</span>
-                      <span className={`super-admin-health-value ${getHealthColor(platformHealth.uptime, 99)}`}>
-                        {platformHealth.uptime}%
-                      </span>
-                    </div>
-                    <div className="super-admin-health-metric">
-                      <span className="super-admin-health-label">Response Time:</span>
-                      <span className={`super-admin-health-value ${getHealthColor(platformHealth.responseTime, 200)}`}>
-                        {platformHealth.responseTime}ms
-                      </span>
-                    </div>
-                    <div className="super-admin-health-metric">
-                      <span className="super-admin-health-label">Error Rate:</span>
-                      <span className={`super-admin-health-value ${getHealthColor(platformHealth.errorRate, 1)}`}>
-                        {platformHealth.errorRate}%
-                      </span>
-                    </div>
-                    <div className="super-admin-health-metric">
-                      <span className="super-admin-health-label">Active Sessions:</span>
-                      <span className="super-admin-health-value">
-                        {platformHealth.activeSessions}
-                      </span>
-                    </div>
-                    <div className="super-admin-health-metric">
-                      <span className="super-admin-health-label">Pending Approvals:</span>
-                      <span className="super-admin-health-value">
-                        {platformHealth.pendingApprovals}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
 
-              {/* Overview Analytics */}
-              {type === 'overview' && analyticsData?.overview && (
-                <div className="super-admin-analytics-overview">
-                  <div className="super-admin-overview-stats">
-                    <div className="super-admin-stat-card">
-                      <div className="super-admin-stat-icon">
-                        <i className="fas fa-users"></i>
-                      </div>
-                      <div className="super-admin-stat-content">
-                        <h4>Total Users</h4>
-                        <p>{formatNumber(analyticsData.overview.totalUsers)}</p>
-                        <span className="super-admin-stat-breakdown">
-                          {analyticsData.overview.totalStudents} Students • {analyticsData.overview.totalTutors} Tutors
-                        </span>
-                      </div>
-                    </div>
-                    <div className="super-admin-stat-card">
-                      <div className="super-admin-stat-icon">
-                        <i className="fas fa-calendar-check"></i>
-                      </div>
-                      <div className="super-admin-stat-content">
-                        <h4>Total Sessions</h4>
-                        <p>{formatNumber(analyticsData.overview.totalSessions)}</p>
-                        <span className="super-admin-stat-breakdown">
-                          {analyticsData.overview.activeUsers} Active Users
-                        </span>
-                      </div>
-                    </div>
-                    <div className="super-admin-stat-card">
-                      <div className="super-admin-stat-icon">
-                        <i className="fas fa-dollar-sign"></i>
-                      </div>
-                      <div className="super-admin-stat-content">
-                        <h4>Total Revenue</h4>
-                        <p>{formatCurrency(analyticsData.overview.totalRevenue)}</p>
-                        <span className="super-admin-stat-breakdown">
-                          Net: {formatCurrency(analyticsData.overview.netRevenue)}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="super-admin-stat-card">
-                      <div className="super-admin-stat-icon">
-                        <i className="fas fa-chart-line"></i>
-                      </div>
-                      <div className="super-admin-stat-content">
-                        <h4>Platform Activity</h4>
-                        <p>{formatNumber(analyticsData.overview.activeUsers)}</p>
-                        <span className="super-admin-stat-breakdown">
-                          {analyticsData.overview.pendingApprovals} Pending Approvals
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="super-admin-recent-activity">
-                    <div className="super-admin-recent-section">
-                      <h4>Recent Sessions</h4>
-                      <div className="super-admin-recent-list">
-                        {analyticsData.overview.recentBookings.map(booking => (
-                          <div key={booking.id} className="super-admin-recent-item">
-                            <div className="super-admin-recent-info">
-                              <span className="super-admin-recent-title">
-                                {booking.student.name} → {booking.tutor.name}
-                              </span>
-                              <span className="super-admin-recent-date">
-                                {formatDateTime(booking.scheduledAt)}
-                              </span>
-                            </div>
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadge(booking.status)}`}>
-                              {booking.status}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="super-admin-recent-section">
-                      <h4>Recent Payments</h4>
-                      <div className="super-admin-recent-list">
-                        {analyticsData.overview.recentPayments.map(payment => (
-                          <div key={payment.id} className="super-admin-recent-item">
-                            <div className="super-admin-recent-info">
-                              <span className="super-admin-recent-title">
-                                {payment.user.name}
-                              </span>
-                              <span className="super-admin-recent-date">
-                                {formatDateTime(payment.createdAt)}
-                              </span>
-                            </div>
-                            <div className="super-admin-recent-amount">
-                              <span className="super-admin-amount-value">
-                                {formatCurrency(payment.amount)}
-                              </span>
-                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadge(payment.status)}`}>
-                                {payment.status}
-                              </span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* User Analytics */}
-              {type === 'users' && analyticsData?.users && (
-                <div className="super-admin-user-analytics">
-                  <div className="super-admin-analytics-section">
-                    <h4>User Growth</h4>
-                    <div className="super-admin-user-growth">
-                      {analyticsData.users.userGrowth.map(growth => (
-                        <div key={growth.role} className="super-admin-growth-item">
-                          <span className="super-admin-growth-role">{growth.role}</span>
-                          <span className="super-admin-growth-count">{growth._count.id}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="super-admin-analytics-section">
-                    <h4>Top Active Users</h4>
-                    <div className="super-admin-top-users">
-                      {analyticsData.users.topActiveUsers.map(user => (
-                        <div key={user.id} className="super-admin-user-item">
-                          <div className="super-admin-user-info">
-                            <span className="super-admin-user-name">{user.name}</span>
-                            <span className="super-admin-user-email">{user.email}</span>
-                            <span className="super-admin-user-role">{user.role}</span>
-                          </div>
-                          <div className="super-admin-user-stats">
-                            <span className="super-admin-user-sessions">
-                              {user.totalSessions} sessions
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Session Analytics */}
-              {type === 'sessions' && analyticsData?.sessions && (
-                <div className="super-admin-session-analytics">
-                  <div className="super-admin-analytics-section">
-                    <h4>Session Statistics</h4>
-                    <div className="super-admin-session-stats">
-                      <div className="super-admin-stat-item">
-                        <span className="super-admin-stat-label">Total Sessions:</span>
-                        <span className="super-admin-stat-value">{formatNumber(analyticsData.sessions.totalSessions)}</span>
-                      </div>
-                      <div className="super-admin-stat-item">
-                        <span className="super-admin-stat-label">Total Revenue:</span>
-                        <span className="super-admin-stat-value">{formatCurrency(analyticsData.sessions.totalRevenue)}</span>
-                      </div>
-                      <div className="super-admin-stat-item">
-                        <span className="super-admin-stat-label">Total Hours:</span>
-                        <span className="super-admin-stat-value">{formatNumber(analyticsData.sessions.totalHours)}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="super-admin-analytics-section">
-                    <h4>Top Performing Tutors</h4>
-                    <div className="super-admin-top-tutors">
-                      {analyticsData.sessions.topTutors.map(tutor => (
-                        <div key={tutor.id} className="super-admin-tutor-item">
-                          <div className="super-admin-tutor-info">
-                            <span className="super-admin-tutor-name">{tutor.name}</span>
-                            <span className="super-admin-tutor-email">{tutor.email}</span>
-                          </div>
-                          <div className="super-admin-tutor-stats">
-                            <span className="super-admin-tutor-sessions">
-                              {tutor.totalSessions} sessions
-                            </span>
-                            <span className="super-admin-tutor-revenue">
-                              {formatCurrency(tutor.totalRevenue)}
-                            </span>
-                            <span className="super-admin-tutor-rating">
-                              ⭐ {tutor.averageRating.toFixed(1)}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Revenue Analytics */}
-              {type === 'revenue' && analyticsData?.revenue && (
-                <div className="super-admin-revenue-analytics">
-                  <div className="super-admin-analytics-section">
-                    <h4>Revenue Overview</h4>
-                    <div className="super-admin-revenue-stats">
-                      <div className="super-admin-stat-item">
-                        <span className="super-admin-stat-label">Total Revenue:</span>
-                        <span className="super-admin-stat-value">{formatCurrency(analyticsData.revenue.totalRevenue)}</span>
-                      </div>
-                      <div className="super-admin-stat-item">
-                        <span className="super-admin-stat-label">Total Payouts:</span>
-                        <span className="super-admin-stat-value">{formatCurrency(analyticsData.revenue.totalPayouts)}</span>
-                      </div>
-                      <div className="super-admin-stat-item">
-                        <span className="super-admin-stat-label">Net Revenue:</span>
-                        <span className={`super-admin-stat-value ${analyticsData.revenue.netRevenue >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                          {formatCurrency(analyticsData.revenue.netRevenue)}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="super-admin-analytics-section">
-                    <h4>Payment Method Breakdown</h4>
-                    <div className="super-admin-payment-breakdown">
-                      {analyticsData.revenue.paymentMethodBreakdown.map(method => (
-                        <div key={method.status} className="super-admin-payment-method">
-                          <span className="super-admin-method-status">{method.status}</span>
-                          <span className="super-admin-method-count">{method._count.id} payments</span>
-                          <span className="super-admin-method-amount">{formatCurrency(method._sum.amount || 0)}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Tutor Analytics */}
-              {type === 'tutors' && analyticsData?.tutors && (
-                <div className="super-admin-tutor-analytics">
-                  <div className="super-admin-analytics-section">
-                    <h4>Tutor Performance</h4>
-                    <div className="super-admin-tutor-performance">
-                      {analyticsData.tutors.topPerformingTutors.map(tutor => (
-                        <div key={tutor.id} className="super-admin-tutor-performance-item">
-                          <div className="super-admin-tutor-basic">
-                            <span className="super-admin-tutor-name">{tutor.name}</span>
-                            <span className="super-admin-tutor-email">{tutor.email}</span>
-                            <span className="super-admin-tutor-rate">${tutor.hourlyRate}/hr</span>
-                          </div>
-                          <div className="super-admin-tutor-metrics">
-                            <div className="super-admin-metric">
-                              <span className="super-admin-metric-label">Sessions:</span>
-                              <span className="super-admin-metric-value">{tutor.totalSessions}</span>
-                            </div>
-                            <div className="super-admin-metric">
-                              <span className="super-admin-metric-label">Revenue:</span>
-                              <span className="super-admin-metric-value">{formatCurrency(tutor.totalRevenue)}</span>
-                            </div>
-                            <div className="super-admin-metric">
-                              <span className="super-admin-metric-label">Rating:</span>
-                              <span className="super-admin-metric-value">⭐ {tutor.averageRating.toFixed(1)}</span>
-                            </div>
-                            <div className="super-admin-metric">
-                              <span className="super-admin-metric-label">Completion:</span>
-                              <span className="super-admin-metric-value">{tutor.completionRate.toFixed(1)}%</span>
-                            </div>
-                          </div>
-                          <div className="super-admin-tutor-skills">
-                            {tutor.skills.slice(0, 3).map(skill => (
-                              <span key={skill} className="super-admin-skill-tag">{skill}</span>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="super-admin-analytics-section">
-                    <h4>Skills Distribution</h4>
-                    <div className="super-admin-skills-breakdown">
-                      {analyticsData.tutors.skillsBreakdown.slice(0, 10).map(skill => (
-                        <div key={skill.skill} className="super-admin-skill-item">
-                          <span className="super-admin-skill-name">{skill.skill}</span>
-                          <span className="super-admin-skill-count">{skill.count} tutors</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </>
-          )}
+        <div className="control-right">
+          <button 
+            className="btn btn-secondary"
+            onClick={() => {
+              showNotification('info', 'Export functionality coming soon');
+            }}
+          >
+            <span className="btn-icon">📤</span>
+            Export Report
+          </button>
+          
+          <button 
+            className="btn btn-primary"
+            onClick={fetchAnalytics}
+          >
+            <span className="btn-icon">🔄</span>
+            Refresh
+          </button>
         </div>
       </div>
+
+      {/* Content */}
+      {loading ? (
+        <div className="loading-overlay">
+          <div className="loading-spinner"></div>
+          <p>Loading analytics...</p>
+        </div>
+      ) : (
+        <>
+          {/* Platform Health */}
+          {platformHealth && (
+            <div className="health-section">
+              <h3 className="section-title">🏥 Platform Health</h3>
+              <div className="metric-grid">
+                <div className="metric-card premium-hover">
+                  <div className="metric-icon">⚡</div>
+                  <div className="metric-content">
+                    <div className="metric-value">{platformHealth.uptime}%</div>
+                    <div className="metric-label">Uptime</div>
+                    <div className={`metric-trend ${getHealthColor(platformHealth.uptime, 99)}`}>
+                      {platformHealth.uptime >= 99 ? '✅' : '⚠️'}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="metric-card premium-hover">
+                  <div className="metric-icon">⏱️</div>
+                  <div className="metric-content">
+                    <div className="metric-value">{platformHealth.responseTime}ms</div>
+                    <div className="metric-label">Response Time</div>
+                    <div className={`metric-trend ${getHealthColor(platformHealth.responseTime, 200)}`}>
+                      {platformHealth.responseTime <= 200 ? '✅' : '⚠️'}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="metric-card premium-hover">
+                  <div className="metric-icon">❌</div>
+                  <div className="metric-content">
+                    <div className="metric-value">{platformHealth.errorRate}%</div>
+                    <div className="metric-label">Error Rate</div>
+                    <div className={`metric-trend ${getHealthColor(platformHealth.errorRate, 1)}`}>
+                      {platformHealth.errorRate <= 1 ? '✅' : '⚠️'}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="metric-card premium-hover">
+                  <div className="metric-icon">👥</div>
+                  <div className="metric-content">
+                    <div className="metric-value">{platformHealth.activeSessions}</div>
+                    <div className="metric-label">Active Sessions</div>
+                  </div>
+                </div>
+                
+                <div className="metric-card premium-hover">
+                  <div className="metric-icon">⏳</div>
+                  <div className="metric-content">
+                    <div className="metric-value">{platformHealth.pendingApprovals}</div>
+                    <div className="metric-label">Pending Approvals</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Overview Analytics */}
+          {type === 'overview' && analyticsData?.overview && (
+            <div className="overview-section">
+              <h3 className="section-title">📈 Overview Analytics</h3>
+              <div className="overview-grid">
+                <div className="overview-card premium-hover">
+                  <div className="overview-card-header">
+                    <div className="overview-card-icon">👥</div>
+                    <div className="overview-card-trend positive">+12%</div>
+                  </div>
+                  <div className="overview-card-value">{formatNumber(analyticsData.overview.totalUsers)}</div>
+                  <div className="overview-card-label">Total Users</div>
+                </div>
+                
+                <div className="overview-card premium-hover">
+                  <div className="overview-card-header">
+                    <div className="overview-card-icon">🎓</div>
+                    <div className="overview-card-trend positive">+8%</div>
+                  </div>
+                  <div className="overview-card-value">{formatNumber(analyticsData.overview.totalTutors)}</div>
+                  <div className="overview-card-label">Total Tutors</div>
+                </div>
+                
+                <div className="overview-card premium-hover">
+                  <div className="overview-card-header">
+                    <div className="overview-card-icon">📚</div>
+                    <div className="overview-card-trend positive">+15%</div>
+                  </div>
+                  <div className="overview-card-value">{formatNumber(analyticsData.overview.totalStudents)}</div>
+                  <div className="overview-card-label">Total Students</div>
+                </div>
+                
+                <div className="overview-card premium-hover">
+                  <div className="overview-card-header">
+                    <div className="overview-card-icon">🎯</div>
+                    <div className="overview-card-trend positive">+20%</div>
+                  </div>
+                  <div className="overview-card-value">{formatNumber(analyticsData.overview.totalSessions)}</div>
+                  <div className="overview-card-label">Total Sessions</div>
+                </div>
+                
+                <div className="overview-card premium-hover">
+                  <div className="overview-card-header">
+                    <div className="overview-card-icon">💰</div>
+                    <div className="overview-card-trend positive">+25%</div>
+                  </div>
+                  <div className="overview-card-value">{formatCurrency(analyticsData.overview.totalRevenue)}</div>
+                  <div className="overview-card-label">Total Revenue</div>
+                </div>
+                
+                <div className="overview-card premium-hover">
+                  <div className="overview-card-header">
+                    <div className="overview-card-icon">📊</div>
+                    <div className="overview-card-trend positive">+18%</div>
+                  </div>
+                  <div className="overview-card-value">{formatNumber(analyticsData.overview.activeUsers)}</div>
+                  <div className="overview-card-label">Active Users</div>
+                </div>
+                
+                <div className="overview-card premium-hover">
+                  <div className="overview-card-header">
+                    <div className="overview-card-icon">⏳</div>
+                    <div className="overview-card-trend neutral">0%</div>
+                  </div>
+                  <div className="overview-card-value">{formatNumber(analyticsData.overview.pendingApprovals)}</div>
+                  <div className="overview-card-label">Pending Approvals</div>
+                </div>
+                
+                <div className="overview-card premium-hover">
+                  <div className="overview-card-header">
+                    <div className="overview-card-icon">💳</div>
+                    <div className="overview-card-trend positive">+30%</div>
+                  </div>
+                  <div className="overview-card-value">{formatCurrency(analyticsData.overview.totalPayments)}</div>
+                  <div className="overview-card-label">Total Payments</div>
+                </div>
+                
+                <div className="overview-card premium-hover">
+                  <div className="overview-card-header">
+                    <div className="overview-card-icon">💸</div>
+                    <div className="overview-card-trend positive">+22%</div>
+                  </div>
+                  <div className="overview-card-value">{formatCurrency(analyticsData.overview.totalPayouts)}</div>
+                  <div className="overview-card-label">Total Payouts</div>
+                </div>
+                
+                <div className="overview-card premium-hover">
+                  <div className="overview-card-header">
+                    <div className="overview-card-icon">📈</div>
+                    <div className="overview-card-trend positive">+28%</div>
+                  </div>
+                  <div className="overview-card-value">{formatCurrency(analyticsData.overview.netRevenue)}</div>
+                  <div className="overview-card-label">Net Revenue</div>
+                </div>
+              </div>
+
+              {/* Recent Activity */}
+              <div className="recent-activity-section">
+                <h3 className="section-title">📅 Recent Activity</h3>
+                <div className="activity-grid">
+                  <div className="activity-card premium-hover">
+                    <h4 className="activity-title">Recent Sessions</h4>
+                    <div className="activity-list">
+                      {analyticsData.overview.recentBookings.map(booking => (
+                        <div key={booking.id} className="activity-item">
+                          <div className="activity-info">
+                            <span className="activity-title">
+                              {booking.student.name} → {booking.tutor.name}
+                            </span>
+                            <span className="activity-date">
+                              {formatDateTime(booking.scheduledAt)}
+                            </span>
+                          </div>
+                          <span className={`activity-status ${getStatusBadge(booking.status)}`}>
+                            {booking.status}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="activity-card premium-hover">
+                    <h4 className="activity-title">Recent Payments</h4>
+                    <div className="activity-list">
+                      {analyticsData.overview.recentPayments.map(payment => (
+                        <div key={payment.id} className="activity-item">
+                          <div className="activity-info">
+                            <span className="activity-title">
+                              {payment.user.name}
+                            </span>
+                            <span className="activity-date">
+                              {formatDateTime(payment.createdAt)}
+                            </span>
+                          </div>
+                          <div className="activity-amount">
+                            <span className="amount-value">
+                              {formatCurrency(payment.amount)}
+                            </span>
+                            <span className={`activity-status ${getStatusBadge(payment.status)}`}>
+                              {payment.status}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Other Analytics Types */}
+          {type !== 'overview' && (
+            <div className="analytics-placeholder">
+              <h3 className="section-title">📊 {type.charAt(0).toUpperCase() + type.slice(1)} Analytics</h3>
+              <p>Detailed analytics for {type} will be implemented here.</p>
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 } 

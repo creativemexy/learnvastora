@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import './content-management.css';
 
 interface TeachingResource {
   id: string;
@@ -72,6 +73,20 @@ export default function ContentManagement({ showNotification }: ContentManagemen
     url: '',
     isActive: true
   });
+  const [editResource, setEditResource] = useState({
+    title: '',
+    description: '',
+    type: '',
+    category: '',
+    difficulty: '',
+    duration: 60,
+    language: '',
+    ageGroup: '',
+    tags: [] as string[],
+    thumbnail: '',
+    url: '',
+    isActive: true
+  });
 
   useEffect(() => {
     fetchContentData();
@@ -100,10 +115,14 @@ export default function ContentManagement({ showNotification }: ContentManagemen
         setTotalPages(data.data.pagination.totalPages);
       } else {
         showNotification('error', 'Failed to fetch content data');
+        setResources([]);
+        setStatistics(null);
       }
     } catch (error) {
       console.error('Error fetching content data:', error);
       showNotification('error', 'Network error while fetching content data');
+      setResources([]);
+      setStatistics(null);
     } finally {
       setLoading(false);
     }
@@ -113,8 +132,10 @@ export default function ContentManagement({ showNotification }: ContentManagemen
     try {
       const response = await fetch('/api/super-admin/content', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newResource)
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newResource),
       });
 
       const data = await response.json();
@@ -138,7 +159,7 @@ export default function ContentManagement({ showNotification }: ContentManagemen
         });
         fetchContentData();
       } else {
-        showNotification('error', data.error || 'Failed to create resource');
+        showNotification('error', data.message || 'Failed to create resource');
       }
     } catch (error) {
       console.error('Error creating resource:', error);
@@ -150,10 +171,12 @@ export default function ContentManagement({ showNotification }: ContentManagemen
     if (!selectedResource) return;
 
     try {
-      const response = await fetch('/api/super-admin/content', {
+      const response = await fetch(`/api/super-admin/content/${selectedResource.id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(selectedResource)
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editResource),
       });
 
       const data = await response.json();
@@ -164,7 +187,7 @@ export default function ContentManagement({ showNotification }: ContentManagemen
         setSelectedResource(null);
         fetchContentData();
       } else {
-        showNotification('error', data.error || 'Failed to update resource');
+        showNotification('error', data.message || 'Failed to update resource');
       }
     } catch (error) {
       console.error('Error updating resource:', error);
@@ -176,8 +199,8 @@ export default function ContentManagement({ showNotification }: ContentManagemen
     if (!selectedResource) return;
 
     try {
-      const response = await fetch(`/api/super-admin/content?id=${selectedResource.id}`, {
-        method: 'DELETE'
+      const response = await fetch(`/api/super-admin/content/${selectedResource.id}`, {
+        method: 'DELETE',
       });
 
       const data = await response.json();
@@ -188,7 +211,7 @@ export default function ContentManagement({ showNotification }: ContentManagemen
         setSelectedResource(null);
         fetchContentData();
       } else {
-        showNotification('error', data.error || 'Failed to delete resource');
+        showNotification('error', data.message || 'Failed to delete resource');
       }
     } catch (error) {
       console.error('Error deleting resource:', error);
@@ -196,40 +219,80 @@ export default function ContentManagement({ showNotification }: ContentManagemen
     }
   };
 
+  const handleEditClick = (resource: TeachingResource) => {
+    setSelectedResource(resource);
+    setEditResource({
+      title: resource.title,
+      description: resource.description,
+      type: resource.type,
+      category: resource.category,
+      difficulty: resource.difficulty,
+      duration: resource.duration,
+      language: resource.language,
+      ageGroup: resource.ageGroup,
+      tags: resource.tags,
+      thumbnail: resource.thumbnail || '',
+      url: resource.url || '',
+      isActive: resource.isActive
+    });
+    setShowEditModal(true);
+  };
+
+  const handleAddClick = () => {
+    setNewResource({
+      title: '',
+      description: '',
+      type: '',
+      category: '',
+      difficulty: '',
+      duration: 60,
+      language: '',
+      ageGroup: '',
+      tags: [],
+      thumbnail: '',
+      url: '',
+      isActive: true
+    });
+    setShowAddModal(true);
+  };
+
   const getStatusBadge = (isActive: boolean) => {
-    return isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+    return isActive ? 'active' : 'inactive';
   };
 
   const getTypeIcon = (type: string) => {
     const icons: { [key: string]: string } = {
-      'LESSON_PLAN': 'fas fa-book',
-      'WORKSHEET': 'fas fa-file-alt',
-      'VIDEO': 'fas fa-video',
-      'PRESENTATION': 'fas fa-presentation',
-      'QUIZ': 'fas fa-question-circle',
-      'GAME': 'fas fa-gamepad',
-      'TEMPLATE': 'fas fa-copy',
-      'GUIDE': 'fas fa-map',
-      'AUDIO': 'fas fa-music',
-      'INTERACTIVE': 'fas fa-mouse-pointer'
+      'LESSON_PLAN': '📋',
+      'WORKSHEET': '📝',
+      'VIDEO': '🎥',
+      'PRESENTATION': '📊',
+      'QUIZ': '❓',
+      'GAME': '🎮',
+      'TEMPLATE': '📄',
+      'GUIDE': '📖',
+      'AUDIO': '🎵',
+      'INTERACTIVE': '🔄'
     };
-    return icons[type] || 'fas fa-file';
+    return icons[type] || '📚';
   };
 
   const getDifficultyColor = (difficulty: string) => {
     const colors: { [key: string]: string } = {
-      'BEGINNER': 'text-green-600',
-      'INTERMEDIATE': 'text-yellow-600',
-      'ADVANCED': 'text-red-600'
+      'BEGINNER': 'beginner',
+      'INTERMEDIATE': 'intermediate',
+      'ADVANCED': 'advanced'
     };
-    return colors[difficulty] || 'text-gray-600';
+    return colors[difficulty] || 'beginner';
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     });
   };
 
@@ -238,58 +301,75 @@ export default function ContentManagement({ showNotification }: ContentManagemen
   };
 
   return (
-    <div className="super-admin-content-management">
+    <div className="content-management-container">
+      {/* Header */}
+      <div className="content-management-header">
+        <h1 className="premium-heading">📚 Content Management</h1>
+        <p className="premium-text">Manage and organize all teaching resources and content</p>
+      </div>
+
       {/* Content Statistics */}
       {statistics && (
-        <div className="super-admin-content-stats">
-          <div className="super-admin-stat-card">
-            <div className="super-admin-stat-icon">📚</div>
-            <div className="super-admin-stat-content">
-              <h3>{formatNumber(statistics.total)}</h3>
-              <p>Total Resources</p>
-            </div>
+        <div className="content-stats-grid">
+          <div className="content-stat-card premium-hover">
+            <div className="content-stat-icon">📚</div>
+            <div className="content-stat-value">{formatNumber(statistics.total)}</div>
+            <div className="content-stat-label">Total Resources</div>
           </div>
-          <div className="super-admin-stat-card">
-            <div className="super-admin-stat-icon">✅</div>
-            <div className="super-admin-stat-content">
-              <h3>{formatNumber(statistics.active)}</h3>
-              <p>Active Resources</p>
-            </div>
+          <div className="content-stat-card premium-hover">
+            <div className="content-stat-icon">✅</div>
+            <div className="content-stat-value">{formatNumber(statistics.active)}</div>
+            <div className="content-stat-label">Active Resources</div>
           </div>
-          <div className="super-admin-stat-card">
-            <div className="super-admin-stat-icon">⏸️</div>
-            <div className="super-admin-stat-content">
-              <h3>{formatNumber(statistics.inactive)}</h3>
-              <p>Inactive Resources</p>
-            </div>
+          <div className="content-stat-card premium-hover">
+            <div className="content-stat-icon">⏸️</div>
+            <div className="content-stat-value">{formatNumber(statistics.inactive)}</div>
+            <div className="content-stat-label">Inactive Resources</div>
           </div>
-          <div className="super-admin-stat-card">
-            <div className="super-admin-stat-icon">📊</div>
-            <div className="super-admin-stat-content">
-              <h3>{statistics.typeBreakdown.length}</h3>
-              <p>Resource Types</p>
-            </div>
+          <div className="content-stat-card premium-hover">
+            <div className="content-stat-icon">📊</div>
+            <div className="content-stat-value">{statistics.typeBreakdown.length}</div>
+            <div className="content-stat-label">Resource Types</div>
           </div>
         </div>
       )}
 
-      {/* Content Filters */}
-      <div className="super-admin-content-filters">
-        <div className="super-admin-search-box">
-          <input
-            type="text"
-            placeholder="Search resources..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="super-admin-input"
-          />
-          <i className="fas fa-search"></i>
+      {/* Content Controls */}
+      <div className="content-controls">
+        <div className="control-left">
+          <button 
+            className="control-btn"
+            onClick={handleAddClick}
+          >
+            <span className="btn-icon">➕</span>
+            Add Resource
+          </button>
+          
+          <button 
+            className="control-btn"
+            onClick={() => fetchContentData()}
+          >
+            <span className="btn-icon">🔄</span>
+            Refresh
+          </button>
         </div>
-        <div className="super-admin-filter-group">
+        
+        <div className="control-right">
+          <div className="search-container">
+            <span className="search-icon">🔍</span>
+            <input
+              type="text"
+              placeholder="Search resources..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+          </div>
+          
           <select
             value={filters.type}
             onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-            className="super-admin-select"
+            className="filter-select"
           >
             <option value="">All Types</option>
             <option value="LESSON_PLAN">Lesson Plan</option>
@@ -303,238 +383,195 @@ export default function ContentManagement({ showNotification }: ContentManagemen
             <option value="AUDIO">Audio</option>
             <option value="INTERACTIVE">Interactive</option>
           </select>
+          
           <select
             value={filters.difficulty}
             onChange={(e) => setFilters({ ...filters, difficulty: e.target.value })}
-            className="super-admin-select"
+            className="filter-select"
           >
             <option value="">All Difficulties</option>
             <option value="BEGINNER">Beginner</option>
             <option value="INTERMEDIATE">Intermediate</option>
             <option value="ADVANCED">Advanced</option>
           </select>
-          <select
-            value={filters.ageGroup}
-            onChange={(e) => setFilters({ ...filters, ageGroup: e.target.value })}
-            className="super-admin-select"
-          >
-            <option value="">All Age Groups</option>
-            <option value="CHILDREN">Children</option>
-            <option value="TEENAGERS">Teenagers</option>
-            <option value="ADULTS">Adults</option>
-            <option value="SENIORS">Seniors</option>
-          </select>
-          <select
-            value={filters.language}
-            onChange={(e) => setFilters({ ...filters, language: e.target.value })}
-            className="super-admin-select"
-          >
-            <option value="">All Languages</option>
-            <option value="english">English</option>
-            <option value="spanish">Spanish</option>
-            <option value="french">French</option>
-            <option value="german">German</option>
-            <option value="italian">Italian</option>
-            <option value="portuguese">Portuguese</option>
-            <option value="russian">Russian</option>
-            <option value="chinese">Chinese</option>
-            <option value="japanese">Japanese</option>
-            <option value="korean">Korean</option>
-          </select>
+          
           <select
             value={filters.isActive}
             onChange={(e) => setFilters({ ...filters, isActive: e.target.value })}
-            className="super-admin-select"
+            className="filter-select"
           >
             <option value="">All Status</option>
             <option value="true">Active</option>
             <option value="false">Inactive</option>
           </select>
         </div>
-        <button
-          className="super-admin-btn primary"
-          onClick={() => setShowAddModal(true)}
-        >
-          <i className="fas fa-plus"></i>
-          Add Resource
-        </button>
       </div>
 
       {/* Content List */}
-      <div className="super-admin-content-list">
-        {loading ? (
-          <div className="super-admin-loading">
-            <div className="super-admin-spinner"></div>
-            <p>Loading resources...</p>
-          </div>
-        ) : resources.length > 0 ? (
-          <div className="super-admin-resources-grid">
+      {loading ? (
+        <div className="loading-overlay">
+          <div className="loading-spinner"></div>
+          <p>Loading resources...</p>
+        </div>
+      ) : resources.length > 0 ? (
+        <>
+          <div className="resources-grid">
             {resources.map((resource) => (
-              <div key={resource.id} className="super-admin-resource-card">
-                <div className="super-admin-resource-header">
-                  <div className="super-admin-resource-type">
-                    <i className={getTypeIcon(resource.type)}></i>
-                    <span>{resource.type.replace('_', ' ')}</span>
+              <div key={resource.id} className="resource-card premium-hover">
+                <div className="resource-header">
+                  <div className="resource-icon">
+                    {getTypeIcon(resource.type)}
                   </div>
-                  <div className="super-admin-resource-actions">
+                  <div className="resource-title">{resource.title}</div>
+                  <div className="resource-type">{resource.type.replace('_', ' ')}</div>
+                  <div className="resource-description">{resource.description}</div>
+                  
+                  <div className="resource-meta">
+                    <div className="meta-item">
+                      <span className="meta-label">Duration:</span>
+                      <span className="meta-value">{resource.duration} min</span>
+                    </div>
+                    <div className="meta-item">
+                      <span className="meta-label">Language:</span>
+                      <span className="meta-value">{resource.language}</span>
+                    </div>
+                    <div className="meta-item">
+                      <span className="meta-label">Age Group:</span>
+                      <span className="meta-value">{resource.ageGroup}</span>
+                    </div>
+                    <div className="meta-item">
+                      <span className="meta-label">Difficulty:</span>
+                      <span className={`difficulty-badge ${getDifficultyColor(resource.difficulty)}`}>
+                        {resource.difficulty}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="resource-stats">
+                    <div className="stat-item">
+                      <span className="stat-icon">⬇️</span>
+                      <span className="stat-value">{formatNumber(resource.stats.downloads)}</span>
+                      <span className="stat-label">Downloads</span>
+                    </div>
+                    <div className="stat-item">
+                      <span className="stat-icon">⭐</span>
+                      <span className="stat-value">{resource.stats.averageRating.toFixed(1)}</span>
+                      <span className="stat-label">Rating</span>
+                    </div>
+                    <div className="stat-item">
+                      <span className="stat-icon">❤️</span>
+                      <span className="stat-value">{formatNumber(resource.stats.favorites)}</span>
+                      <span className="stat-label">Favorites</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="resource-footer">
+                  <div className="resource-status">
+                    <span className={`status-badge ${getStatusBadge(resource.isActive)}`}>
+                      {resource.isActive ? 'Active' : 'Inactive'}
+                    </span>
+                    <span className="meta-value">{formatDate(resource.createdAt)}</span>
+                  </div>
+                  
+                  <div className="resource-actions">
                     <button
-                      className="super-admin-btn-icon"
-                      onClick={() => {
-                        setSelectedResource(resource);
-                        setShowEditModal(true);
-                      }}
-                      title="Edit"
+                      className="resource-action-btn"
+                      onClick={() => handleEditClick(resource)}
+                      title="Edit Resource"
                     >
-                      <i className="fas fa-edit"></i>
+                      ✏️
                     </button>
                     <button
-                      className="super-admin-btn-icon danger"
+                      className="resource-action-btn"
                       onClick={() => {
                         setSelectedResource(resource);
                         setShowDeleteModal(true);
                       }}
-                      title="Delete"
+                      title="Delete Resource"
                     >
-                      <i className="fas fa-trash"></i>
+                      🗑️
                     </button>
-                  </div>
-                </div>
-                <div className="super-admin-resource-content">
-                  <h4>{resource.title}</h4>
-                  <p>{resource.description}</p>
-                  <div className="super-admin-resource-meta">
-                    <span className={`super-admin-difficulty ${getDifficultyColor(resource.difficulty)}`}>
-                      {resource.difficulty}
-                    </span>
-                    <span className="super-admin-duration">
-                      {resource.duration} min
-                    </span>
-                    <span className="super-admin-language">
-                      {resource.language}
-                    </span>
-                    <span className={`super-admin-status ${getStatusBadge(resource.isActive)}`}>
-                      {resource.isActive ? 'Active' : 'Inactive'}
-                    </span>
-                  </div>
-                  <div className="super-admin-resource-stats">
-                    <span title="Downloads">
-                      <i className="fas fa-download"></i>
-                      {formatNumber(resource.stats.downloads)}
-                    </span>
-                    <span title="Favorites">
-                      <i className="fas fa-heart"></i>
-                      {formatNumber(resource.stats.favorites)}
-                    </span>
-                    <span title="Rating">
-                      <i className="fas fa-star"></i>
-                      {resource.stats.averageRating.toFixed(1)}
-                    </span>
-                    <span title="Total Ratings">
-                      <i className="fas fa-users"></i>
-                      {formatNumber(resource.stats.totalRatings)}
-                    </span>
-                  </div>
-                  <div className="super-admin-resource-tags">
-                    {resource.tags.slice(0, 3).map((tag, index) => (
-                      <span key={index} className="super-admin-tag">
-                        {tag}
-                      </span>
-                    ))}
-                    {resource.tags.length > 3 && (
-                      <span className="super-admin-tag-more">
-                        +{resource.tags.length - 3} more
-                      </span>
-                    )}
-                  </div>
-                  <div className="super-admin-resource-date">
-                    Created: {formatDate(resource.createdAt)}
                   </div>
                 </div>
               </div>
             ))}
           </div>
-        ) : (
-          <div className="super-admin-empty-state">
-            <div className="super-admin-empty-state-icon">📚</div>
-            <h3>No Resources Found</h3>
-            <p>No teaching resources match your current filters.</p>
-            <button
-              className="super-admin-btn primary"
-              onClick={() => setShowAddModal(true)}
-            >
-              <i className="fas fa-plus"></i>
-              Add Your First Resource
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="super-admin-pagination">
-          <button
-            className="super-admin-btn secondary"
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage(currentPage - 1)}
-          >
-            <i className="fas fa-chevron-left"></i>
-            Previous
-          </button>
-          <span className="super-admin-page-info">
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            className="super-admin-btn secondary"
-            disabled={currentPage === totalPages}
-            onClick={() => setCurrentPage(currentPage + 1)}
-          >
-            Next
-            <i className="fas fa-chevron-right"></i>
-          </button>
+          
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="pagination">
+              <button
+                className="pagination-btn"
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  className={`pagination-btn ${currentPage === page ? 'active' : ''}`}
+                  onClick={() => setCurrentPage(page)}
+                >
+                  {page}
+                </button>
+              ))}
+              
+              <button
+                className="pagination-btn"
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="empty-state">
+          <div className="empty-icon">📚</div>
+          <h3 className="empty-title">No Resources Found</h3>
+          <p className="empty-subtitle">No teaching resources match your current filters</p>
         </div>
       )}
 
       {/* Add Resource Modal */}
       {showAddModal && (
-        <div className="super-admin-modal-overlay">
-          <div className="super-admin-modal">
-            <div className="super-admin-modal-header">
-              <h3>Add New Resource</h3>
-              <button
-                className="super-admin-btn-icon"
-                onClick={() => setShowAddModal(false)}
-              >
-                <i className="fas fa-times"></i>
-              </button>
-            </div>
-            <div className="super-admin-modal-body">
-              <div className="super-admin-form-group">
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Add New Resource</h2>
+            <div className="modal-form">
+              <div className="form-group">
                 <label>Title *</label>
                 <input
                   type="text"
                   value={newResource.title}
                   onChange={(e) => setNewResource({ ...newResource, title: e.target.value })}
-                  className="super-admin-input"
                   placeholder="Enter resource title"
+                  required
                 />
               </div>
-              <div className="super-admin-form-group">
-                <label>Description</label>
+              
+              <div className="form-group">
+                <label>Description *</label>
                 <textarea
                   value={newResource.description}
                   onChange={(e) => setNewResource({ ...newResource, description: e.target.value })}
-                  className="super-admin-textarea"
                   placeholder="Enter resource description"
                   rows={3}
+                  required
                 />
               </div>
-              <div className="super-admin-form-row">
-                <div className="super-admin-form-group">
+              
+              <div className="form-row">
+                <div className="form-group">
                   <label>Type *</label>
                   <select
                     value={newResource.type}
                     onChange={(e) => setNewResource({ ...newResource, type: e.target.value })}
-                    className="super-admin-select"
+                    required
                   >
                     <option value="">Select Type</option>
                     <option value="LESSON_PLAN">Lesson Plan</option>
@@ -549,24 +586,25 @@ export default function ContentManagement({ showNotification }: ContentManagemen
                     <option value="INTERACTIVE">Interactive</option>
                   </select>
                 </div>
-                <div className="super-admin-form-group">
-                  <label>Category *</label>
+                
+                <div className="form-group">
+                  <label>Category</label>
                   <input
                     type="text"
                     value={newResource.category}
                     onChange={(e) => setNewResource({ ...newResource, category: e.target.value })}
-                    className="super-admin-input"
                     placeholder="Enter category"
                   />
                 </div>
               </div>
-              <div className="super-admin-form-row">
-                <div className="super-admin-form-group">
+              
+              <div className="form-row">
+                <div className="form-group">
                   <label>Difficulty *</label>
                   <select
                     value={newResource.difficulty}
                     onChange={(e) => setNewResource({ ...newResource, difficulty: e.target.value })}
-                    className="super-admin-select"
+                    required
                   >
                     <option value="">Select Difficulty</option>
                     <option value="BEGINNER">Beginner</option>
@@ -574,97 +612,90 @@ export default function ContentManagement({ showNotification }: ContentManagemen
                     <option value="ADVANCED">Advanced</option>
                   </select>
                 </div>
-                <div className="super-admin-form-group">
-                  <label>Duration (minutes)</label>
+                
+                <div className="form-group">
+                  <label>Duration (minutes) *</label>
                   <input
                     type="number"
                     value={newResource.duration}
-                    onChange={(e) => setNewResource({ ...newResource, duration: parseInt(e.target.value) || 60 })}
-                    className="super-admin-input"
+                    onChange={(e) => setNewResource({ ...newResource, duration: parseInt(e.target.value) || 0 })}
                     min="1"
+                    required
                   />
                 </div>
               </div>
-              <div className="super-admin-form-row">
-                <div className="super-admin-form-group">
+              
+              <div className="form-row">
+                <div className="form-group">
                   <label>Language *</label>
                   <input
                     type="text"
                     value={newResource.language}
                     onChange={(e) => setNewResource({ ...newResource, language: e.target.value })}
-                    className="super-admin-input"
-                    placeholder="Enter language"
+                    placeholder="e.g., English"
+                    required
                   />
                 </div>
-                <div className="super-admin-form-group">
-                  <label>Age Group</label>
+                
+                <div className="form-group">
+                  <label>Age Group *</label>
                   <select
                     value={newResource.ageGroup}
                     onChange={(e) => setNewResource({ ...newResource, ageGroup: e.target.value })}
-                    className="super-admin-select"
+                    required
                   >
-                    <option value="ADULTS">Adults</option>
+                    <option value="">Select Age Group</option>
                     <option value="CHILDREN">Children</option>
                     <option value="TEENAGERS">Teenagers</option>
+                    <option value="ADULTS">Adults</option>
                     <option value="SENIORS">Seniors</option>
                   </select>
                 </div>
               </div>
-              <div className="super-admin-form-group">
-                <label>Tags</label>
+              
+              <div className="form-group">
+                <label>Thumbnail URL</label>
                 <input
-                  type="text"
-                  value={newResource.tags.join(', ')}
-                  onChange={(e) => setNewResource({ ...newResource, tags: e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag) })}
-                  className="super-admin-input"
-                  placeholder="Enter tags separated by commas"
+                  type="url"
+                  value={newResource.thumbnail}
+                  onChange={(e) => setNewResource({ ...newResource, thumbnail: e.target.value })}
+                  placeholder="Enter thumbnail URL"
                 />
               </div>
-              <div className="super-admin-form-row">
-                <div className="super-admin-form-group">
-                  <label>Thumbnail URL</label>
-                  <input
-                    type="url"
-                    value={newResource.thumbnail}
-                    onChange={(e) => setNewResource({ ...newResource, thumbnail: e.target.value })}
-                    className="super-admin-input"
-                    placeholder="Enter thumbnail URL"
-                  />
-                </div>
-                <div className="super-admin-form-group">
-                  <label>Resource URL</label>
-                  <input
-                    type="url"
-                    value={newResource.url}
-                    onChange={(e) => setNewResource({ ...newResource, url: e.target.value })}
-                    className="super-admin-input"
-                    placeholder="Enter resource URL"
-                  />
-                </div>
+              
+              <div className="form-group">
+                <label>Resource URL</label>
+                <input
+                  type="url"
+                  value={newResource.url}
+                  onChange={(e) => setNewResource({ ...newResource, url: e.target.value })}
+                  placeholder="Enter resource URL"
+                />
               </div>
-              <div className="super-admin-form-group">
-                <label className="super-admin-checkbox-label">
+              
+              <div className="form-group">
+                <label>
                   <input
                     type="checkbox"
                     checked={newResource.isActive}
                     onChange={(e) => setNewResource({ ...newResource, isActive: e.target.checked })}
-                    className="super-admin-checkbox"
                   />
                   Active Resource
                 </label>
               </div>
             </div>
-            <div className="super-admin-modal-footer">
-              <button
-                className="super-admin-btn secondary"
+            
+            <div className="modal-actions">
+              <button 
+                className="modal-btn secondary"
                 onClick={() => setShowAddModal(false)}
               >
                 Cancel
               </button>
-              <button
-                className="super-admin-btn primary"
+              <button 
+                className="modal-btn primary"
                 onClick={handleCreateResource}
-                disabled={!newResource.title || !newResource.type || !newResource.category || !newResource.difficulty || !newResource.language}
+                disabled={!newResource.title || !newResource.description || !newResource.type || !newResource.difficulty || !newResource.language || !newResource.ageGroup}
               >
                 Create Resource
               </button>
@@ -675,44 +706,41 @@ export default function ContentManagement({ showNotification }: ContentManagemen
 
       {/* Edit Resource Modal */}
       {showEditModal && selectedResource && (
-        <div className="super-admin-modal-overlay">
-          <div className="super-admin-modal">
-            <div className="super-admin-modal-header">
-              <h3>Edit Resource</h3>
-              <button
-                className="super-admin-btn-icon"
-                onClick={() => setShowEditModal(false)}
-              >
-                <i className="fas fa-times"></i>
-              </button>
-            </div>
-            <div className="super-admin-modal-body">
-              <div className="super-admin-form-group">
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Edit Resource</h2>
+            <div className="modal-form">
+              <div className="form-group">
                 <label>Title *</label>
                 <input
                   type="text"
-                  value={selectedResource.title}
-                  onChange={(e) => setSelectedResource({ ...selectedResource, title: e.target.value })}
-                  className="super-admin-input"
+                  value={editResource.title}
+                  onChange={(e) => setEditResource({ ...editResource, title: e.target.value })}
+                  placeholder="Enter resource title"
+                  required
                 />
               </div>
-              <div className="super-admin-form-group">
-                <label>Description</label>
+              
+              <div className="form-group">
+                <label>Description *</label>
                 <textarea
-                  value={selectedResource.description}
-                  onChange={(e) => setSelectedResource({ ...selectedResource, description: e.target.value })}
-                  className="super-admin-textarea"
+                  value={editResource.description}
+                  onChange={(e) => setEditResource({ ...editResource, description: e.target.value })}
+                  placeholder="Enter resource description"
                   rows={3}
+                  required
                 />
               </div>
-              <div className="super-admin-form-row">
-                <div className="super-admin-form-group">
+              
+              <div className="form-row">
+                <div className="form-group">
                   <label>Type *</label>
                   <select
-                    value={selectedResource.type}
-                    onChange={(e) => setSelectedResource({ ...selectedResource, type: e.target.value })}
-                    className="super-admin-select"
+                    value={editResource.type}
+                    onChange={(e) => setEditResource({ ...editResource, type: e.target.value })}
+                    required
                   >
+                    <option value="">Select Type</option>
                     <option value="LESSON_PLAN">Lesson Plan</option>
                     <option value="WORKSHEET">Worksheet</option>
                     <option value="VIDEO">Video</option>
@@ -725,117 +753,116 @@ export default function ContentManagement({ showNotification }: ContentManagemen
                     <option value="INTERACTIVE">Interactive</option>
                   </select>
                 </div>
-                <div className="super-admin-form-group">
-                  <label>Category *</label>
+                
+                <div className="form-group">
+                  <label>Category</label>
                   <input
                     type="text"
-                    value={selectedResource.category}
-                    onChange={(e) => setSelectedResource({ ...selectedResource, category: e.target.value })}
-                    className="super-admin-input"
+                    value={editResource.category}
+                    onChange={(e) => setEditResource({ ...editResource, category: e.target.value })}
+                    placeholder="Enter category"
                   />
                 </div>
               </div>
-              <div className="super-admin-form-row">
-                <div className="super-admin-form-group">
+              
+              <div className="form-row">
+                <div className="form-group">
                   <label>Difficulty *</label>
                   <select
-                    value={selectedResource.difficulty}
-                    onChange={(e) => setSelectedResource({ ...selectedResource, difficulty: e.target.value })}
-                    className="super-admin-select"
+                    value={editResource.difficulty}
+                    onChange={(e) => setEditResource({ ...editResource, difficulty: e.target.value })}
+                    required
                   >
+                    <option value="">Select Difficulty</option>
                     <option value="BEGINNER">Beginner</option>
                     <option value="INTERMEDIATE">Intermediate</option>
                     <option value="ADVANCED">Advanced</option>
                   </select>
                 </div>
-                <div className="super-admin-form-group">
-                  <label>Duration (minutes)</label>
+                
+                <div className="form-group">
+                  <label>Duration (minutes) *</label>
                   <input
                     type="number"
-                    value={selectedResource.duration}
-                    onChange={(e) => setSelectedResource({ ...selectedResource, duration: parseInt(e.target.value) || 60 })}
-                    className="super-admin-input"
+                    value={editResource.duration}
+                    onChange={(e) => setEditResource({ ...editResource, duration: parseInt(e.target.value) || 0 })}
                     min="1"
+                    required
                   />
                 </div>
               </div>
-              <div className="super-admin-form-row">
-                <div className="super-admin-form-group">
+              
+              <div className="form-row">
+                <div className="form-group">
                   <label>Language *</label>
                   <input
                     type="text"
-                    value={selectedResource.language}
-                    onChange={(e) => setSelectedResource({ ...selectedResource, language: e.target.value })}
-                    className="super-admin-input"
+                    value={editResource.language}
+                    onChange={(e) => setEditResource({ ...editResource, language: e.target.value })}
+                    placeholder="e.g., English"
+                    required
                   />
                 </div>
-                <div className="super-admin-form-group">
-                  <label>Age Group</label>
+                
+                <div className="form-group">
+                  <label>Age Group *</label>
                   <select
-                    value={selectedResource.ageGroup}
-                    onChange={(e) => setSelectedResource({ ...selectedResource, ageGroup: e.target.value })}
-                    className="super-admin-select"
+                    value={editResource.ageGroup}
+                    onChange={(e) => setEditResource({ ...editResource, ageGroup: e.target.value })}
+                    required
                   >
-                    <option value="ADULTS">Adults</option>
+                    <option value="">Select Age Group</option>
                     <option value="CHILDREN">Children</option>
                     <option value="TEENAGERS">Teenagers</option>
+                    <option value="ADULTS">Adults</option>
                     <option value="SENIORS">Seniors</option>
                   </select>
                 </div>
               </div>
-              <div className="super-admin-form-group">
-                <label>Tags</label>
+              
+              <div className="form-group">
+                <label>Thumbnail URL</label>
                 <input
-                  type="text"
-                  value={selectedResource.tags.join(', ')}
-                  onChange={(e) => setSelectedResource({ ...selectedResource, tags: e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag) })}
-                  className="super-admin-input"
-                  placeholder="Enter tags separated by commas"
+                  type="url"
+                  value={editResource.thumbnail}
+                  onChange={(e) => setEditResource({ ...editResource, thumbnail: e.target.value })}
+                  placeholder="Enter thumbnail URL"
                 />
               </div>
-              <div className="super-admin-form-row">
-                <div className="super-admin-form-group">
-                  <label>Thumbnail URL</label>
-                  <input
-                    type="url"
-                    value={selectedResource.thumbnail || ''}
-                    onChange={(e) => setSelectedResource({ ...selectedResource, thumbnail: e.target.value })}
-                    className="super-admin-input"
-                  />
-                </div>
-                <div className="super-admin-form-group">
-                  <label>Resource URL</label>
-                  <input
-                    type="url"
-                    value={selectedResource.url || ''}
-                    onChange={(e) => setSelectedResource({ ...selectedResource, url: e.target.value })}
-                    className="super-admin-input"
-                  />
-                </div>
+              
+              <div className="form-group">
+                <label>Resource URL</label>
+                <input
+                  type="url"
+                  value={editResource.url}
+                  onChange={(e) => setEditResource({ ...editResource, url: e.target.value })}
+                  placeholder="Enter resource URL"
+                />
               </div>
-              <div className="super-admin-form-group">
-                <label className="super-admin-checkbox-label">
+              
+              <div className="form-group">
+                <label>
                   <input
                     type="checkbox"
-                    checked={selectedResource.isActive}
-                    onChange={(e) => setSelectedResource({ ...selectedResource, isActive: e.target.checked })}
-                    className="super-admin-checkbox"
+                    checked={editResource.isActive}
+                    onChange={(e) => setEditResource({ ...editResource, isActive: e.target.checked })}
                   />
                   Active Resource
                 </label>
               </div>
             </div>
-            <div className="super-admin-modal-footer">
-              <button
-                className="super-admin-btn secondary"
+            
+            <div className="modal-actions">
+              <button 
+                className="modal-btn secondary"
                 onClick={() => setShowEditModal(false)}
               >
                 Cancel
               </button>
-              <button
-                className="super-admin-btn primary"
+              <button 
+                className="modal-btn primary"
                 onClick={handleUpdateResource}
-                disabled={!selectedResource.title || !selectedResource.type || !selectedResource.category || !selectedResource.difficulty || !selectedResource.language}
+                disabled={!editResource.title || !editResource.description || !editResource.type || !editResource.difficulty || !editResource.language || !editResource.ageGroup}
               >
                 Update Resource
               </button>
@@ -844,34 +871,22 @@ export default function ContentManagement({ showNotification }: ContentManagemen
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
+      {/* Delete Resource Modal */}
       {showDeleteModal && selectedResource && (
-        <div className="super-admin-modal-overlay">
-          <div className="super-admin-modal">
-            <div className="super-admin-modal-header">
-              <h3>Delete Resource</h3>
-              <button
-                className="super-admin-btn-icon"
-                onClick={() => setShowDeleteModal(false)}
-              >
-                <i className="fas fa-times"></i>
-              </button>
-            </div>
-            <div className="super-admin-modal-body">
-              <p>Are you sure you want to delete the resource &quot;{selectedResource.title}&quot;?</p>
-              <p className="super-admin-warning-text">
-                This action cannot be undone. All associated data (downloads, favorites, ratings) will also be deleted.
-              </p>
-            </div>
-            <div className="super-admin-modal-footer">
-              <button
-                className="super-admin-btn secondary"
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Delete Resource</h2>
+            <p>Are you sure you want to delete &quot;{selectedResource.title}&quot;?</p>
+            <p className="warning-text">This action cannot be undone.</p>
+            <div className="modal-actions">
+              <button 
+                className="modal-btn secondary"
                 onClick={() => setShowDeleteModal(false)}
               >
                 Cancel
               </button>
-              <button
-                className="super-admin-btn danger"
+              <button 
+                className="modal-btn danger"
                 onClick={handleDeleteResource}
               >
                 Delete Resource

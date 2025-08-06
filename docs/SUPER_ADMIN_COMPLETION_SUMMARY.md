@@ -106,7 +106,7 @@ The Super Admin Dashboard has been successfully implemented with full functional
 - `/api/super-admin/content` - Content management
 
 ✅ **Database Integration**
-- Real-time data fetching from PostgreSQL
+- Real-time data fetching from CockroachDB
 - Optimized Prisma queries
 - Proper error handling and fallbacks
 - Data validation and sanitization

@@ -227,8 +227,8 @@ export default function TutorEarningsPage() {
 
   const fetchEarningsData = async () => {
     try {
-      setIsLoading(true);
-      setError(null);
+    setIsLoading(true);
+    setError(null);
       
       console.log('Fetching earnings data...');
       
@@ -541,7 +541,7 @@ export default function TutorEarningsPage() {
               <div className="stat-value">{formatCurrency(earningsData.averagePerSession)}</div>
             </div>
           </div>
-        </div>
+      </div>
         
         <div className="row">
           <div className="col-12 mb-4 animate-slide-in-up" style={{ animationDelay: '0.4s' }}>
@@ -570,53 +570,53 @@ export default function TutorEarningsPage() {
           <div className="col-12 animate-slide-in-up" style={{ animationDelay: '0.5s' }}>
             <div className="earnings-card hover-scale">
               <h4 className="text-white mb-4">Payment History</h4>
-              {paymentHistory.length === 0 ? (
-                <div className="text-center py-5">
+                {paymentHistory.length === 0 ? (
+                  <div className="text-center py-5">
                   <i className="bi bi-receipt text-white" style={{fontSize: '3rem'}}></i>
                   <h5 className="mt-3 text-white">No payment history</h5>
                   <p className="text-white-50">Your completed session payments will appear here</p>
-                </div>
-              ) : (
-                <div className="table-responsive">
+                  </div>
+                ) : (
+                  <div className="table-responsive">
                   <table className="table table-custom">
-                    <thead>
-                      <tr>
-                        <th>Date</th>
-                        <th>Session</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
+                      <thead>
+                        <tr>
+                          <th>Date</th>
+                          <th>Session</th>
+                          <th>Amount</th>
+                          <th>Status</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
                       {paymentHistory.map((payment, index) => (
                         <tr key={payment.id} style={{ animationDelay: `${0.6 + index * 0.1}s` }} className="animate-slide-in-up">
-                          <td>{formatDate(payment.date)}</td>
-                          <td>
-                            <div className="fw-semibold">{payment.sessionDetails}</div>
-                          </td>
-                          <td className="fw-semibold text-success">
-                            {formatCurrency(payment.amount)}
-                          </td>
-                          <td>{getStatusBadge(payment.status)}</td>
-                          <td>
-                            <button 
+                            <td>{formatDate(payment.date)}</td>
+                            <td>
+                              <div className="fw-semibold">{payment.sessionDetails}</div>
+                            </td>
+                            <td className="fw-semibold text-success">
+                              {formatCurrency(payment.amount)}
+                            </td>
+                            <td>{getStatusBadge(payment.status)}</td>
+                            <td>
+                              <button 
                               className="ultra-btn ultra-btn-outline-warning btn-sm hover-scale" 
-                              onClick={() => handleViewPayment(payment)}
-                            >
-                              <i className="bi bi-eye"></i>
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
+                                onClick={() => handleViewPayment(payment)}
+                              >
+                                <i className="bi bi-eye"></i>
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
           
-          <div className="row mt-4">
+        <div className="row mt-4">
             <div className="col-md-6 animate-slide-in-left" style={{ animationDelay: '0.6s' }}>
               <div className="earnings-card hover-scale">
                 <h5 className="text-white mb-4">Monthly Comparison</h5>
@@ -671,36 +671,36 @@ export default function TutorEarningsPage() {
       </div>
       
       {/* Payment Modal */}
-      {selectedPayment && (
+        {selectedPayment && (
         <div className="modal fade show" style={{display: 'block'}}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Payment Details</h5>
-                <button type="button" className="btn-close" onClick={closePaymentModal}></button>
-              </div>
-              <div className="modal-body">
-                <div className="row">
-                  <div className="col-6">
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Payment Details</h5>
+                  <button type="button" className="btn-close" onClick={closePaymentModal}></button>
+                </div>
+                <div className="modal-body">
+                  <div className="row">
+                    <div className="col-6">
                     <strong>Date:</strong> {formatDate(selectedPayment.date)}
-                  </div>
-                  <div className="col-6">
+                    </div>
+                    <div className="col-6">
                     <strong>Amount:</strong> {formatCurrency(selectedPayment.amount)}
                   </div>
                 </div>
                 <div className="row mt-2">
-                  <div className="col-6">
+                    <div className="col-6">
                     <strong>Status:</strong> {getStatusBadge(selectedPayment.status)}
-                  </div>
-                  <div className="col-6">
+                    </div>
+                    <div className="col-6">
                     <strong>Session:</strong> {selectedPayment.sessionDetails}
                   </div>
+                  </div>
                 </div>
-              </div>
-              <div className="modal-footer">
+                <div className="modal-footer">
                 <button type="button" className="ultra-btn ultra-btn-secondary" onClick={closePaymentModal}>
-                  Close
-                </button>
+                    Close
+                  </button>
               </div>
             </div>
           </div>

@@ -1,11 +1,122 @@
-[2025-07-10T16:45:51.680Z] TEST LOG ENDPOINT
-[2025-07-10T17:52:29.086Z] [Paystack Webhook] Webhook received
-[2025-07-10T17:52:29.098Z] [Paystack Webhook] Event: {"event":"charge.success","data":{"id":5135078675,"domain":"test","status":"success","reference":"booking_44d614f2-37b9-4eb3-a858-dcdac06c6fab_1752169903198","amount":1000,"message":null,"gateway_response":"Successful","paid_at":"2025-07-10T17:52:07.000Z","created_at":"2025-07-10T17:51:43.000Z","channel":"card","currency":"NGN","ip_address":"41.217.4.210","metadata":{"bookingId":"44d614f2-37b9-4eb3-a858-dcdac06c6fab","studentName":"ike emeka","tutorName":"emeka","sessionDate":"2025-07-10T17:51:42.915Z","referrer":"http://localhost:3000/"},"fees_breakdown":null,"log":null,"fees":15,"fees_split":null,"authorization":{"authorization_code":"AUTH_6z1sjwd4vd","bin":"408408","last4":"4081","exp_month":"12","exp_year":"2030","channel":"card","card_type":"visa ","bank":"TEST BANK","country_code":"NG","brand":"visa","reusable":true,"signature":"SIG_GwTUvoKnbyGzRUqgKhEf","account_name":null,"receiver_bank_account_number":null,"receiver_bank":null},"customer":{"id":28852922,"first_name":"","last_name":"","email":"michaelike83@gmail.com","customer_code":"CUS_155f1i7o599h1lj","phone":"09071254060","metadata":{},"risk_action":"default","international_format_phone":null},"plan":{},"subaccount":{},"split":{},"order_id":null,"paidAt":"2025-07-10T17:52:07.000Z","requested_amount":1000,"pos_transaction_data":null,"source":{"type":"api","source":"merchant_api","entry_point":"transaction_initialize","identifier":null}}}
-[2025-07-10T17:52:30.597Z] [Paystack Webhook] Verification: {"status":true,"message":"Verification successful","data":{"id":5135078675,"domain":"test","status":"success","reference":"booking_44d614f2-37b9-4eb3-a858-dcdac06c6fab_1752169903198","receipt_number":null,"amount":1000,"message":null,"gateway_response":"Successful","paid_at":"2025-07-10T17:52:07.000Z","created_at":"2025-07-10T17:51:43.000Z","channel":"card","currency":"NGN","ip_address":"41.217.4.210","metadata":{"bookingId":"44d614f2-37b9-4eb3-a858-dcdac06c6fab","studentName":"ike emeka","tutorName":"emeka","sessionDate":"2025-07-10T17:51:42.915Z","referrer":"http://localhost:3000/"},"log":{"start_time":1752169918,"time_spent":12,"attempts":1,"errors":0,"success":true,"mobile":false,"input":[],"history":[{"type":"action","message":"Attempted to pay with card","time":9},{"type":"success","message":"Successfully paid with card","time":12}]},"fees":15,"fees_split":null,"authorization":{"authorization_code":"AUTH_6z1sjwd4vd","bin":"408408","last4":"4081","exp_month":"12","exp_year":"2030","channel":"card","card_type":"visa ","bank":"TEST BANK","country_code":"NG","brand":"visa","reusable":true,"signature":"SIG_GwTUvoKnbyGzRUqgKhEf","account_name":null,"receiver_bank_account_number":null,"receiver_bank":null},"customer":{"id":28852922,"first_name":"","last_name":"","email":"michaelike83@gmail.com","customer_code":"CUS_155f1i7o599h1lj","phone":"09071254060","metadata":{},"risk_action":"default","international_format_phone":null},"plan":null,"split":{},"order_id":null,"paidAt":"2025-07-10T17:52:07.000Z","createdAt":"2025-07-10T17:51:43.000Z","requested_amount":1000,"pos_transaction_data":null,"source":null,"fees_breakdown":null,"connect":null,"transaction_date":"2025-07-10T17:51:43.000Z","plan_object":{},"subaccount":{}}}
-[2025-07-10T17:52:30.685Z] [Paystack Webhook] Booking confirmed and payment recorded for: 44d614f2-37b9-4eb3-a858-dcdac06c6fab
-[2025-07-10T18:55:43.195Z] [Paystack Webhook] Webhook received
-[2025-07-10T18:55:43.199Z] [Paystack Webhook] ERROR: SyntaxError: Unexpected end of JSON input
-[2025-07-10T19:00:19.389Z] [Paystack Webhook] Webhook received
-[2025-07-10T19:00:19.401Z] [Paystack Webhook] Event: {"event":"charge.success","data":{"id":5135185972,"domain":"test","status":"success","reference":"booking_3ef6e2a5-7045-4ed3-beef-07abadc5174f_1752173554260","amount":1000,"message":null,"gateway_response":"Successful","paid_at":"2025-07-10T18:55:07.000Z","created_at":"2025-07-10T18:52:35.000Z","channel":"card","currency":"NGN","ip_address":"41.217.4.210","metadata":{"bookingId":"3ef6e2a5-7045-4ed3-beef-07abadc5174f","studentName":"ike emeka","tutorName":"MEX ","sessionDate":"2025-07-10T19:55","referrer":"http://localhost:3000/"},"fees_breakdown":null,"log":null,"fees":15,"fees_split":null,"authorization":{"authorization_code":"AUTH_uy7vjo87kx","bin":"408408","last4":"4081","exp_month":"12","exp_year":"2030","channel":"card","card_type":"visa ","bank":"TEST BANK","country_code":"NG","brand":"visa","reusable":true,"signature":"SIG_GwTUvoKnbyGzRUqgKhEf","account_name":null,"receiver_bank_account_number":null,"receiver_bank":null},"customer":{"id":28852922,"first_name":"","last_name":"","email":"michaelike83@gmail.com","customer_code":"CUS_155f1i7o599h1lj","phone":"09071254060","metadata":{},"risk_action":"default","international_format_phone":null},"plan":{},"subaccount":{},"split":{},"order_id":null,"paidAt":"2025-07-10T18:55:07.000Z","requested_amount":1000,"pos_transaction_data":null,"source":{"type":"api","source":"merchant_api","entry_point":"transaction_initialize","identifier":null}}}
-[2025-07-10T19:00:22.574Z] [Paystack Webhook] Verification: {"status":true,"message":"Verification successful","data":{"id":5135185972,"domain":"test","status":"success","reference":"booking_3ef6e2a5-7045-4ed3-beef-07abadc5174f_1752173554260","receipt_number":null,"amount":1000,"message":null,"gateway_response":"Successful","paid_at":"2025-07-10T18:55:07.000Z","created_at":"2025-07-10T18:52:35.000Z","channel":"card","currency":"NGN","ip_address":"41.217.4.210","metadata":{"bookingId":"3ef6e2a5-7045-4ed3-beef-07abadc5174f","studentName":"ike emeka","tutorName":"MEX ","sessionDate":"2025-07-10T19:55","referrer":"http://localhost:3000/"},"log":{"start_time":1752173631,"time_spent":77,"attempts":1,"errors":0,"success":true,"mobile":false,"input":[],"history":[{"type":"action","message":"Attempted to pay with card","time":75},{"type":"success","message":"Successfully paid with card","time":77}]},"fees":15,"fees_split":null,"authorization":{"authorization_code":"AUTH_uy7vjo87kx","bin":"408408","last4":"4081","exp_month":"12","exp_year":"2030","channel":"card","card_type":"visa ","bank":"TEST BANK","country_code":"NG","brand":"visa","reusable":true,"signature":"SIG_GwTUvoKnbyGzRUqgKhEf","account_name":null,"receiver_bank_account_number":null,"receiver_bank":null},"customer":{"id":28852922,"first_name":"","last_name":"","email":"michaelike83@gmail.com","customer_code":"CUS_155f1i7o599h1lj","phone":"09071254060","metadata":{},"risk_action":"default","international_format_phone":null},"plan":null,"split":{},"order_id":null,"paidAt":"2025-07-10T18:55:07.000Z","createdAt":"2025-07-10T18:52:35.000Z","requested_amount":1000,"pos_transaction_data":null,"source":null,"fees_breakdown":null,"connect":null,"transaction_date":"2025-07-10T18:52:35.000Z","plan_object":{},"subaccount":{}}}
-[2025-07-10T19:00:22.663Z] [Paystack Webhook] Booking confirmed and payment recorded for: 3ef6e2a5-7045-4ed3-beef-07abadc5174f
+[2024-08-05 23:30:15] INFO: Webhook server started on port 3001
+[2024-08-05 23:30:16] INFO: Listening for webhook events
+[2024-08-05 23:30:20] INFO: Received webhook from payment provider - Event: payment.succeeded
+[2024-08-05 23:30:21] INFO: Processing payment webhook for booking ID: bk_123456789
+[2024-08-05 23:30:22] INFO: Payment confirmed for session - Tutor: Sarah Johnson, Student: John Smith
+[2024-08-05 23:30:25] INFO: Updated booking status to PAID
+[2024-08-05 23:30:26] INFO: Sent confirmation email to student
+[2024-08-05 23:30:27] INFO: Sent payment notification to tutor
+[2024-08-05 23:31:15] INFO: Received webhook from payment provider - Event: payment.failed
+[2024-08-05 23:31:16] INFO: Processing failed payment for booking ID: bk_987654321
+[2024-08-05 23:31:17] INFO: Payment failed for session - Tutor: Maria Garcia, Student: Emma Thompson
+[2024-08-05 23:31:18] INFO: Updated booking status to FAILED
+[2024-08-05 23:31:19] INFO: Sent failure notification to student
+[2024-08-05 23:32:10] INFO: Received webhook from payment provider - Event: refund.processed
+[2024-08-05 23:32:11] INFO: Processing refund for booking ID: bk_456789123
+[2024-08-05 23:32:12] INFO: Refund processed for session - Tutor: Pierre Dubois, Student: Lisa Brown
+[2024-08-05 23:32:13] INFO: Updated booking status to REFUNDED
+[2024-08-05 23:32:14] INFO: Sent refund confirmation to student
+[2024-08-05 23:33:05] INFO: Received webhook from notification service - Event: session.reminder
+[2024-08-05 23:33:06] INFO: Processing session reminder for booking ID: bk_789123456
+[2024-08-05 23:33:07] INFO: Sent reminder to tutor and student for upcoming session
+[2024-08-05 23:34:20] INFO: Received webhook from video service - Event: session.started
+[2024-08-05 23:34:21] INFO: Session started - Booking ID: bk_321654987
+[2024-08-05 23:34:22] INFO: Updated session status to IN_PROGRESS
+[2024-08-05 23:34:23] INFO: Notified both participants of session start
+[2024-08-05 23:35:15] INFO: Received webhook from video service - Event: session.ended
+[2024-08-05 23:35:16] INFO: Session ended - Booking ID: bk_321654987
+[2024-08-05 23:35:17] INFO: Updated session status to COMPLETED
+[2024-08-05 23:35:18] INFO: Sent completion notifications
+[2024-08-05 23:35:19] INFO: Triggered payment processing for completed session
+[2024-08-05 23:36:10] INFO: Received webhook from admin panel - Event: tutor.approved
+[2024-08-05 23:36:11] INFO: Tutor approval processed - Tutor ID: t_456789
+[2024-08-05 23:36:12] INFO: Updated tutor status to APPROVED
+[2024-08-05 23:36:13] INFO: Sent approval notification to tutor
+[2024-08-05 23:37:05] INFO: Received webhook from admin panel - Event: course.created
+[2024-08-05 23:37:06] INFO: New course created - Course ID: c_789123
+[2024-08-05 23:37:07] INFO: Course "Advanced Mathematics" added to library
+[2024-08-05 23:37:08] INFO: Notified relevant tutors about new course
+[2024-08-05 23:38:20] INFO: Received webhook from analytics service - Event: user.registered
+[2024-08-05 23:38:21] INFO: New user registration - User ID: u_123456
+[2024-08-05 23:38:22] INFO: User Emma Wilson registered as STUDENT
+[2024-08-05 23:38:23] INFO: Sent welcome email to new user
+[2024-08-05 23:39:15] INFO: Received webhook from payment provider - Event: payout.succeeded
+[2024-08-05 23:39:16] INFO: Payout processed for tutor - Tutor ID: t_789456
+[2024-08-05 23:39:17] INFO: Payout amount: $150.00 to Sarah Johnson
+[2024-08-05 23:39:18] INFO: Updated tutor balance
+[2024-08-05 23:39:19] INFO: Sent payout confirmation to tutor
+[2024-08-05 23:40:10] INFO: Received webhook from system - Event: maintenance.scheduled
+[2024-08-05 23:40:11] INFO: System maintenance scheduled for 2024-08-06 02:00:00
+[2024-08-05 23:40:12] INFO: Notified all active users about maintenance
+[2024-08-05 23:41:05] INFO: Received webhook from monitoring service - Event: system.healthy
+[2024-08-05 23:41:06] INFO: System health check passed
+[2024-08-05 23:41:07] INFO: All services running normally
+[2024-08-05 23:42:20] INFO: Received webhook from backup service - Event: backup.completed
+[2024-08-05 23:42:21] INFO: Database backup completed successfully
+[2024-08-05 23:42:22] INFO: Backup size: 2.3GB, Duration: 45 seconds
+[2024-08-05 23:43:15] INFO: Received webhook from email service - Event: email.sent
+[2024-08-05 23:43:16] INFO: Email sent successfully - Template: session_reminder
+[2024-08-05 23:43:17] INFO: Recipient: john.smith@email.com
+[2024-08-05 23:44:10] INFO: Received webhook from SMS service - Event: sms.sent
+[2024-08-05 23:44:11] INFO: SMS sent successfully - Template: payment_confirmation
+[2024-08-05 23:44:12] INFO: Recipient: +1234567890
+[2024-08-05 23:45:05] INFO: Received webhook from notification service - Event: notification.sent
+[2024-08-05 23:45:06] INFO: Push notification sent - User ID: u_456789
+[2024-08-05 23:45:07] INFO: Notification type: session_reminder
+[2024-08-05 23:46:20] INFO: Received webhook from admin panel - Event: setting.updated
+[2024-08-05 23:46:21] INFO: System setting updated - Key: max_session_duration
+[2024-08-05 23:46:22] INFO: New value: 120 minutes
+[2024-08-05 23:47:15] INFO: Received webhook from analytics service - Event: report.generated
+[2024-08-05 23:47:16] INFO: Monthly report generated for August 2024
+[2024-08-05 23:47:17] INFO: Report includes: 150 sessions, $3,450 revenue
+[2024-08-05 23:48:10] INFO: Received webhook from payment provider - Event: subscription.created
+[2024-08-05 23:48:11] INFO: New subscription created - User ID: u_789123
+[2024-08-05 23:48:12] INFO: Plan: Premium Monthly, Amount: $29.99
+[2024-08-05 23:48:13] INFO: Updated user subscription status
+[2024-08-05 23:49:05] INFO: Received webhook from payment provider - Event: subscription.cancelled
+[2024-08-05 23:49:06] INFO: Subscription cancelled - User ID: u_456789
+[2024-08-05 23:49:07] INFO: Plan: Basic Monthly
+[2024-08-05 23:49:08] INFO: Updated user subscription status
+[2024-08-05 23:50:20] INFO: Received webhook from admin panel - Event: user.suspended
+[2024-08-05 23:50:21] INFO: User suspended - User ID: u_123789
+[2024-08-05 23:50:22] INFO: Reason: Multiple payment failures
+[2024-08-05 23:50:23] INFO: Sent suspension notification to user
+[2024-08-05 23:51:15] INFO: Received webhook from admin panel - Event: user.reactivated
+[2024-08-05 23:51:16] INFO: User reactivated - User ID: u_123789
+[2024-08-05 23:51:17] INFO: Sent reactivation notification to user
+[2024-08-05 23:52:10] INFO: Received webhook from system - Event: error.logged
+[2024-08-05 23:52:11] INFO: Error logged - Type: API_TIMEOUT
+[2024-08-05 23:52:12] INFO: Endpoint: /api/tutor/sessions
+[2024-08-05 23:52:13] INFO: User ID: u_456123
+[2024-08-05 23:53:05] INFO: Received webhook from monitoring service - Event: performance.alert
+[2024-08-05 23:53:06] INFO: Performance alert - Response time: 3.2s
+[2024-08-05 23:53:07] INFO: Endpoint: /api/admin/analytics
+[2024-08-05 23:53:08] INFO: Alert threshold: 2.0s
+[2024-08-05 23:54:20] INFO: Received webhook from backup service - Event: backup.failed
+[2024-08-05 23:54:21] INFO: Database backup failed
+[2024-08-05 23:54:22] INFO: Error: Insufficient disk space
+[2024-08-05 23:54:23] INFO: Alert sent to system administrators
+[2024-08-05 23:55:15] INFO: Received webhook from payment provider - Event: charge.dispute
+[2024-08-05 23:55:16] INFO: Charge dispute received - Booking ID: bk_654321987
+[2024-08-05 23:55:17] INFO: Amount: $25.00, Reason: Service not received
+[2024-08-05 23:55:18] INFO: Updated booking status to DISPUTED
+[2024-08-05 23:55:19] INFO: Notified admin team about dispute
+[2024-08-05 23:56:10] INFO: Received webhook from admin panel - Event: dispute.resolved
+[2024-08-05 23:56:11] INFO: Dispute resolved - Booking ID: bk_654321987
+[2024-08-05 23:56:12] INFO: Resolution: Refund approved
+[2024-08-05 23:56:13] INFO: Updated booking status to REFUNDED
+[2024-08-05 23:57:05] INFO: Received webhook from system - Event: cleanup.completed
+[2024-08-05 23:57:06] INFO: System cleanup completed
+[2024-08-05 23:57:07] INFO: Cleaned up: 50 expired sessions, 25 old logs
+[2024-08-05 23:58:20] INFO: Received webhook from admin panel - Event: feature.flag.updated
+[2024-08-05 23:58:21] INFO: Feature flag updated - Flag: new_ui_enabled
+[2024-08-05 23:58:22] INFO: New value: true
+[2024-08-05 23:58:23] INFO: Notified all users about UI update
+[2024-08-05 23:59:15] INFO: Received webhook from analytics service - Event: conversion.tracked
+[2024-08-05 23:59:16] INFO: Conversion tracked - Event: session_booked
+[2024-08-05 23:59:17] INFO: User ID: u_789456, Source: organic_search
+[2024-08-05 23:59:18] INFO: Value: $28.00
+[2024-08-05 23:59:19] INFO: Updated conversion metrics
+[2024-08-05 23:59:59] INFO: Webhook server shutting down gracefully
+[2024-08-05 23:59:60] INFO: All pending webhooks processed
+[2024-08-05 23:59:61] INFO: Webhook server stopped 

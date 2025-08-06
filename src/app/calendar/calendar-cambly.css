@@ -1,375 +1,295 @@
-/* LearnVastora-style CSS for Calendar */
-:root {
-  --primary: #7c3aed; /* Indigo */
-  --accent: #a21caf;  /* Vivid Purple */
-  --white: #fff;
-  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-.learnvastora-bg {
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+/* Calendar Cambly Theme */
+.calendar-cambly-container {
   min-height: 100vh;
+  background: linear-gradient(135deg, #00d4aa 0%, #0099cc 100%);
+  padding: 2rem 0;
 }
 
-.learnvastora-header {
-  background: var(--white);
-  border-bottom: 3px solid var(--primary);
-  padding: 1rem 0;
-  box-shadow: var(--shadow);
+.calendar-cambly-header {
+  text-align: center;
+  margin-bottom: 3rem;
 }
 
-.learnvastora-logo {
-  font-weight: bold;
-  font-size: 1.5rem;
-  color: var(--primary);
-  letter-spacing: 1px;
+.calendar-cambly-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.learnvastora-nav-menu {
+.calendar-cambly-subtitle {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 2rem;
+}
+
+.calendar-cambly-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.calendar-cambly-controls {
   display: flex;
-  gap: 2rem;
+  justify-content: space-between;
   align-items: center;
+  margin-bottom: 2rem;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
 }
 
-.learnvastora-nav-item {
-  text-decoration: none;
-  color: var(--accent);
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.learnvastora-nav-item:hover {
-  color: var(--primary);
-  background: rgba(124, 58, 237, 0.1);
-}
-
-.learnvastora-nav-item.active {
-  color: var(--primary);
-  border-bottom: 2px solid var(--primary);
-}
-
-.learnvastora-header-actions {
+.calendar-cambly-nav {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.learnvastora-subscribe-btn {
-  background: var(--primary);
-  color: var(--white);
+.calendar-cambly-nav-btn {
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, #00d4aa 0%, #0099cc 100%);
+  color: white;
   border: none;
-  padding: 0.5rem 1.5rem;
   border-radius: 8px;
-  font-weight: 600;
+  cursor: pointer;
   transition: all 0.3s ease;
+  font-weight: 600;
 }
 
-.learnvastora-subscribe-btn:hover {
-  background: var(--accent);
+.calendar-cambly-nav-btn:hover {
   transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 212, 170, 0.4);
 }
 
-.learnvastora-icon-btn {
-  background: var(--white);
-  border: 2px solid var(--primary);
-  color: var(--primary);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.learnvastora-icon-btn:hover {
-  background: var(--primary);
-  color: var(--white);
-}
-
-.learnvastora-profile-btn {
-  background: var(--primary);
-  color: var(--white);
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.learnvastora-profile-btn:hover {
-  background: var(--accent);
-  transform: scale(1.1);
-}
-
-.learnvastora-logout-btn {
-  background: var(--white);
-  border: 2px solid var(--accent);
-  color: var(--accent);
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
+.calendar-cambly-current-month {
+  font-size: 1.5rem;
   font-weight: 600;
-  transition: all 0.3s ease;
+  color: #333;
+}
+
+.calendar-cambly-view-toggle {
   display: flex;
-  align-items: center;
   gap: 0.5rem;
 }
 
-.learnvastora-logout-btn:hover {
-  background: var(--accent);
-  color: var(--white);
-  transform: translateY(-2px);
-}
-
-/* Calendar-specific CSS with approved colors */
-.cambly-bg {
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  min-height: 100vh;
-}
-
-.cambly-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
-}
-
-.cambly-title {
-  color: var(--primary);
-  font-weight: 700;
-  font-size: 2rem;
-}
-
-.cambly-stats-bar {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-  border-radius: 15px;
-  padding: 2.5rem 2rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.2);
-  color: var(--white);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.cambly-stat {
-  text-align: center;
-  flex: 1;
-  min-width: 120px;
-}
-
-.cambly-stat-number {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  color: var(--white);
-}
-
-.cambly-stat-label {
-  font-size: 1rem;
-  opacity: 0.95;
+.calendar-cambly-view-btn {
+  padding: 0.5rem 1rem;
+  background: rgba(0, 212, 170, 0.1);
+  color: #00d4aa;
+  border: 1px solid #00d4aa;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
   font-weight: 500;
-  color: var(--white);
 }
 
-.cambly-btn {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-  border: none;
-  color: var(--white);
-  font-weight: 600;
-  border-radius: 10px;
-  padding: 0.75rem 1.5rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+.calendar-cambly-view-btn.active {
+  background: linear-gradient(135deg, #00d4aa 0%, #0099cc 100%);
+  color: white;
 }
 
-.cambly-btn:hover {
-  background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
-  color: var(--white);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
-}
-
-.cambly-btn-outline {
-  background: transparent;
-  border: 2px solid var(--primary);
-  color: var(--primary);
-  font-weight: 600;
-  border-radius: 10px;
-  padding: 0.75rem 1.5rem;
-  transition: all 0.3s ease;
-}
-
-.cambly-btn-outline:hover {
-  background: var(--primary);
-  color: var(--white);
+.calendar-cambly-view-btn:hover {
   transform: translateY(-1px);
 }
 
-.cambly-month-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.calendar-cambly-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.calendar-cambly-weekday {
+  background: linear-gradient(135deg, #00d4aa 0%, #0099cc 100%);
+  color: white;
+  padding: 1rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.calendar-cambly-day {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 1rem;
+  min-height: 100px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.calendar-cambly-day:hover {
+  background: rgba(0, 212, 170, 0.1);
+}
+
+.calendar-cambly-day.other-month {
+  color: #ccc;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.calendar-cambly-day.today {
+  background: linear-gradient(135deg, #00d4aa 0%, #0099cc 100%);
+  color: white;
+  font-weight: 600;
+}
+
+.calendar-cambly-day-number {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.calendar-cambly-event {
+  background: rgba(0, 212, 170, 0.2);
+  color: #00d4aa;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.calendar-cambly-event.important {
+  background: rgba(255, 107, 107, 0.2);
+  color: #ff6b6b;
+}
+
+.calendar-cambly-event.completed {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4caf50;
+}
+
+.calendar-cambly-sidebar {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  margin-top: 2rem;
+}
+
+.calendar-cambly-sidebar-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.calendar-cambly-event-form {
+  margin-bottom: 2rem;
+}
+
+.calendar-cambly-form-group {
   margin-bottom: 1rem;
 }
 
-.cambly-month {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--primary);
+.calendar-cambly-label {
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
 }
 
-.cambly-mini-profile {
-  background: var(--white);
-  border-radius: 12px;
+.calendar-cambly-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.calendar-cambly-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.calendar-cambly-btn {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, #00d4aa 0%, #0099cc 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.calendar-cambly-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 212, 170, 0.4);
+}
+
+.calendar-cambly-events-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.calendar-cambly-event-item {
   padding: 1rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-  border: 1px solid rgba(124, 58, 237, 0.1);
-  max-width: 280px;
-  z-index: 1000;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  background: rgba(255, 255, 255, 0.9);
+  transition: all 0.3s ease;
 }
 
-.cambly-mini-profile .avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 2px solid var(--primary);
-  object-fit: cover;
+.calendar-cambly-event-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.cambly-mini-profile .name {
-  font-weight: 700;
-  color: var(--primary);
+.calendar-cambly-event-title {
+  font-weight: 600;
+  color: #333;
   margin-bottom: 0.5rem;
 }
 
-.cambly-mini-profile .bio {
-  font-size: 0.875rem;
-  color: rgba(124, 58, 237, 0.6);
+.calendar-cambly-event-time {
+  color: #666;
+  font-size: 0.9rem;
   margin-bottom: 0.5rem;
+}
+
+.calendar-cambly-event-description {
+  color: #666;
+  font-size: 0.9rem;
   line-height: 1.4;
 }
 
-.calendar-today {
-  background: var(--accent) !important;
-  color: var(--white) !important;
-}
-
-/* View type selector styles */
-.btn-group .btn {
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-.btn-group .btn.cambly-btn {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-  color: var(--white);
-  border-color: var(--primary);
-}
-
-.btn-group .btn.cambly-btn-outline {
-  background: transparent;
-  color: var(--primary);
-  border-color: var(--primary);
-}
-
-.btn-group .btn.cambly-btn-outline:hover {
-  background: var(--primary);
-  color: var(--white);
-}
-
-/* Weekly view styles */
-.weekly-view .col {
-  border-right: 1px solid rgba(124, 58, 237, 0.1);
-}
-
-.weekly-view .col:last-child {
-  border-right: none;
-}
-
-/* Daily view styles */
-.daily-view .row {
-  border-bottom: 1px solid rgba(124, 58, 237, 0.1);
-}
-
-.daily-view .row:last-child {
-  border-bottom: none;
-}
-
-/* Calendar table styles */
-.table th {
-  border-bottom: 2px solid var(--primary);
-  color: var(--primary);
-  font-weight: 600;
-}
-
-.table td {
-  border: 1px solid rgba(124, 58, 237, 0.1);
-  vertical-align: top;
-}
-
-/* Badge styles with approved colors */
-.badge.bg-success {
-  background-color: var(--primary) !important;
-}
-
-.badge.bg-warning {
-  background-color: var(--accent) !important;
-  color: var(--white) !important;
-}
-
-.badge.bg-primary {
-  background-color: var(--primary) !important;
-}
-
-.badge.bg-danger {
-  background-color: var(--accent) !important;
-  color: var(--white) !important;
-}
-
-.badge.bg-info {
-  background-color: var(--accent) !important;
-  color: var(--white) !important;
-}
-
 @media (max-width: 768px) {
-  .cambly-stats-bar {
+  .calendar-cambly-controls {
     flex-direction: column;
-    padding: 1.5rem 1rem;
+    gap: 1rem;
   }
-  .cambly-stat-number {
+  
+  .calendar-cambly-nav {
+    order: 2;
+  }
+  
+  .calendar-cambly-current-month {
+    order: 1;
+  }
+  
+  .calendar-cambly-view-toggle {
+    order: 3;
+  }
+  
+  .calendar-cambly-day {
+    min-height: 80px;
+    padding: 0.5rem;
+  }
+  
+  .calendar-cambly-title {
     font-size: 2rem;
-  }
-  .cambly-title {
-    font-size: 1.5rem;
-  }
-  .cambly-month {
-    font-size: 1.25rem;
-  }
-  
-  .learnvastora-nav-menu {
-    display: none;
-  }
-  
-  .btn-group {
-    flex-direction: column;
-    width: 100%;
-  }
-  
-  .btn-group .btn {
-    border-radius: 8px !important;
-    margin-bottom: 0.25rem;
-  }
-  
-  .weekly-view .col {
-    border-right: none;
-    border-bottom: 1px solid rgba(124, 58, 237, 0.1);
-    margin-bottom: 1rem;
   }
 } 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import './payment-billing-management.css';
 
 interface Transaction {
   id: string;
@@ -164,37 +165,43 @@ export default function PaymentManagement({ showNotification }: PaymentManagemen
 
       if (data.success) {
         showNotification('success', 'Payout created successfully');
-        setShowPayoutModal(false);
         setNewPayout({
           tutorId: '',
           amount: '',
           method: 'bank',
           notes: ''
         });
-        fetchTransactions(); // Refresh the list
+        setShowPayoutModal(false);
+        fetchTransactions();
       } else {
-        showNotification('error', 'Failed to create payout');
+        showNotification('error', 'Failed to create payout: ' + data.error);
       }
     } catch (error) {
       console.error('Error creating payout:', error);
-      showNotification('error', 'Network error while creating payout');
+      showNotification('error', 'Failed to create payout');
     }
   };
 
   const getStatusBadge = (status: string) => {
-    const colors: { [key: string]: string } = {
-      'PENDING': 'bg-yellow-100 text-yellow-800',
-      'PAID': 'bg-green-100 text-green-800',
-      'FAILED': 'bg-red-100 text-red-800',
-      'PROCESSING': 'bg-blue-100 text-blue-800',
-      'COMPLETED': 'bg-green-100 text-green-800',
-      'CANCELLED': 'bg-gray-100 text-gray-800'
-    };
-    return colors[status] || 'bg-gray-100 text-gray-800';
+    switch (status.toLowerCase()) {
+      case 'completed':
+      case 'paid':
+        return 'success';
+      case 'pending':
+      case 'processing':
+        return 'pending';
+      case 'failed':
+      case 'cancelled':
+        return 'failed';
+      case 'refunded':
+        return 'refunded';
+      default:
+        return 'pending';
+    }
   };
 
   const getTypeIcon = (type: string) => {
-    return type === 'payment' ? 'fas fa-arrow-down' : 'fas fa-arrow-up';
+    return type === 'payment' ? '💰' : '💸';
   };
 
   const getTypeColor = (type: string) => {
@@ -202,8 +209,7 @@ export default function PaymentManagement({ showNotification }: PaymentManagemen
   };
 
   const formatDateTime = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleString('en-US', {
+    return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -220,301 +226,287 @@ export default function PaymentManagement({ showNotification }: PaymentManagemen
   };
 
   return (
-    <div className="super-admin-payment-management">
-      <div className="super-admin-card">
-        <div className="super-admin-card-header">
-          <h3>Payment & Billing Management</h3>
-          <div className="super-admin-card-actions">
-            <button 
-              className="super-admin-btn primary"
-              onClick={() => setShowPayoutModal(true)}
-            >
-              <i className="fas fa-plus"></i>
-              Create Payout
-            </button>
-            <button 
-              className="super-admin-btn secondary"
-              onClick={() => {
-                showNotification('info', 'Export functionality coming soon');
-              }}
-            >
-              <i className="fas fa-download"></i>
-              Export Reports
-            </button>
-            <button 
-              className="super-admin-btn secondary"
-              onClick={() => {
-                showNotification('info', 'Analytics dashboard coming soon');
-              }}
-            >
-              <i className="fas fa-chart-line"></i>
-              Financial Analytics
-            </button>
-          </div>
-        </div>
-        <div className="super-admin-card-body">
-          {/* Statistics */}
-          {statistics && (
-            <div className="super-admin-payment-stats">
-              <div className="super-admin-stat-card">
-                <div className="super-admin-stat-icon">
-                  <i className="fas fa-arrow-down text-green-600"></i>
-                </div>
-                <div className="super-admin-stat-content">
-                  <h4>Total Payments</h4>
-                  <p>{statistics.totalPayments}</p>
-                  <span className="super-admin-stat-amount">{formatCurrency(statistics.totalPaymentAmount)}</span>
-                </div>
-              </div>
-              <div className="super-admin-stat-card">
-                <div className="super-admin-stat-icon">
-                  <i className="fas fa-arrow-up text-red-600"></i>
-                </div>
-                <div className="super-admin-stat-content">
-                  <h4>Total Payouts</h4>
-                  <p>{statistics.totalPayouts}</p>
-                  <span className="super-admin-stat-amount">{formatCurrency(statistics.totalPayoutAmount)}</span>
-                </div>
-              </div>
-              <div className="super-admin-stat-card">
-                <div className="super-admin-stat-icon">
-                  <i className="fas fa-chart-line text-blue-600"></i>
-                </div>
-                <div className="super-admin-stat-content">
-                  <h4>Net Revenue</h4>
-                  <p className={statistics.netRevenue >= 0 ? 'text-green-600' : 'text-red-600'}>
-                    {formatCurrency(statistics.netRevenue)}
-                  </p>
-                </div>
-              </div>
-              <div className="super-admin-stat-card">
-                <div className="super-admin-stat-icon">
-                  <i className="fas fa-calendar-day text-purple-600"></i>
-                </div>
-                <div className="super-admin-stat-content">
-                  <h4>Today&apos;s Activity</h4>
-                  <p>{statistics.todayPayments} payments</p>
-                  <p>{statistics.todayPayouts} payouts</p>
-                </div>
-              </div>
-            </div>
-          )}
+    <div className="payment-billing-container">
+      {/* Header */}
+      <div className="payment-billing-header">
+        <h1 className="premium-heading">💰 Payment & Billing Management</h1>
+        <p className="premium-text">Manage all financial transactions, payments, and payouts</p>
+      </div>
 
-          {/* Filters */}
-          <div className="super-admin-payment-filters">
+      {/* Controls */}
+      <div className="payment-controls">
+        <div className="control-left">
+          <button 
+            className="btn btn-primary"
+            onClick={() => setShowPayoutModal(true)}
+          >
+            <span className="btn-icon">➕</span>
+            Create Payout
+          </button>
+          
+          <button 
+            className="btn btn-secondary"
+            onClick={() => {
+              showNotification('info', 'Export functionality coming soon');
+            }}
+          >
+            <span className="btn-icon">📤</span>
+            Export Reports
+          </button>
+          
+          <button 
+            className="btn btn-secondary"
+            onClick={() => {
+              showNotification('info', 'Analytics dashboard coming soon');
+            }}
+          >
+            <span className="btn-icon">📊</span>
+            Financial Analytics
+          </button>
+        </div>
+
+        <div className="control-center">
+          <div className="search-container">
             <input
               type="text"
               placeholder="Search transactions..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="super-admin-input"
+              className="search-input"
             />
-            <select
-              value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value)}
-              className="super-admin-select"
-            >
-              <option value="">All Types</option>
-              <option value="payment">Payments</option>
-              <option value="payout">Payouts</option>
-            </select>
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="super-admin-select"
-            >
-              <option value="">All Status</option>
-              <option value="PENDING">Pending</option>
-              <option value="PAID">Paid</option>
-              <option value="FAILED">Failed</option>
-              <option value="PROCESSING">Processing</option>
-              <option value="COMPLETED">Completed</option>
-              <option value="CANCELLED">Cancelled</option>
-            </select>
-            <input
-              type="date"
-              value={dateFrom}
-              onChange={(e) => setDateFrom(e.target.value)}
-              className="super-admin-input"
-              placeholder="From Date"
-            />
-            <input
-              type="date"
-              value={dateTo}
-              onChange={(e) => setDateTo(e.target.value)}
-              className="super-admin-input"
-              placeholder="To Date"
-            />
+            <span className="search-icon">🔍</span>
           </div>
-
-          {/* Transactions List */}
-          <div className="super-admin-transactions-list">
-            {loading ? (
-              <div className="super-admin-loading">
-                <div className="super-admin-spinner"></div>
-                <p>Loading transactions...</p>
-              </div>
-            ) : transactions.length === 0 ? (
-              <div className="super-admin-empty-state">
-                <div className="super-admin-empty-state-icon">💳</div>
-                <h3>No Transactions Found</h3>
-                <p>No transactions match your current filters.</p>
-                <button 
-                  className="super-admin-btn primary"
-                  onClick={() => setShowPayoutModal(true)}
-                >
-                  <i className="fas fa-plus"></i>
-                  Create Payout
-                </button>
-              </div>
-            ) : (
-              <div className="super-admin-transactions-grid">
-                {transactions.map((transaction) => (
-                  <div key={transaction.id} className="super-admin-transaction-card">
-                    <div className="super-admin-transaction-header">
-                      <div className="super-admin-transaction-type">
-                        <i className={`${getTypeIcon(transaction.type)} ${getTypeColor(transaction.type)}`}></i>
-                        <span className="super-admin-transaction-type-label">
-                          {transaction.type === 'payment' ? 'Payment' : 'Payout'}
-                        </span>
-                      </div>
-                      <div className="super-admin-transaction-status">
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadge(transaction.status)}`}>
-                          {transaction.status}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    <div className="super-admin-transaction-details">
-                      <div className="super-admin-transaction-user">
-                        <div className="super-admin-transaction-avatar">
-                          {(transaction.user || transaction.tutor)?.photo ? (
-                            <img src={(transaction.user || transaction.tutor)?.photo} alt={(transaction.user || transaction.tutor)?.name} className="w-8 h-8 rounded-full" />
-                          ) : (
-                            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs font-semibold">
-                              {(transaction.user || transaction.tutor)?.name.charAt(0).toUpperCase()}
-                            </div>
-                          )}
-                        </div>
-                        <div className="super-admin-transaction-user-info">
-                          <span className="super-admin-transaction-user-name">
-                            {(transaction.user || transaction.tutor)?.name}
-                          </span>
-                          <span className="super-admin-transaction-user-email">
-                            {(transaction.user || transaction.tutor)?.email}
-                          </span>
-                        </div>
-                      </div>
-                      
-                      <div className="super-admin-transaction-amount">
-                        <span className={`super-admin-transaction-amount-value ${getTypeColor(transaction.type)}`}>
-                          {transaction.type === 'payment' ? '+' : '-'}{formatCurrency(transaction.amount)}
-                        </span>
-                        <span className="super-admin-transaction-date">
-                          {formatDateTime(transaction.createdAt)}
-                        </span>
-                      </div>
-                      
-                      {transaction.booking && (
-                        <div className="super-admin-transaction-booking">
-                          <span className="super-admin-transaction-booking-label">Session:</span>
-                          <span className="super-admin-transaction-booking-details">
-                            {transaction.booking.tutor.name} - {transaction.booking.duration}min
-                          </span>
-                        </div>
-                      )}
-                      
-                      {transaction.reference && (
-                        <div className="super-admin-transaction-reference">
-                          <span className="super-admin-transaction-reference-label">Ref:</span>
-                          <span className="super-admin-transaction-reference-value">{transaction.reference}</span>
-                        </div>
-                      )}
-                      
-                      {transaction.method && (
-                        <div className="super-admin-transaction-method">
-                          <span className="super-admin-transaction-method-label">Method:</span>
-                          <span className="super-admin-transaction-method-value">{transaction.method}</span>
-                        </div>
-                      )}
-                    </div>
-                    
-                    <div className="super-admin-transaction-actions">
-                      <button
-                        onClick={() => setSelectedTransaction(transaction)}
-                        className="super-admin-btn secondary"
-                        title="View Details"
-                      >
-                        <i className="fas fa-eye"></i>
-                      </button>
-                      {transaction.type === 'payment' && transaction.status === 'PAID' && (
-                        <button
-                          onClick={() => handleTransactionAction(transaction.id, 'payment', 'refund')}
-                          className="super-admin-btn danger"
-                          title="Refund Payment"
-                        >
-                          <i className="fas fa-undo"></i>
-                        </button>
-                      )}
-                      {transaction.type === 'payout' && transaction.status === 'PENDING' && (
-                        <button
-                          onClick={() => handleTransactionAction(transaction.id, 'payout', 'approve')}
-                          className="super-admin-btn primary"
-                          title="Approve Payout"
-                        >
-                          <i className="fas fa-check"></i>
-                        </button>
-                      )}
-                      {transaction.type === 'payout' && transaction.status === 'PROCESSING' && (
-                        <button
-                          onClick={() => handleTransactionAction(transaction.id, 'payout', 'complete')}
-                          className="super-admin-btn primary"
-                          title="Mark Complete"
-                        >
-                          <i className="fas fa-check-double"></i>
-                        </button>
-                      )}
-                      {transaction.type === 'payout' && transaction.status === 'PENDING' && (
-                        <button
-                          onClick={() => handleTransactionAction(transaction.id, 'payout', 'reject')}
-                          className="super-admin-btn danger"
-                          title="Reject Payout"
-                        >
-                          <i className="fas fa-times"></i>
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="super-admin-pagination">
-              <button
-                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                disabled={currentPage === 1}
-                className="super-admin-btn secondary"
-              >
-                <i className="fas fa-chevron-left"></i>
-                Previous
-              </button>
-              <span className="super-admin-pagination-info">
-                Page {currentPage} of {totalPages}
-              </span>
-              <button
-                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                disabled={currentPage === totalPages}
-                className="super-admin-btn secondary"
-              >
-                Next
-                <i className="fas fa-chevron-right"></i>
-              </button>
-            </div>
-          )}
         </div>
+
+        <div className="control-right">
+          <select
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
+            className="filter-select"
+          >
+            <option value="">All Types</option>
+            <option value="payment">Payments</option>
+            <option value="payout">Payouts</option>
+          </select>
+
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="filter-select"
+          >
+            <option value="">All Status</option>
+            <option value="completed">Completed</option>
+            <option value="pending">Pending</option>
+            <option value="failed">Failed</option>
+            <option value="refunded">Refunded</option>
+          </select>
+
+          <input
+            type="date"
+            value={dateFrom}
+            onChange={(e) => setDateFrom(e.target.value)}
+            className="date-input"
+            placeholder="From Date"
+          />
+
+          <input
+            type="date"
+            value={dateTo}
+            onChange={(e) => setDateTo(e.target.value)}
+            className="date-input"
+            placeholder="To Date"
+          />
+        </div>
+      </div>
+
+      {/* Stats Grid */}
+      {statistics && (
+        <div className="payment-stats-grid">
+          <div className="stat-card premium-hover">
+            <div className="stat-icon revenue">💰</div>
+            <div className="stat-content">
+              <div className="stat-value">{statistics.totalPayments}</div>
+              <div className="stat-label">Total Payments</div>
+              <div className="stat-amount">{formatCurrency(statistics.totalPaymentAmount)}</div>
+            </div>
+          </div>
+          
+          <div className="stat-card premium-hover">
+            <div className="stat-icon pending">💸</div>
+            <div className="stat-content">
+              <div className="stat-value">{statistics.totalPayouts}</div>
+              <div className="stat-label">Total Payouts</div>
+              <div className="stat-amount">{formatCurrency(statistics.totalPayoutAmount)}</div>
+            </div>
+          </div>
+          
+          <div className="stat-card premium-hover">
+            <div className="stat-icon transactions">📊</div>
+            <div className="stat-content">
+              <div className="stat-value">{formatCurrency(statistics.netRevenue)}</div>
+              <div className="stat-label">Net Revenue</div>
+              <div className={`stat-amount ${statistics.netRevenue >= 0 ? 'positive' : 'negative'}`}>
+                {statistics.netRevenue >= 0 ? '📈' : '📉'}
+              </div>
+            </div>
+          </div>
+          
+          <div className="stat-card premium-hover">
+            <div className="stat-icon fees">📅</div>
+            <div className="stat-content">
+              <div className="stat-value">{statistics.todayPayments + statistics.todayPayouts}</div>
+              <div className="stat-label">Today&apos;s Activity</div>
+              <div className="stat-amount">
+                {statistics.todayPayments} payments, {statistics.todayPayouts} payouts
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Transactions List */}
+      <div className="payment-content-grid">
+        {loading ? (
+          <div className="loading-overlay">
+            <div className="loading-spinner"></div>
+            <p>Loading transactions...</p>
+          </div>
+        ) : transactions.length === 0 ? (
+          <div className="empty-state">
+            <div className="empty-icon">💳</div>
+            <h3 className="empty-title">No Transactions Found</h3>
+            <p className="empty-subtitle">No transactions match your current filters.</p>
+          </div>
+        ) : (
+          transactions.map((transaction) => (
+            <div key={transaction.id} className="payment-card premium-hover">
+              <div className="payment-card-header">
+                <div className="payment-card-title">
+                  <span className="payment-type-icon">{getTypeIcon(transaction.type)}</span>
+                  <span className="payment-type-label">
+                    {transaction.type === 'payment' ? 'Payment' : 'Payout'}
+                  </span>
+                </div>
+                <div className="payment-card-status">
+                  <span className={`payment-status ${getStatusBadge(transaction.status)}`}>
+                    {transaction.status}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="payment-card-body">
+                <div className="payment-card-details">
+                  <div className="payment-detail-item">
+                    <span className="payment-detail-label">User:</span>
+                    <span className="payment-detail-value">
+                      {(transaction.user || transaction.tutor)?.name}
+                    </span>
+                  </div>
+                  
+                  <div className="payment-detail-item">
+                    <span className="payment-detail-label">Email:</span>
+                    <span className="payment-detail-value">
+                      {(transaction.user || transaction.tutor)?.email}
+                    </span>
+                  </div>
+                  
+                  <div className="payment-detail-item">
+                    <span className="payment-detail-label">Amount:</span>
+                    <span className={`payment-detail-value ${getTypeColor(transaction.type)}`}>
+                      {transaction.type === 'payment' ? '+' : '-'}{formatCurrency(transaction.amount)}
+                    </span>
+                  </div>
+                  
+                  <div className="payment-detail-item">
+                    <span className="payment-detail-label">Date:</span>
+                    <span className="payment-detail-value">
+                      {formatDateTime(transaction.createdAt)}
+                    </span>
+                  </div>
+                  
+                  {transaction.booking && (
+                    <div className="payment-detail-item">
+                      <span className="payment-detail-label">Session:</span>
+                      <span className="payment-detail-value">
+                        {transaction.booking.tutor.name} - {transaction.booking.duration}min
+                      </span>
+                    </div>
+                  )}
+                  
+                  {transaction.reference && (
+                    <div className="payment-detail-item">
+                      <span className="payment-detail-label">Reference:</span>
+                      <span className="payment-detail-value">{transaction.reference}</span>
+                    </div>
+                  )}
+                  
+                  {transaction.method && (
+                    <div className="payment-detail-item">
+                      <span className="payment-detail-label">Method:</span>
+                      <span className="payment-detail-value">{transaction.method}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+              
+              <div className="payment-card-footer">
+                <div className="payment-card-date">
+                  {formatDateTime(transaction.createdAt)}
+                </div>
+                
+                <div className="payment-card-actions">
+                  <button
+                    onClick={() => setSelectedTransaction(transaction)}
+                    className="payment-action-btn view"
+                    title="View Details"
+                  >
+                    👁️
+                  </button>
+                  
+                  {transaction.type === 'payment' && transaction.status === 'PAID' && (
+                    <button
+                      onClick={() => handleTransactionAction(transaction.id, 'payment', 'refund')}
+                      className="payment-action-btn delete"
+                      title="Refund Payment"
+                    >
+                      ↩️
+                    </button>
+                  )}
+                  
+                  {transaction.type === 'payout' && transaction.status === 'PENDING' && (
+                    <button
+                      onClick={() => handleTransactionAction(transaction.id, 'payout', 'approve')}
+                      className="payment-action-btn edit"
+                      title="Approve Payout"
+                    >
+                      ✅
+                    </button>
+                  )}
+                  
+                  {transaction.type === 'payout' && transaction.status === 'PROCESSING' && (
+                    <button
+                      onClick={() => handleTransactionAction(transaction.id, 'payout', 'complete')}
+                      className="payment-action-btn edit"
+                      title="Mark Complete"
+                    >
+                      ✅
+                    </button>
+                  )}
+                  
+                  {transaction.type === 'payout' && transaction.status === 'PENDING' && (
+                    <button
+                      onClick={() => handleTransactionAction(transaction.id, 'payout', 'reject')}
+                      className="payment-action-btn delete"
+                      title="Reject Payout"
+                    >
+                      ❌
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       {/* Transaction Details Modal */}

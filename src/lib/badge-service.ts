@@ -182,8 +182,14 @@ export class BadgeService {
     for (const badgeData of defaultBadges) {
       await prisma.badge.upsert({
         where: { key: badgeData.key },
-        update: badgeData,
-        create: badgeData
+        update: {
+          ...badgeData,
+          category: badgeData.category as any
+        },
+        create: {
+          ...badgeData,
+          category: badgeData.category as any
+        }
       });
     }
   }
@@ -264,7 +270,7 @@ export class BadgeService {
         shouldAward = hasLateSession;
       }
 
-      if (criteria.pioneer) {
+      if ((criteria as any).pioneer) {
         const userCount = await prisma.user.count();
         progress.userCount = userCount;
         shouldAward = userCount <= 100;
@@ -275,7 +281,7 @@ export class BadgeService {
           data: {
             userId: user.id,
             badgeId: badge.id,
-            progress
+
           },
           include: { badge: true }
         });
