@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 const { execSync, spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
@@ -110,8 +108,11 @@ class DeploymentUpdater {
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
       const backupPath = path.join(this.backupDir, `backup-${timestamp}`);
       
-      // Create backup of current state
-      execSync(`cp -r ${this.projectRoot} ${backupPath}`, { stdio: 'pipe' });
+      // Create backup directory
+      fs.mkdirSync(backupPath, { recursive: true });
+      
+      // Use rsync to copy contents, excluding the backups directory itself
+      execSync(`rsync -a --exclude='backups' ${this.projectRoot}/ ${backupPath}`, { stdio: 'pipe' });
       
       this.log(`✅ Backup created at: ${backupPath}`);
       return backupPath;
@@ -125,36 +126,46 @@ class DeploymentUpdater {
     try {
       this.log('🚀 Starting deployment update...');
       
-      // 1. Create backup
+      // 1. Check if current code builds before creating backup
+      this.log('🔍 Verifying current code builds successfully...');
+      try {
+        await this.executeCommand('npm run build', 'Verifying current build');
+        this.log('✅ Current code builds successfully');
+      } catch (buildError) {
+        this.log('❌ Current code has build errors, aborting update');
+        throw new Error('Cannot update: current code has build errors. Please fix them first.');
+      }
+      
+      // 2. Create backup
       const backupPath = await this.createBackup();
       
-      // 2. Stash any local changes
+      // 3. Stash any local changes
       try {
         await this.executeCommand('git stash', 'Stashing local changes');
       } catch (error) {
         this.log('ℹ️ No local changes to stash');
       }
       
-      // 3. Pull latest changes
+      // 4. Pull latest changes
       await this.executeCommand('git pull origin main', 'Pulling latest changes from GitHub');
       
-      // 4. Install dependencies
+      // 5. Install dependencies
       await this.executeCommand('npm install', 'Installing dependencies');
       
-      // 5. Generate Prisma client
+      // 6. Generate Prisma client
       await this.executeCommand('npx prisma generate', 'Generating Prisma client');
       
-      // 6. Run database migrations
+      // 7. Run database migrations
       try {
         await this.executeCommand('npx prisma db push', 'Pushing database schema changes');
       } catch (error) {
         this.log('⚠️ Database push failed, continuing with build...');
       }
       
-      // 7. Build the application
+      // 8. Build the application
       await this.executeCommand('npm run build', 'Building application');
       
-      // 8. Restart services
+      // 9. Restart services
       await this.executeCommand('pm2 restart all', 'Restarting PM2 processes');
       await this.executeCommand('sudo systemctl reload caddy', 'Reloading Caddy server');
       
@@ -172,7 +183,19 @@ class DeploymentUpdater {
       // Try to restore from backup
       try {
         this.log('🔄 Attempting to restore from backup...');
-        // Add restore logic here if needed
+        
+        // Remove the broken backup directory
+        if (fs.existsSync(backupPath)) {
+          fs.rmSync(backupPath, { recursive: true, force: true });
+          this.log('🗑️ Removed broken backup');
+        }
+        
+        // Reset to the last working commit
+        await this.executeCommand('git reset --hard HEAD~1', 'Resetting to last working commit');
+        await this.executeCommand('git clean -fd', 'Cleaning untracked files');
+        
+        this.log('✅ Successfully restored to last working state');
+        
       } catch (restoreError) {
         this.log(`❌ Failed to restore from backup: ${restoreError.message}`);
       }
