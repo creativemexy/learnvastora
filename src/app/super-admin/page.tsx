@@ -524,9 +524,9 @@ export default function SuperAdminDashboard() {
         const result = await response.json();
         showNotification('success', 'Test session created successfully!');
         
-        // Redirect to the session
+        // Redirect to the test page
         if (result.bookingId) {
-          router.push(`/session/${result.bookingId}`);
+          router.push(`/test-session/${result.bookingId}`);
         }
       } else {
         const error = await response.json();
