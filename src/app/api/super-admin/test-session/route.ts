@@ -77,7 +77,20 @@ export async function POST(request: NextRequest) {
         duration,
         status: 'CONFIRMED',
         price: 0, // Free for test sessions
-        isInstant: false
+        isInstant: false,
+        paidAt: new Date(), // Mark as paid immediately
+        paymentReference: 'TEST_SESSION_' + Date.now(),
+        paymentMethod: 'TEST_SESSION'
+      }
+    });
+
+    // Create a payment record for the test session
+    const payment = await prisma.payment.create({
+      data: {
+        userId: studentId, // Student is the one paying (even though it's free)
+        bookingId: booking.id,
+        amount: 0, // Free for test sessions
+        status: 'PAID'
       }
     });
 
@@ -85,8 +98,10 @@ export async function POST(request: NextRequest) {
       success: true,
       message: 'Test session created successfully',
       bookingId: booking.id,
+      paymentId: payment.id,
       data: {
-        booking
+        booking,
+        payment
       }
     });
 
