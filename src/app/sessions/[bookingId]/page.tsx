@@ -304,6 +304,15 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
         }
         
         const userId = (session.user as any).id;
+        console.log("Session access check:", {
+          userId,
+          bookingStudentId: booking.studentId,
+          bookingTutorId: booking.tutorId,
+          isStudent: booking.studentId === userId,
+          isTutor: booking.tutorId === userId,
+          userEmail: (session.user as any).email
+        });
+        
         if (![booking.studentId, booking.tutorId].includes(userId)) {
           setError("You are not a participant in this session.");
           setLoading(false);
