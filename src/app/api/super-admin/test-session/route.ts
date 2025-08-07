@@ -24,10 +24,15 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { studentId, tutorId, subject, duration, startTime } = body;
 
+    // Debug logging
+    console.log('Test session request body:', body);
+
     // Validate required fields
     if (!studentId || !tutorId || !duration || !startTime) {
+      console.log('Missing fields:', { studentId, tutorId, duration, startTime });
       return NextResponse.json({ 
-        error: 'Missing required fields: studentId, tutorId, duration, startTime' 
+        error: 'Missing required fields: studentId, tutorId, duration, startTime',
+        received: { studentId, tutorId, duration, startTime }
       }, { status: 400 });
     }
 

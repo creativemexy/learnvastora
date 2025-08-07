@@ -511,6 +511,9 @@ export default function SuperAdminDashboard() {
     try {
       setIsCreatingTestSession(true);
       
+      // Debug: Log what we're sending
+      console.log('Sending test session data:', testSessionData);
+      
       const response = await fetch('/api/super-admin/test-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -527,6 +530,7 @@ export default function SuperAdminDashboard() {
         }
       } else {
         const error = await response.json();
+        console.error('Test session creation error response:', error);
         showNotification('error', error.message || 'Failed to create test session');
       }
     } catch (error) {
