@@ -39,6 +39,24 @@ interface SystemAlert {
   priority: 'low' | 'medium' | 'high' | 'critical';
 }
 
+interface UpdateStatus {
+  hasUpdates: boolean;
+  currentCommit: string;
+  latestCommit: string;
+  gitStatus: {
+    currentBranch: string;
+    currentCommit: string;
+    remoteUrl: string;
+  };
+  lastCheck: string;
+  isUpdating: boolean;
+  updateResult?: {
+    success: boolean;
+    message: string;
+    backupPath?: string;
+  };
+}
+
 interface GlobalSettings {
   platform: {
     name: string;
@@ -120,15 +138,18 @@ export default function SuperAdminDashboard() {
   const [isOnline, setIsOnline] = useState(true);
   const [connectionStatus, setConnectionStatus] = useState<'connected' | 'disconnected' | 'reconnecting'>('connected');
   const [notifications, setNotifications] = useState<Array<{type: 'success' | 'error' | 'info', message: string, id: string}>>([]);
-  const [updateStatus, setUpdateStatus] = useState<{
-    hasChanges: boolean;
-    lastCommit: string;
-    lastCommitMessage: string;
-    lastCommitDate: string;
-    deploymentStatus: 'idle' | 'checking' | 'updating' | 'completed' | 'failed';
-    deploymentMessage: string;
-    oracleInstanceStatus: 'online' | 'offline' | 'updating';
-  } | null>(null);
+  const [updateStatus, setUpdateStatus] = useState<UpdateStatus>({
+    hasUpdates: false,
+    currentCommit: '',
+    latestCommit: '',
+    gitStatus: {
+      currentBranch: '',
+      currentCommit: '',
+      remoteUrl: ''
+    },
+    lastCheck: '',
+    isUpdating: false
+  });
   const [isCheckingUpdates, setIsCheckingUpdates] = useState(false);
   const [isDeploying, setIsDeploying] = useState(false);
 
@@ -245,16 +266,22 @@ export default function SuperAdminDashboard() {
     try {
       setIsCheckingUpdates(true);
       const response = await fetch('/api/super-admin/update-system', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'check-updates' })
+        method: 'GET'
       });
       
       const data = await response.json();
       
       if (data.success) {
-        setUpdateStatus(data.data);
-        if (data.data.hasChanges) {
+        setUpdateStatus({
+          hasUpdates: data.updateInfo.hasUpdates,
+          currentCommit: data.updateInfo.currentCommit?.substring(0, 8) || '',
+          latestCommit: data.updateInfo.latestCommit?.substring(0, 8) || '',
+          gitStatus: data.gitStatus,
+          lastCheck: data.timestamp,
+          isUpdating: false
+        });
+        
+        if (data.updateInfo.hasUpdates) {
           showNotification('info', 'Updates available from GitHub');
         } else {
           showNotification('success', 'System is up to date');
@@ -272,32 +299,48 @@ export default function SuperAdminDashboard() {
 
   const deployUpdates = useCallback(async () => {
     try {
+      setUpdateStatus(prev => ({ ...prev, isUpdating: true }));
       setIsDeploying(true);
-      setUpdateStatus(prev => prev ? { ...prev, deploymentStatus: 'updating' } : null);
       
       const response = await fetch('/api/super-admin/update-system', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'deploy-updates' })
+        method: 'POST'
       });
       
       const data = await response.json();
       
       if (data.success) {
-        setUpdateStatus(data.data);
-        showNotification('success', 'System updated successfully');
+        setUpdateStatus(prev => ({
+          ...prev,
+          isUpdating: false,
+          updateResult: data.result
+        }));
+        showNotification('success', data.result.message || 'System updated successfully');
         // Refresh data after update
         setTimeout(() => {
           fetchSuperAdminData();
           setLastUpdate(new Date());
         }, 2000);
       } else {
-        setUpdateStatus(prev => prev ? { ...prev, deploymentStatus: 'failed' } : null);
+        setUpdateStatus(prev => ({
+          ...prev,
+          isUpdating: false,
+          updateResult: {
+            success: false,
+            message: data.error || 'Failed to deploy updates'
+          }
+        }));
         showNotification('error', data.error || 'Failed to deploy updates');
       }
     } catch (error) {
       console.error('Deploy updates error:', error);
-      setUpdateStatus(prev => prev ? { ...prev, deploymentStatus: 'failed' } : null);
+      setUpdateStatus(prev => ({
+        ...prev,
+        isUpdating: false,
+        updateResult: {
+          success: false,
+          message: 'Failed to deploy updates'
+        }
+      }));
       showNotification('error', 'Failed to deploy updates');
     } finally {
       setIsDeploying(false);
@@ -467,7 +510,7 @@ export default function SuperAdminDashboard() {
               style={{
                 background: isCheckingUpdates || isDeploying 
                   ? 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)'
-                  : updateStatus?.hasChanges 
+                  : updateStatus?.hasUpdates 
                     ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)'
                     : 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
                 color: 'white',
