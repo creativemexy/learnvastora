@@ -26,6 +26,14 @@ export async function POST(request: NextRequest) {
     console.log('Test session request body:', body);
 
     // Validate required fields
+    console.log('Validating fields:', { studentId, tutorId, duration, startTime });
+    console.log('Field types:', { 
+      studentId: typeof studentId, 
+      tutorId: typeof tutorId, 
+      duration: typeof duration, 
+      startTime: typeof startTime 
+    });
+    
     if (!studentId || !tutorId || !duration || !startTime) {
       console.log('Missing fields:', { studentId, tutorId, duration, startTime });
       return NextResponse.json({ 
@@ -35,6 +43,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify student and tutor exist
+    console.log('Looking up student and tutor...');
     const [student, tutor] = await Promise.all([
       prisma.user.findUnique({
         where: { id: studentId },
@@ -46,11 +55,16 @@ export async function POST(request: NextRequest) {
       })
     ]);
 
+    console.log('Found student:', student);
+    console.log('Found tutor:', tutor);
+
     if (!student || student.role !== 'STUDENT') {
+      console.log('Student validation failed:', { student, expectedRole: 'STUDENT' });
       return NextResponse.json({ error: 'Invalid student ID' }, { status: 400 });
     }
 
     if (!tutor || tutor.role !== 'TUTOR') {
+      console.log('Tutor validation failed:', { tutor, expectedRole: 'TUTOR' });
       return NextResponse.json({ error: 'Invalid tutor ID' }, { status: 400 });
     }
 
