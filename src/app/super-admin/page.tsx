@@ -123,6 +123,14 @@ interface GlobalSettings {
   };
 }
 
+interface TestSessionData {
+  studentId: string;
+  tutorId: string;
+  subject: string;
+  duration: number;
+  startTime: Date;
+}
+
 export default function SuperAdminDashboard() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -152,6 +160,18 @@ export default function SuperAdminDashboard() {
   });
   const [isCheckingUpdates, setIsCheckingUpdates] = useState(false);
   const [isDeploying, setIsDeploying] = useState(false);
+
+  // Test session state
+  const [testSessionData, setTestSessionData] = useState<TestSessionData>({
+    studentId: '',
+    tutorId: '',
+    subject: 'Test Session',
+    duration: 30,
+    startTime: new Date()
+  });
+  const [isCreatingTestSession, setIsCreatingTestSession] = useState(false);
+  const [availableStudents, setAvailableStudents] = useState<Array<{id: string, name: string, email: string}>>([]);
+  const [availableTutors, setAvailableTutors] = useState<Array<{id: string, name: string, email: string}>>([]);
 
   // Network status monitoring
   useEffect(() => {
@@ -464,6 +484,64 @@ export default function SuperAdminDashboard() {
     }
   };
 
+  // Test session functions
+  const fetchAvailableUsers = useCallback(async () => {
+    try {
+      const [studentsResponse, tutorsResponse] = await Promise.all([
+        fetch('/api/super-admin/users?role=STUDENT'),
+        fetch('/api/super-admin/users?role=TUTOR')
+      ]);
+
+      if (studentsResponse.ok) {
+        const studentsData = await studentsResponse.json();
+        setAvailableStudents(studentsData.data || []);
+      }
+
+      if (tutorsResponse.ok) {
+        const tutorsData = await tutorsResponse.json();
+        setAvailableTutors(tutorsData.data || []);
+      }
+    } catch (error) {
+      console.error('Error fetching available users:', error);
+      showNotification('error', 'Failed to fetch available users');
+    }
+  }, [showNotification]);
+
+  const createTestSession = useCallback(async () => {
+    try {
+      setIsCreatingTestSession(true);
+      
+      const response = await fetch('/api/super-admin/test-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(testSessionData)
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        showNotification('success', 'Test session created successfully!');
+        
+        // Redirect to the session
+        if (result.sessionId) {
+          router.push(`/sessions/${result.sessionId}`);
+        }
+      } else {
+        const error = await response.json();
+        showNotification('error', error.message || 'Failed to create test session');
+      }
+    } catch (error) {
+      console.error('Error creating test session:', error);
+      showNotification('error', 'Failed to create test session');
+    } finally {
+      setIsCreatingTestSession(false);
+    }
+  }, [testSessionData, router, showNotification]);
+
+  // Load available users when component mounts
+  useEffect(() => {
+    fetchAvailableUsers();
+  }, [fetchAvailableUsers]);
+
   // Check authentication
   if (status === 'loading') {
     return (
@@ -743,6 +821,120 @@ export default function SuperAdminDashboard() {
             <label htmlFor="import-settings" className="btn btn-secondary">
               📥 Import Settings
             </label>
+          </div>
+        </div>
+
+        {/* Test Session Panel */}
+        <div className="test-session-panel">
+          <div className="test-session-header">
+            <h3>🧪 Test Session Creator</h3>
+            <p>Create instant test sessions for testing purposes</p>
+          </div>
+          
+          <div className="test-session-form">
+            <div className="form-row">
+              <div className="form-group">
+                <label>Student:</label>
+                <select 
+                  value={testSessionData.studentId}
+                  onChange={(e) => setTestSessionData(prev => ({ ...prev, studentId: e.target.value }))}
+                  className="form-select"
+                >
+                  <option value="">Select a student</option>
+                  {availableStudents.map(student => (
+                    <option key={student.id} value={student.id}>
+                      {student.name} ({student.email})
+                    </option>
+                  ))}
+                </select>
+              </div>
+              
+              <div className="form-group">
+                <label>Tutor:</label>
+                <select 
+                  value={testSessionData.tutorId}
+                  onChange={(e) => setTestSessionData(prev => ({ ...prev, tutorId: e.target.value }))}
+                  className="form-select"
+                >
+                  <option value="">Select a tutor</option>
+                  {availableTutors.map(tutor => (
+                    <option key={tutor.id} value={tutor.id}>
+                      {tutor.name} ({tutor.email})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            
+            <div className="form-row">
+              <div className="form-group">
+                <label>Subject:</label>
+                <input 
+                  type="text"
+                  value={testSessionData.subject}
+                  onChange={(e) => setTestSessionData(prev => ({ ...prev, subject: e.target.value }))}
+                  className="form-input"
+                  placeholder="Test Session"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Duration (minutes):</label>
+                <select 
+                  value={testSessionData.duration}
+                  onChange={(e) => setTestSessionData(prev => ({ ...prev, duration: Number(e.target.value) }))}
+                  className="form-select"
+                >
+                  <option value={15}>15 minutes</option>
+                  <option value={30}>30 minutes</option>
+                  <option value={45}>45 minutes</option>
+                  <option value={60}>1 hour</option>
+                  <option value={90}>1.5 hours</option>
+                  <option value={120}>2 hours</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="form-row">
+              <div className="form-group">
+                <label>Start Time:</label>
+                <input 
+                  type="datetime-local"
+                  value={testSessionData.startTime.toISOString().slice(0, 16)}
+                  onChange={(e) => setTestSessionData(prev => ({ ...prev, startTime: new Date(e.target.value) }))}
+                  className="form-input"
+                />
+              </div>
+              
+              <div className="form-group">
+                <button 
+                  className="btn btn-primary test-session-btn"
+                  onClick={createTestSession}
+                  disabled={isCreatingTestSession || !testSessionData.studentId || !testSessionData.tutorId}
+                  style={{
+                    background: isCreatingTestSession || !testSessionData.studentId || !testSessionData.tutorId
+                      ? 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)'
+                      : 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                    color: 'white',
+                    border: 'none',
+                    padding: '0.75rem 1.5rem',
+                    borderRadius: '10px',
+                    fontSize: '0.9rem',
+                    fontWeight: '600',
+                    cursor: isCreatingTestSession || !testSessionData.studentId || !testSessionData.tutorId ? 'not-allowed' : 'pointer',
+                    transition: 'all 0.3s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    boxShadow: '0 4px 15px rgba(16, 185, 129, 0.3)',
+                    marginTop: '1.5rem'
+                  }}
+                >
+                  <span>{isCreatingTestSession ? '⏳' : '🚀'}</span>
+                  {isCreatingTestSession ? 'Creating Session...' : 'Start Test Session'}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
