@@ -25,9 +25,9 @@ export async function POST(request: NextRequest) {
     const { studentId, tutorId, subject, duration, startTime } = body;
 
     // Validate required fields
-    if (!studentId || !tutorId || !subject || !duration || !startTime) {
+    if (!studentId || !tutorId || !duration || !startTime) {
       return NextResponse.json({ 
-        error: 'Missing required fields: studentId, tutorId, subject, duration, startTime' 
+        error: 'Missing required fields: studentId, tutorId, duration, startTime' 
       }, { status: 400 });
     }
 
@@ -56,38 +56,19 @@ export async function POST(request: NextRequest) {
       data: {
         studentId,
         tutorId,
-        subject,
+        scheduledAt: new Date(startTime),
         duration,
-        startTime: new Date(startTime),
-        endTime: new Date(new Date(startTime).getTime() + duration * 60000), // duration in minutes
         status: 'CONFIRMED',
-        isTestSession: true,
         price: 0, // Free for test sessions
-        paymentStatus: 'PAID',
-        notes: 'Test session created by super admin'
-      }
-    });
-
-    // Create a session record
-    const sessionRecord = await prisma.session.create({
-      data: {
-        bookingId: booking.id,
-        studentId,
-        tutorId,
-        startTime: new Date(startTime),
-        endTime: new Date(new Date(startTime).getTime() + duration * 60000),
-        status: 'IN_PROGRESS',
-        isTestSession: true
+        isInstant: false
       }
     });
 
     return NextResponse.json({
       success: true,
       message: 'Test session created successfully',
-      sessionId: sessionRecord.id,
       bookingId: booking.id,
       data: {
-        session: sessionRecord,
         booking
       }
     });

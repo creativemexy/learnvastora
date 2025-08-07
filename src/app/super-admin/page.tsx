@@ -521,9 +521,9 @@ export default function SuperAdminDashboard() {
         const result = await response.json();
         showNotification('success', 'Test session created successfully!');
         
-        // Redirect to the session
-        if (result.sessionId) {
-          router.push(`/sessions/${result.sessionId}`);
+        // Redirect to the booking
+        if (result.bookingId) {
+          router.push(`/bookings/${result.bookingId}`);
         }
       } else {
         const error = await response.json();
@@ -900,7 +900,7 @@ export default function SuperAdminDashboard() {
                 <label>Start Time:</label>
                 <input 
                   type="datetime-local"
-                  value={testSessionData.startTime.toISOString().slice(0, 16)}
+                  value={testSessionData.startTime ? testSessionData.startTime.toISOString().slice(0, 16) : ''}
                   onChange={(e) => setTestSessionData(prev => ({ ...prev, startTime: new Date(e.target.value) }))}
                   className="form-input"
                 />
