@@ -541,12 +541,12 @@ export default function SuperAdminDashboard() {
               }}
             >
               <span>
-                {isCheckingUpdates ? '⏳' : isDeploying ? '🔄' : updateStatus?.hasChanges ? '⚠️' : '🔄'}
+                {isCheckingUpdates ? '⏳' : isDeploying ? '🔄' : updateStatus?.hasUpdates ? '⚠️' : '🔄'}
               </span>
-              {isCheckingUpdates ? 'Checking...' : isDeploying ? 'Updating...' : updateStatus?.hasChanges ? 'Update Available' : 'Check Updates'}
+                              {isCheckingUpdates ? 'Checking...' : isDeploying ? 'Updating...' : updateStatus?.hasUpdates ? 'Update Available' : 'Check Updates'}
             </button>
             
-            {updateStatus?.hasChanges && (
+            {updateStatus?.hasUpdates && (
               <button 
                 className="btn btn-warning deploy-btn"
                 onClick={deployUpdates}
