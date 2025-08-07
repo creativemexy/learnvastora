@@ -63,9 +63,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid student ID' }, { status: 400 });
     }
 
-    if (!tutor || tutor.role !== 'TUTOR') {
-      console.log('Tutor validation failed:', { tutor, expectedRole: 'TUTOR' });
-      return NextResponse.json({ error: 'Invalid tutor ID' }, { status: 400 });
+    if (!tutor || (tutor.role !== 'TUTOR' && tutor.role !== 'SUPER_ADMIN')) {
+      console.log('Tutor validation failed:', { tutor, expectedRoles: ['TUTOR', 'SUPER_ADMIN'] });
+      return NextResponse.json({ error: 'Invalid tutor ID - must be a TUTOR or SUPER_ADMIN' }, { status: 400 });
     }
 
     // Create a test booking
