@@ -526,7 +526,7 @@ export default function SuperAdminDashboard() {
         
         // Redirect to the session
         if (result.bookingId) {
-          router.push(`/session/${result.bookingId}`);
+          router.push(`/sessions/${result.bookingId}`);
         }
       } else {
         const error = await response.json();
