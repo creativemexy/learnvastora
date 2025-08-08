@@ -38,6 +38,7 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
   const [showChat, setShowChat] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
   const [isVideoOff, setIsVideoOff] = useState(false);
+  const [activeSidebar, setActiveSidebar] = useState('chat'); // 'chat' or 'participants'
 
   // Session timer
   useEffect(() => {
@@ -282,24 +283,11 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center relative overflow-hidden">
-        {/* Animated Background */}
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
-        </div>
-        
-        <div className="relative text-center z-10">
-          <div className="relative mb-8">
-            <div className="w-24 h-24 border-4 border-purple-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
-            <div className="absolute inset-0 w-24 h-24 border-4 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto" style={{animationDelay: '0.2s'}}></div>
-            <div className="absolute inset-0 w-24 h-24 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin mx-auto" style={{animationDelay: '0.4s'}}></div>
-          </div>
-          <h2 className="text-4xl font-bold text-white mb-4 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-            Initializing Session
-          </h2>
-          <p className="text-purple-200 text-lg">Setting up your premium learning experience...</p>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Initializing Session</h2>
+          <p className="text-gray-600">Setting up your learning experience...</p>
         </div>
       </div>
     );
@@ -307,32 +295,27 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <div className="max-w-lg w-full bg-white/10 backdrop-blur-2xl rounded-3xl p-10 text-center border border-white/20 shadow-2xl">
-          <div className="text-red-400 mb-8">
-            <div className="w-20 h-20 mx-auto bg-red-500/20 rounded-full flex items-center justify-center">
-              <svg className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-              </svg>
-            </div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
+          <div className="text-red-500 mb-6">
+            <svg className="w-16 h-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
           </div>
-          <h2 className="text-3xl font-bold text-white mb-6">Session Error</h2>
-          <p className="text-purple-200 mb-10 text-lg">{error}</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Session Error</h2>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button
               onClick={() => {
                 setError("");
                 setRetryCount(0);
                 initializeVideoCall();
               }}
-              className="inline-block bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-8 py-3 rounded-2xl hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 transform hover:scale-105 shadow-xl"
+              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
             >
-              <svg className="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
               Retry Connection
             </button>
-            <Link href="/dashboard" className="inline-block bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-3 rounded-2xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 shadow-xl">
+            <Link href="/dashboard" className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
               Return to Dashboard
             </Link>
           </div>
@@ -342,232 +325,313 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden relative">
-      {/* Animated Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
-        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '4s'}}></div>
-      </div>
+    <div className="h-screen bg-gray-50 flex">
+      {/* Left Navigation Sidebar */}
+      <div className="w-16 bg-white border-r border-gray-200 flex flex-col items-center py-4">
+        {/* Logo */}
+        <div className="mb-8">
+          <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-red-500 rounded-lg flex items-center justify-center">
+            <span className="text-white text-xs font-bold">LV</span>
+          </div>
+        </div>
 
-      {/* Header */}
-      <div className="relative z-10 bg-black/30 backdrop-blur-xl border-b border-white/10 p-4">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-6">
-            <div className="flex items-center space-x-3">
-              <div className="relative">
-                <div className={`w-3 h-3 rounded-full ${connected ? 'bg-green-400' : 'bg-red-400'} animate-pulse`}></div>
-                {showConnectionAnimation && (
-                  <div className="absolute inset-0 w-3 h-3 rounded-full bg-green-400 animate-ping"></div>
-                )}
-              </div>
-              <span className="text-sm font-medium text-gray-300">{connected ? 'Connected' : 'Connecting...'}</span>
-            </div>
-            
-            <div className="h-6 w-px bg-white/20"></div>
-            
-            <div className="text-sm">
-              <span className="text-gray-300">Session Time:</span>
-              <span className="ml-2 font-mono text-lg font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-                {formatTime(sessionTime)}
-              </span>
-            </div>
-          </div>
+        {/* Navigation Icons */}
+        <div className="flex-1 flex flex-col items-center space-y-6">
+          <button className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors">
+            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </button>
           
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => setShowParticipants(!showParticipants)}
-              className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-200"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-              </svg>
-            </button>
-            
-            <button
-              onClick={() => setShowSettings(!showSettings)}
-              className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-200"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-            </button>
-          </div>
+          <button className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors">
+            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+          </button>
+          
+          <button className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors">
+            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </button>
+          
+          <button className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors">
+            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+            </svg>
+          </button>
+          
+          <button className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors">
+            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+          </button>
+          
+          <button className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+          </button>
+        </div>
+
+        {/* User Avatar */}
+        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
+          <span className="text-white text-sm font-medium">
+            {(session?.user as any)?.name?.charAt(0) || 'U'}
+          </span>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="relative z-10 flex h-[calc(100vh-80px)]">
-        {/* Video Area */}
-        <div className="flex-1 flex flex-col">
-          {/* Main Video */}
-          <div className="flex-1 relative bg-black/50 rounded-2xl m-4 overflow-hidden">
-            <video
-              ref={remoteVideo}
-              autoPlay
-              playsInline
-              className="w-full h-full object-cover"
-            />
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col">
+        {/* Top Header */}
+        <div className="bg-white border-b border-gray-200 px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <button onClick={() => router.back()} className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              
+              <div>
+                <h1 className="text-xl font-semibold text-gray-800">
+                  {booking?.subject || 'Learning Session'}
+                </h1>
+                <div className="flex items-center space-x-4 text-sm text-gray-600">
+                  <span className="text-green-600">Invited to the call: {participants.length}</span>
+                  <span className="text-red-600">Absent people: 0</span>
+                </div>
+              </div>
+            </div>
             
-            {/* Local Video (Picture-in-Picture) */}
-            <div className="absolute top-4 right-4 w-48 h-36 bg-black/80 rounded-xl overflow-hidden border-2 border-white/20">
+            <div className="flex items-center space-x-3">
+              <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex items-center space-x-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                </svg>
+                <span>Team</span>
+              </button>
+              
+              <button className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors flex items-center space-x-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                <span>Add user to the call</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Video Area */}
+        <div className="flex-1 flex">
+          {/* Main Video Area */}
+          <div className="flex-1 flex flex-col">
+            <div className="flex-1 relative bg-gray-900 rounded-lg m-4 overflow-hidden">
+              {/* Main Video */}
               <video
-                ref={localVideo}
+                ref={remoteVideo}
                 autoPlay
                 playsInline
-                muted
                 className="w-full h-full object-cover"
               />
-              {isVideoOff && (
-                <div className="absolute inset-0 bg-gray-800 flex items-center justify-center">
-                  <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
-                  </svg>
+              
+              {/* Local Video (Picture-in-Picture) */}
+              <div className="absolute top-4 right-4 w-48 h-36 bg-black rounded-lg overflow-hidden border-2 border-white">
+                <video
+                  ref={localVideo}
+                  autoPlay
+                  playsInline
+                  muted
+                  className="w-full h-full object-cover"
+                />
+                {isVideoOff && (
+                  <div className="absolute inset-0 bg-gray-800 flex items-center justify-center">
+                    <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+
+              {/* Session Info Overlay */}
+              <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-sm rounded-lg p-3">
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+                    <span className="text-white text-xs font-medium">T</span>
+                  </div>
+                  <div className="text-white text-sm">
+                    <div className="font-medium">Tutor</div>
+                    <div className="text-xs text-gray-300">{(session?.user as any)?.name}</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Recording Indicator */}
+              {isRecording && (
+                <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-3 py-1 rounded-full flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                  <span className="text-sm font-medium">{formatTime(sessionTime)}</span>
                 </div>
               )}
-            </div>
 
-            {/* Session Info Overlay */}
-            <div className="absolute bottom-4 left-4 bg-black/50 backdrop-blur-sm rounded-xl p-3">
-              <div className="text-sm text-gray-300">
-                <div className="font-medium">{booking?.subject || 'Session'}</div>
-                <div className="text-xs text-gray-400">{participants.length} participants</div>
-              </div>
-            </div>
-          </div>
+              {/* Control Bar */}
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 backdrop-blur-sm rounded-full px-6 py-3 flex items-center space-x-4">
+                {/* Volume Slider */}
+                <div className="w-20 h-1 bg-gray-600 rounded-full">
+                  <div className="w-12 h-1 bg-white rounded-full"></div>
+                </div>
 
-          {/* Control Bar */}
-          <div className="bg-black/30 backdrop-blur-xl border-t border-white/10 p-4">
-            <div className="flex justify-center items-center space-x-4">
-              {/* Mute Button */}
-              <button
-                onClick={toggleMute}
-                className={`p-4 rounded-full transition-all duration-200 ${
-                  isMuted 
-                    ? 'bg-red-500 hover:bg-red-600' 
-                    : 'bg-white/20 hover:bg-white/30'
-                }`}
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  {isMuted ? (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                  ) : (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                  )}
-                </svg>
-              </button>
+                {/* Fullscreen */}
+                <button className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                  </svg>
+                </button>
 
-              {/* Video Toggle */}
-              <button
-                onClick={toggleVideo}
-                className={`p-4 rounded-full transition-all duration-200 ${
-                  isVideoOff 
-                    ? 'bg-red-500 hover:bg-red-600' 
-                    : 'bg-white/20 hover:bg-white/30'
-                }`}
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  {isVideoOff ? (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
-                  ) : (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                  )}
-                </svg>
-              </button>
-
-              {/* Record Button */}
-              <button
-                onClick={toggleRecording}
-                className={`p-4 rounded-full transition-all duration-200 ${
-                  isRecording 
-                    ? 'bg-red-500 hover:bg-red-600 animate-pulse' 
-                    : 'bg-white/20 hover:bg-white/30'
-                }`}
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </button>
-
-              {/* Whiteboard Button */}
-              <button
-                onClick={toggleWhiteboard}
-                className={`p-4 rounded-full transition-all duration-200 ${
-                  showWhiteboard 
-                    ? 'bg-blue-500 hover:bg-blue-600' 
-                    : 'bg-white/20 hover:bg-white/30'
-                }`}
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-              </button>
-
-              {/* End Session */}
-              <button
-                onClick={endSession}
-                className="p-4 rounded-full bg-red-500 hover:bg-red-600 transition-all duration-200"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Sidebar */}
-        <div className="w-80 bg-black/30 backdrop-blur-xl border-l border-white/10 flex flex-col">
-          {/* Chat Section */}
-          <div className="flex-1 flex flex-col">
-            <div className="p-4 border-b border-white/10">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold">Chat</h3>
+                {/* Mute Button */}
                 <button
-                  onClick={() => setShowChat(!showChat)}
-                  className="p-1 rounded-lg hover:bg-white/10 transition-colors"
+                  onClick={toggleMute}
+                  className={`p-3 rounded-full transition-colors ${
+                    isMuted ? 'bg-red-500' : 'bg-white/20 hover:bg-white/30'
+                  }`}
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    {isMuted ? (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                    ) : (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                    )}
+                  </svg>
+                </button>
+
+                {/* End Call */}
+                <button
+                  onClick={endSession}
+                  className="p-3 rounded-full bg-red-500 hover:bg-red-600 transition-colors"
+                >
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                </button>
+
+                {/* Video Toggle */}
+                <button
+                  onClick={toggleVideo}
+                  className={`p-3 rounded-full transition-colors ${
+                    isVideoOff ? 'bg-red-500' : 'bg-white/20 hover:bg-white/30'
+                  }`}
+                >
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    {isVideoOff ? (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
+                    ) : (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    )}
+                  </svg>
+                </button>
+
+                {/* Settings */}
+                <button className="p-3 rounded-full bg-white/20 hover:bg-white/30 transition-colors">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                 </button>
               </div>
             </div>
 
-            {showChat && (
-              <>
-                {/* Messages */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            {/* Audio Waveform/Transcript */}
+            <div className="mx-4 mb-4 p-4 bg-white rounded-lg border border-gray-200">
+              <div className="flex items-center space-x-3">
+                <div className="flex space-x-1">
+                  {[...Array(20)].map((_, i) => (
+                    <div key={i} className="w-1 bg-green-500 rounded-full" style={{ height: `${Math.random() * 20 + 5}px` }}></div>
+                  ))}
+                </div>
+                <span className="text-sm text-gray-600">
+                  "Thanks for sending all those completed transcripts through - we've been really happy..."
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Sidebar */}
+          <div className="w-80 bg-white border-l border-gray-200 flex flex-col">
+            {/* Tabs */}
+            <div className="flex border-b border-gray-200">
+              <button
+                onClick={() => setActiveSidebar('chat')}
+                className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
+                  activeSidebar === 'chat' 
+                    ? 'text-green-600 border-b-2 border-green-600' 
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Messages
+              </button>
+              <button
+                onClick={() => setActiveSidebar('participants')}
+                className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
+                  activeSidebar === 'participants' 
+                    ? 'text-green-600 border-b-2 border-green-600' 
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Participants
+              </button>
+            </div>
+
+            {/* Chat Messages */}
+            {activeSidebar === 'chat' && (
+              <div className="flex-1 flex flex-col">
+                <div className="flex-1 overflow-y-auto p-4 space-y-4">
                   {messages.map((message) => (
-                    <div key={message.id} className="flex flex-col">
-                      <div className="flex items-center space-x-2 mb-1">
-                        <span className="text-xs text-gray-400">{message.sender}</span>
-                        <span className="text-xs text-gray-500">
-                          {message.timestamp.toLocaleTimeString()}
+                    <div key={message.id} className="flex items-start space-x-3">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
+                        <span className="text-white text-xs font-medium">
+                          {message.sender?.charAt(0) || 'U'}
                         </span>
                       </div>
-                      <div className="bg-white/10 rounded-lg p-3 text-sm">
-                        {message.text}
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2 mb-1">
+                          <span className="text-sm font-medium text-gray-800">{message.sender}</span>
+                          <span className="text-xs text-gray-500">
+                            {message.timestamp.toLocaleTimeString()}
+                          </span>
+                        </div>
+                        <div className="text-sm text-gray-700 bg-gray-50 rounded-lg p-3">
+                          {message.text}
+                        </div>
                       </div>
                     </div>
                   ))}
+                  
+                  {/* Typing Indicator */}
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-blue-500 flex items-center justify-center">
+                      <span className="text-white text-xs font-medium">M</span>
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      Martin is typing<span className="animate-pulse">...</span>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Message Input */}
-                <div className="p-4 border-t border-white/10">
+                <div className="p-4 border-t border-gray-200">
                   <div className="flex space-x-2">
                     <input
                       type="text"
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                      placeholder="Type a message..."
-                      className="flex-1 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Write your message..."
+                      className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     />
                     <button
                       onClick={sendMessage}
-                      className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg transition-colors"
+                      className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
@@ -575,32 +639,31 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
                     </button>
                   </div>
                 </div>
-              </>
+              </div>
             )}
-          </div>
 
-          {/* Participants Section */}
-          {showParticipants && (
-            <div className="border-t border-white/10">
-              <div className="p-4">
-                <h3 className="text-lg font-semibold mb-3">Participants ({participants.length})</h3>
-                <div className="space-y-2">
+            {/* Participants List */}
+            {activeSidebar === 'participants' && (
+              <div className="flex-1 p-4">
+                <div className="space-y-3">
                   {participants.map((participant) => (
-                    <div key={participant.id} className="flex items-center space-x-3 p-2 rounded-lg bg-white/5">
-                      <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-xs font-medium">
-                        {participant.name?.charAt(0) || 'U'}
+                    <div key={participant.id} className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+                        <span className="text-white text-sm font-medium">
+                          {participant.name?.charAt(0) || 'U'}
+                        </span>
                       </div>
                       <div className="flex-1">
-                        <div className="text-sm font-medium">{participant.name}</div>
-                        <div className="text-xs text-gray-400">{participant.role}</div>
+                        <div className="text-sm font-medium text-gray-800">{participant.name}</div>
+                        <div className="text-xs text-gray-500">{participant.role}</div>
                       </div>
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
                     </div>
                   ))}
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
 
