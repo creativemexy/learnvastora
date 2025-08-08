@@ -33,6 +33,7 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [videoEnabled, setVideoEnabled] = useState(true);
   const [showConnectionAnimation, setShowConnectionAnimation] = useState(true);
+  const [retryCount, setRetryCount] = useState(0);
 
   // Session timer
   useEffect(() => {
@@ -86,6 +87,9 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
 
   const initializeVideoCall = useCallback(async () => {
     try {
+      console.log("Initializing video call...");
+      console.log("Signal server URL:", SIGNAL_SERVER_URL);
+      
       // Get user media
       const stream = await navigator.mediaDevices.getUserMedia({ 
         video: true, 
@@ -97,8 +101,31 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
       }
 
       // Connect to signaling server
-      const socket = io(SIGNAL_SERVER_URL);
+      const socket = io(SIGNAL_SERVER_URL, {
+        timeout: 10000,
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000
+      });
       socketRef.current = socket;
+
+      // Add socket error handling
+      socket.on("connect_error", (error) => {
+        console.error("Socket connection error:", error);
+        setError("Failed to connect to signaling server. Please check your connection.");
+      });
+
+      socket.on("connect_timeout", () => {
+        console.error("Socket connection timeout");
+        setError("Connection to signaling server timed out. Please try again.");
+      });
+
+      socket.on("disconnect", (reason) => {
+        console.log("Socket disconnected:", reason);
+        if (reason === "io server disconnect") {
+          setError("Disconnected from server. Please refresh the page.");
+        }
+      });
 
       const userData = {
         id: (session?.user as any).id,
@@ -164,7 +191,34 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
 
     } catch (error) {
       console.error("Error initializing video call:", error);
-      setError("Failed to initialize video call");
+      
+      // More specific error handling
+      if (error instanceof Error) {
+        if (error.name === 'NotAllowedError') {
+          setError("Camera and microphone access denied. Please allow permissions and refresh the page.");
+        } else if (error.name === 'NotFoundError') {
+          setError("No camera or microphone found. Please check your device.");
+        } else if (error.name === 'NotReadableError') {
+          setError("Camera or microphone is already in use by another application.");
+        } else if (error.name === 'OverconstrainedError') {
+          setError("Camera or microphone doesn't meet the required constraints.");
+        } else if (error.message.includes('getUserMedia')) {
+          setError("Failed to access camera and microphone. Please check permissions.");
+        } else {
+          setError(`Failed to initialize video call: ${error.message}`);
+        }
+      } else {
+        setError("Failed to initialize video call. Please check your connection and try again.");
+      }
+      
+      // Auto-retry for certain errors
+      if (retryCount < 3 && error instanceof Error && 
+          (error.name === 'NotReadableError' || error.message.includes('getUserMedia'))) {
+        setTimeout(() => {
+          setRetryCount(prev => prev + 1);
+          initializeVideoCall();
+        }, 2000);
+      }
     }
   }, [params.bookingId, session]);
 
@@ -250,9 +304,24 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
           </div>
           <h2 className="text-3xl font-bold text-white mb-6">Session Error</h2>
           <p className="text-purple-200 mb-10 text-lg">{error}</p>
-          <Link href="/dashboard" className="inline-block bg-gradient-to-r from-purple-600 to-pink-600 text-white px-10 py-4 rounded-2xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 shadow-xl">
-            Return to Dashboard
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={() => {
+                setError("");
+                setRetryCount(0);
+                initializeVideoCall();
+              }}
+              className="inline-block bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-8 py-3 rounded-2xl hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 transform hover:scale-105 shadow-xl"
+            >
+              <svg className="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Retry Connection
+            </button>
+            <Link href="/dashboard" className="inline-block bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-3 rounded-2xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 shadow-xl">
+              Return to Dashboard
+            </Link>
+          </div>
         </div>
       </div>
     );
