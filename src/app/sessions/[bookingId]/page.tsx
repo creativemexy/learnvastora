@@ -34,6 +34,10 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
   const [videoEnabled, setVideoEnabled] = useState(true);
   const [showConnectionAnimation, setShowConnectionAnimation] = useState(true);
   const [retryCount, setRetryCount] = useState(0);
+  const [showParticipants, setShowParticipants] = useState(false);
+  const [showChat, setShowChat] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
+  const [isVideoOff, setIsVideoOff] = useState(false);
 
   // Session timer
   useEffect(() => {
@@ -220,7 +224,7 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
         }, 2000);
       }
     }
-  }, [params.bookingId, session]);
+  }, [params.bookingId, session, retryCount]);
 
   const sendMessage = useCallback(() => {
     if (!newMessage.trim() || !socketRef.current) return;
@@ -249,6 +253,16 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
     setShowWhiteboard(!showWhiteboard);
   }, [showWhiteboard]);
 
+  const toggleMute = useCallback(() => {
+    setIsMuted(!isMuted);
+    // TODO: Implement actual mute functionality
+  }, [isMuted]);
+
+  const toggleVideo = useCallback(() => {
+    setIsVideoOff(!isVideoOff);
+    // TODO: Implement actual video toggle functionality
+  }, [isVideoOff]);
+
   const endSession = useCallback(() => {
     if (socketRef.current) {
       socketRef.current.disconnect();
@@ -268,24 +282,24 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 flex items-center justify-center relative overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center relative overflow-hidden">
         {/* Animated Background */}
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
         </div>
         
         <div className="relative text-center z-10">
           <div className="relative mb-8">
             <div className="w-24 h-24 border-4 border-purple-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
-            <div className="absolute inset-0 w-24 h-24 border-4 border-pink-400 border-t-transparent rounded-full animate-spin mx-auto" style={{animationDelay: '0.2s'}}></div>
+            <div className="absolute inset-0 w-24 h-24 border-4 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto" style={{animationDelay: '0.2s'}}></div>
             <div className="absolute inset-0 w-24 h-24 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin mx-auto" style={{animationDelay: '0.4s'}}></div>
           </div>
-          <h2 className="text-4xl font-bold text-white mb-4 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-            Initializing Premium Session
+          <h2 className="text-4xl font-bold text-white mb-4 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+            Initializing Session
           </h2>
-          <p className="text-purple-200 text-lg">Setting up your ultra-premium learning experience...</p>
+          <p className="text-purple-200 text-lg">Setting up your premium learning experience...</p>
         </div>
       </div>
     );
@@ -293,8 +307,8 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 flex items-center justify-center">
-        <div className="max-w-lg w-full bg-white/5 backdrop-blur-2xl rounded-3xl p-10 text-center border border-white/10 shadow-2xl">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+        <div className="max-w-lg w-full bg-white/10 backdrop-blur-2xl rounded-3xl p-10 text-center border border-white/20 shadow-2xl">
           <div className="text-red-400 mb-8">
             <div className="w-20 h-20 mx-auto bg-red-500/20 rounded-full flex items-center justify-center">
               <svg className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -328,319 +342,290 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 text-white overflow-hidden relative">
-      {/* Animated Background Elements */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden relative">
+      {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
         <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '4s'}}></div>
       </div>
 
-      {/* Premium Header */}
-      <div className="relative z-10 bg-black/20 backdrop-blur-2xl border-b border-white/10 p-6">
+      {/* Header */}
+      <div className="relative z-10 bg-black/30 backdrop-blur-xl border-b border-white/10 p-4">
         <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-8">
-            <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-3">
               <div className="relative">
-                <div className={`w-4 h-4 rounded-full ${connected ? 'bg-green-400' : 'bg-red-400'} animate-pulse`}></div>
+                <div className={`w-3 h-3 rounded-full ${connected ? 'bg-green-400' : 'bg-red-400'} animate-pulse`}></div>
                 {showConnectionAnimation && (
-                  <div className="absolute inset-0 w-4 h-4 rounded-full bg-green-400 animate-ping"></div>
+                  <div className="absolute inset-0 w-3 h-3 rounded-full bg-green-400 animate-ping"></div>
                 )}
               </div>
-              <span className="text-lg font-semibold text-cyan-300">{connected ? 'Connected' : 'Connecting...'}</span>
+              <span className="text-sm font-medium text-gray-300">{connected ? 'Connected' : 'Connecting...'}</span>
             </div>
             
-            <div className="h-8 w-px bg-white/20"></div>
+            <div className="h-6 w-px bg-white/20"></div>
             
-            <div className="text-lg">
-              <span className="text-emerald-300 font-medium">Session Time:</span>
-              <span className="ml-3 font-mono text-2xl font-bold bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">
+            <div className="text-sm">
+              <span className="text-gray-300">Session Time:</span>
+              <span className="ml-2 font-mono text-lg font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
                 {formatTime(sessionTime)}
               </span>
             </div>
           </div>
           
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-4">
             <button
-              onClick={() => setShowSettings(!showSettings)}
-              className="p-3 rounded-2xl bg-cyan-500/20 hover:bg-cyan-500/30 transition-all duration-300 transform hover:scale-110 border border-cyan-400/30 text-cyan-300"
+              onClick={() => setShowParticipants(!showParticipants)}
+              className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-200"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
               </svg>
             </button>
             
             <button
-              onClick={endSession}
-              className="bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 px-8 py-3 rounded-2xl text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-xl border border-rose-400/30 text-amber-100"
+              onClick={() => setShowSettings(!showSettings)}
+              className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-200"
             >
-              End Session
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
             </button>
           </div>
         </div>
       </div>
 
-      <div className="flex h-screen relative z-10">
-        {/* Ultra-Premium Video Section */}
-        <div className="flex-1 p-8">
-          <div className="grid grid-cols-2 gap-8 h-full">
-            {/* Local Video */}
-            <div className="relative bg-slate-800/40 backdrop-blur-2xl rounded-3xl overflow-hidden border border-cyan-400/20 group shadow-2xl">
-              <div className="absolute top-6 left-6 z-20 bg-slate-900/80 backdrop-blur-xl px-4 py-2 rounded-2xl border border-cyan-400/30">
-                <span className="text-lg font-semibold bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">You</span>
-              </div>
+      {/* Main Content */}
+      <div className="relative z-10 flex h-[calc(100vh-80px)]">
+        {/* Video Area */}
+        <div className="flex-1 flex flex-col">
+          {/* Main Video */}
+          <div className="flex-1 relative bg-black/50 rounded-2xl m-4 overflow-hidden">
+            <video
+              ref={remoteVideo}
+              autoPlay
+              playsInline
+              className="w-full h-full object-cover"
+            />
+            
+            {/* Local Video (Picture-in-Picture) */}
+            <div className="absolute top-4 right-4 w-48 h-36 bg-black/80 rounded-xl overflow-hidden border-2 border-white/20">
               <video
                 ref={localVideo}
                 autoPlay
+                playsInline
                 muted
-                playsInline
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-              
-              {/* Video Controls Overlay */}
-              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-4 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                <button className="p-3 bg-slate-900/80 backdrop-blur-xl rounded-2xl border border-cyan-400/30 hover:bg-slate-800/90 transition-all duration-200 text-cyan-300">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              {isVideoOff && (
+                <div className="absolute inset-0 bg-gray-800 flex items-center justify-center">
+                  <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
                   </svg>
-                </button>
-                <button className="p-3 bg-slate-900/80 backdrop-blur-xl rounded-2xl border border-cyan-400/30 hover:bg-slate-800/90 transition-all duration-200 text-cyan-300">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            {/* Remote Video */}
-            <div className="relative bg-slate-800/40 backdrop-blur-2xl rounded-3xl overflow-hidden border border-emerald-400/20 group shadow-2xl">
-              <div className="absolute top-6 left-6 z-20 bg-slate-900/80 backdrop-blur-xl px-4 py-2 rounded-2xl border border-emerald-400/30">
-                <span className="text-lg font-semibold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">Remote</span>
-              </div>
-              <video
-                ref={remoteVideo}
-                autoPlay
-                playsInline
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-              
-              {/* Connection Status */}
-              {!connected && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-16 h-16 border-4 border-purple-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-purple-200">Waiting for connection...</p>
-                  </div>
                 </div>
               )}
             </div>
+
+            {/* Session Info Overlay */}
+            <div className="absolute bottom-4 left-4 bg-black/50 backdrop-blur-sm rounded-xl p-3">
+              <div className="text-sm text-gray-300">
+                <div className="font-medium">{booking?.subject || 'Session'}</div>
+                <div className="text-xs text-gray-400">{participants.length} participants</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Control Bar */}
+          <div className="bg-black/30 backdrop-blur-xl border-t border-white/10 p-4">
+            <div className="flex justify-center items-center space-x-4">
+              {/* Mute Button */}
+              <button
+                onClick={toggleMute}
+                className={`p-4 rounded-full transition-all duration-200 ${
+                  isMuted 
+                    ? 'bg-red-500 hover:bg-red-600' 
+                    : 'bg-white/20 hover:bg-white/30'
+                }`}
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  {isMuted ? (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                  ) : (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                  )}
+                </svg>
+              </button>
+
+              {/* Video Toggle */}
+              <button
+                onClick={toggleVideo}
+                className={`p-4 rounded-full transition-all duration-200 ${
+                  isVideoOff 
+                    ? 'bg-red-500 hover:bg-red-600' 
+                    : 'bg-white/20 hover:bg-white/30'
+                }`}
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  {isVideoOff ? (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
+                  ) : (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  )}
+                </svg>
+              </button>
+
+              {/* Record Button */}
+              <button
+                onClick={toggleRecording}
+                className={`p-4 rounded-full transition-all duration-200 ${
+                  isRecording 
+                    ? 'bg-red-500 hover:bg-red-600 animate-pulse' 
+                    : 'bg-white/20 hover:bg-white/30'
+                }`}
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </button>
+
+              {/* Whiteboard Button */}
+              <button
+                onClick={toggleWhiteboard}
+                className={`p-4 rounded-full transition-all duration-200 ${
+                  showWhiteboard 
+                    ? 'bg-blue-500 hover:bg-blue-600' 
+                    : 'bg-white/20 hover:bg-white/30'
+                }`}
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+              </button>
+
+              {/* End Session */}
+              <button
+                onClick={endSession}
+                className="p-4 rounded-full bg-red-500 hover:bg-red-600 transition-all duration-200"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Ultra-Premium Sidebar */}
-        <div className="w-96 bg-slate-800/40 backdrop-blur-2xl border-l border-cyan-400/20">
-          {/* Premium Controls */}
-          <div className="p-8 border-b border-cyan-400/20">
-            <div className="grid grid-cols-2 gap-4">
-              <button
-                onClick={toggleRecording}
-                className={`p-4 rounded-2xl text-lg font-semibold transition-all duration-300 transform hover:scale-105 border ${
-                  isRecording 
-                    ? 'bg-rose-500/20 text-rose-300 border-rose-500/50 shadow-lg shadow-rose-500/20' 
-                    : 'bg-cyan-500/10 text-cyan-300 border-cyan-400/30 hover:bg-cyan-500/20 hover:shadow-lg'
-                }`}
-              >
-                <div className="flex items-center justify-center space-x-2">
-                  <div className={`w-3 h-3 rounded-full ${isRecording ? 'bg-red-400 animate-pulse' : 'bg-white'}`}></div>
-                  <span>{isRecording ? 'Recording' : 'Record'}</span>
-                </div>
-              </button>
-              
-              <button
-                onClick={toggleWhiteboard}
-                className={`p-4 rounded-2xl text-lg font-semibold transition-all duration-300 transform hover:scale-105 border ${
-                  showWhiteboard 
-                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50 shadow-lg shadow-emerald-500/20' 
-                    : 'bg-cyan-500/10 text-cyan-300 border-cyan-400/30 hover:bg-cyan-500/20 hover:shadow-lg'
-                }`}
-              >
-                <div className="flex items-center justify-center space-x-2">
-                  <span>🎨</span>
-                  <span>Whiteboard</span>
-                </div>
-              </button>
-            </div>
-          </div>
-
-          {/* Premium Participants */}
-          <div className="p-8 border-b border-cyan-400/20">
-            <h3 className="text-xl font-bold mb-6 bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">
-              Participants ({participants.length + 1})
-            </h3>
-            <div className="space-y-4">
-              <div className="flex items-center space-x-4 p-4 bg-cyan-500/5 rounded-2xl border border-cyan-400/20">
-                <div className="w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></div>
-                <div className="flex-1">
-                  <span className="text-lg font-semibold text-cyan-200">You ({(session?.user as any)?.name})</span>
-                  <p className="text-sm text-emerald-300">Host</p>
-                </div>
-              </div>
-              {participants.map((participant) => (
-                <div key={participant.id} className="flex items-center space-x-4 p-4 bg-cyan-500/5 rounded-2xl border border-cyan-400/20">
-                  <div className="w-3 h-3 bg-emerald-400 rounded-full"></div>
-                  <div className="flex-1">
-                    <span className="text-lg font-semibold text-cyan-200">{participant.name}</span>
-                    <p className="text-sm text-emerald-300">{participant.role}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Premium Chat */}
+        {/* Sidebar */}
+        <div className="w-80 bg-black/30 backdrop-blur-xl border-l border-white/10 flex flex-col">
+          {/* Chat Section */}
           <div className="flex-1 flex flex-col">
-            <div className="p-8 border-b border-cyan-400/20">
-              <div className="flex space-x-2">
-                {['chat', 'notes', 'files'].map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className={`flex-1 py-3 px-4 rounded-xl text-lg font-semibold transition-all duration-300 ${
-                      activeTab === tab 
-                        ? 'bg-gradient-to-r from-cyan-500/20 to-emerald-500/20 text-cyan-300 border border-cyan-500/30 shadow-lg' 
-                        : 'text-cyan-200/70 hover:text-cyan-200 hover:bg-cyan-500/5'
-                    }`}
-                  >
-                    {tab === 'chat' ? '💬 Chat' : tab === 'notes' ? '📝 Notes' : '📁 Files'}
-                  </button>
-                ))}
-              </div>
-            </div>
-            
-            <div className="flex-1 overflow-y-auto p-8 space-y-6">
-              {messages.map((message) => (
-                <div key={message.id} className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-2xl flex items-center justify-center text-lg font-bold shadow-lg">
-                    {message.sender.charAt(0)}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-3 mb-2">
-                      <span className="text-lg font-semibold text-cyan-300">{message.sender}</span>
-                      <span className="text-sm text-cyan-200/50">{message.timestamp.toLocaleTimeString()}</span>
-                    </div>
-                    <p className="text-lg text-cyan-100 leading-relaxed">{message.text}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            <div className="p-8 border-t border-cyan-400/20">
-              <div className="flex space-x-4">
-                <input
-                  type="text"
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                  placeholder="Type your message..."
-                  className="flex-1 bg-cyan-500/10 border border-cyan-400/30 text-cyan-100 placeholder-cyan-200/50 px-6 py-4 rounded-2xl text-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent backdrop-blur-xl"
-                />
+            <div className="p-4 border-b border-white/10">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold">Chat</h3>
                 <button
-                  onClick={sendMessage}
-                  className="bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-600 hover:to-emerald-600 px-8 py-4 rounded-2xl text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-xl text-slate-900"
+                  onClick={() => setShowChat(!showChat)}
+                  className="p-1 rounded-lg hover:bg-white/10 transition-colors"
                 >
-                  Send
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
                 </button>
               </div>
             </div>
+
+            {showChat && (
+              <>
+                {/* Messages */}
+                <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                  {messages.map((message) => (
+                    <div key={message.id} className="flex flex-col">
+                      <div className="flex items-center space-x-2 mb-1">
+                        <span className="text-xs text-gray-400">{message.sender}</span>
+                        <span className="text-xs text-gray-500">
+                          {message.timestamp.toLocaleTimeString()}
+                        </span>
+                      </div>
+                      <div className="bg-white/10 rounded-lg p-3 text-sm">
+                        {message.text}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Message Input */}
+                <div className="p-4 border-t border-white/10">
+                  <div className="flex space-x-2">
+                    <input
+                      type="text"
+                      value={newMessage}
+                      onChange={(e) => setNewMessage(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                      placeholder="Type a message..."
+                      className="flex-1 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <button
+                      onClick={sendMessage}
+                      className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg transition-colors"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
+
+          {/* Participants Section */}
+          {showParticipants && (
+            <div className="border-t border-white/10">
+              <div className="p-4">
+                <h3 className="text-lg font-semibold mb-3">Participants ({participants.length})</h3>
+                <div className="space-y-2">
+                  {participants.map((participant) => (
+                    <div key={participant.id} className="flex items-center space-x-3 p-2 rounded-lg bg-white/5">
+                      <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-xs font-medium">
+                        {participant.name?.charAt(0) || 'U'}
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-sm font-medium">{participant.name}</div>
+                        <div className="text-xs text-gray-400">{participant.role}</div>
+                      </div>
+                      <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Ultra-Premium Settings Modal */}
-      {showSettings && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-2xl flex items-center justify-center z-50">
-          <div className="bg-black/40 backdrop-blur-2xl rounded-3xl p-10 w-96 border border-white/20 shadow-2xl">
-            <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Settings</h3>
-              <button
-                onClick={() => setShowSettings(false)}
-                className="text-white/50 hover:text-white transition-colors duration-200"
-              >
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            
-            <div className="space-y-8">
-              <div>
-                <label className="block text-lg font-semibold mb-4">Video Quality</label>
-                <select 
-                  value={videoQuality}
-                  onChange={(e) => setVideoQuality(e.target.value)}
-                  className="w-full bg-white/10 border border-white/20 text-white px-6 py-4 rounded-2xl text-lg backdrop-blur-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
-                >
-                  <option value="sd">Standard Definition</option>
-                  <option value="hd">High Definition</option>
-                  <option value="fhd">Full HD</option>
-                </select>
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <span className="text-lg font-semibold">Audio</span>
-                <button
-                  onClick={() => setAudioEnabled(!audioEnabled)}
-                  className={`w-16 h-8 rounded-full transition-all duration-300 ${
-                    audioEnabled ? 'bg-gradient-to-r from-purple-500 to-pink-500' : 'bg-white/20'
-                  }`}
-                >
-                  <div className={`w-6 h-6 bg-white rounded-full transition-transform duration-300 ${
-                    audioEnabled ? 'translate-x-8' : 'translate-x-1'
-                  }`}></div>
-                </button>
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <span className="text-lg font-semibold">Video</span>
-                <button
-                  onClick={() => setVideoEnabled(!videoEnabled)}
-                  className={`w-16 h-8 rounded-full transition-all duration-300 ${
-                    videoEnabled ? 'bg-gradient-to-r from-purple-500 to-pink-500' : 'bg-white/20'
-                  }`}
-                >
-                  <div className={`w-6 h-6 bg-white rounded-full transition-transform duration-300 ${
-                    videoEnabled ? 'translate-x-8' : 'translate-x-1'
-                  }`}></div>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Ultra-Premium Whiteboard Modal */}
+      {/* Whiteboard Overlay */}
       {showWhiteboard && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-2xl flex items-center justify-center z-50">
-          <div className="bg-black/40 backdrop-blur-2xl rounded-3xl p-8 w-5/6 h-5/6 border border-white/20 shadow-2xl">
-            <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Interactive Whiteboard</h3>
+        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center">
+          <div className="bg-white rounded-2xl p-6 w-11/12 h-5/6 flex flex-col">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold text-gray-800">Whiteboard</h2>
               <button
                 onClick={toggleWhiteboard}
-                className="text-white/50 hover:text-white transition-colors duration-200"
+                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
               >
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
-            <div className="bg-white rounded-2xl h-full flex items-center justify-center shadow-2xl">
+            <div className="flex-1 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
               <div className="text-center text-gray-500">
-                <div className="text-8xl mb-6">🎨</div>
-                <h3 className="text-3xl font-bold mb-4">Whiteboard Coming Soon</h3>
-                <p className="text-xl text-gray-400">Advanced collaborative drawing tools will be available here</p>
+                <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                <p className="text-lg font-medium">Whiteboard Coming Soon</p>
+                <p className="text-sm">Interactive drawing and collaboration tools will be available here.</p>
               </div>
             </div>
           </div>
