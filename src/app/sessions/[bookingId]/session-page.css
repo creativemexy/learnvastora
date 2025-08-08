@@ -1,0 +1,29 @@
+/* Session Page Styles */
+.session-container { height: 100vh; background-color: #f9fafb; display: flex; overflow: hidden; }
+.nav-sidebar { width: 4rem; background-color: white; border-right: 1px solid #e5e7eb; display: flex; flex-direction: column; align-items: center; padding: 1rem 0; }
+.nav-logo { margin-bottom: 2rem; }
+.nav-logo-inner { width: 2rem; height: 2rem; background: linear-gradient(135deg, #10b981 0%, #ef4444 100%); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; }
+.nav-logo-text { color: white; font-size: 0.75rem; font-weight: bold; }
+.nav-icons { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+.nav-icon { width: 2.5rem; height: 2.5rem; border-radius: 50%; background-color: #f3f4f6; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; cursor: pointer; }
+.nav-icon:hover { background-color: #e5e7eb; }
+.nav-icon.active { background-color: #3b82f6; }
+.nav-icon svg { width: 1.25rem; height: 1.25rem; color: #4b5563; }
+.nav-icon.active svg { color: white; }
+.user-avatar { width: 2.5rem; height: 2.5rem; border-radius: 50%; background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.875rem; font-weight: 500; }
+.main-content { flex: 1; display: flex; flex-direction: column; }
+.top-header { background-color: white; border-bottom: 1px solid #e5e7eb; padding: 1rem 1.5rem; }
+.header-content { display: flex; align-items: center; justify-content: space-between; }
+.header-left { display: flex; align-items: center; gap: 1rem; }
+.back-button { padding: 0.5rem; border-radius: 0.5rem; transition: background-color 0.2s ease; cursor: pointer; }
+.back-button:hover { background-color: #f3f4f6; }
+.back-button svg { width: 1.25rem; height: 1.25rem; color: #4b5563; }
+.session-title { font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 0.25rem; }
+.session-info { display: flex; align-items: center; gap: 1rem; font-size: 0.875rem; color: #6b7280; }
+.participant-count { color: #059669; }
+.absent-count { color: #dc2626; }
+.header-right { display: flex; align-items: center; gap: 0.75rem; }
+.team-button { padding: 0.5rem 1rem; background-color: #f3f4f6; color: #374151; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem; transition: background-color 0.2s ease; cursor: pointer; }
+.team-button:hover { background-color: #e5e7eb; }
+.add-user-button { padding: 0.5rem 1rem; background-color: #10b981; color: white; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem; transition: background-color 0.2s ease; cursor: pointer; }
+.add-user-button:hover { background-color: #059669; }
