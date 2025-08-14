@@ -666,39 +666,39 @@ export default function SuperAdminDashboard() {
                 {isDeploying ? 'Deploying...' : 'Deploy Updates'}
               </button>
             )}
-            
-            <button 
-              className="btn btn-danger logout-btn"
-              onClick={() => signOut({ callbackUrl: '/' })}
-              style={{
-                background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
-                color: 'white',
-                border: 'none',
-                padding: '0.75rem 1.5rem',
-                borderRadius: '10px',
-                fontSize: '0.9rem',
-                fontWeight: '600',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
+      
+          <button 
+            className="btn btn-danger logout-btn"
+            onClick={() => signOut({ callbackUrl: '/' })}
+            style={{
+              background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+              color: 'white',
+              border: 'none',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '10px',
+              fontSize: '0.9rem',
+              fontWeight: '600',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
                 boxShadow: '0 4px 15px rgba(239, 68, 68, 0.3)',
                 marginLeft: '1rem'
-              }}
-              onMouseEnter={(e) => {
-                const target = e.target as HTMLButtonElement;
-                target.style.transform = 'translateY(-2px)';
-                target.style.boxShadow = '0 6px 20px rgba(239, 68, 68, 0.4)';
-              }}
-              onMouseLeave={(e) => {
-                const target = e.target as HTMLButtonElement;
-                target.style.transform = 'translateY(0)';
-                target.style.boxShadow = '0 4px 15px rgba(239, 68, 68, 0.3)';
-              }}
-            >
-              <span>🚪</span>
-              Logout
+            }}
+            onMouseEnter={(e) => {
+              const target = e.target as HTMLButtonElement;
+              target.style.transform = 'translateY(-2px)';
+              target.style.boxShadow = '0 6px 20px rgba(239, 68, 68, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              const target = e.target as HTMLButtonElement;
+              target.style.transform = 'translateY(0)';
+              target.style.boxShadow = '0 4px 15px rgba(239, 68, 68, 0.3)';
+            }}
+          >
+            <span>🚪</span>
+            Logout
             </button>
           </div>
         </div>

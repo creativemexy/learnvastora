@@ -50,7 +50,7 @@ body {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 2000px;
   margin: 0 auto;
   padding: 0 2rem;
 }
@@ -111,7 +111,7 @@ body {
 }
 
 .nav-container {
-  max-width: 1200px;
+  max-width: 2000px;
   margin: 0 auto;
   padding: 0 2rem;
   display: flex;
@@ -291,7 +291,7 @@ body {
 }
 
 .hero-content {
-  max-width: 1200px;
+  max-width: 2000px;
   margin: 0 auto;
   padding: 0 2rem;
   display: grid;
@@ -329,7 +329,7 @@ body {
   margin-bottom: 2.5rem;
   opacity: 0.95;
   line-height: 1.6;
-  color: white;
+  color: black;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
@@ -398,16 +398,23 @@ body {
 .hero-visual {
   position: relative;
   height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .floating-cards {
   position: relative;
   width: 100%;
   height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  align-items: center;
 }
 
 .card {
-  position: absolute;
+  position: relative;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   border-radius: var(--radius-xl);
@@ -415,24 +422,28 @@ body {
   box-shadow: var(--shadow-xl);
   border: 1px solid rgba(255, 255, 255, 0.2);
   animation: float-card 6s ease-in-out infinite;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: var(--shadow-xl);
 }
 
 .card-1 {
-  top: 10%;
-  left: 10%;
   animation-delay: 0s;
+  grid-column: 1;
 }
 
 .card-2 {
-  top: 30%;
-  right: 10%;
   animation-delay: 2s;
+  grid-column: 2;
 }
 
 .card-3 {
-  bottom: 20%;
-  left: 20%;
   animation-delay: 4s;
+  grid-column: 3;
 }
 
 @keyframes float-card {
@@ -448,7 +459,8 @@ body {
 .card-content h4 {
   font-weight: 700;
   margin-bottom: 0.5rem;
-  color: var(--text-primary);
+  color: #000000;
+  font-size: 1.1rem;
 }
 
 .card-content p {
@@ -460,6 +472,12 @@ body {
 .stats-section {
   padding: 6rem 0;
   background: var(--surface);
+}
+
+.stats-container {
+  max-width: 2000px;
+  margin: 0 auto;
+  padding: 0 2rem;
 }
 
 .stats-grid {
@@ -508,6 +526,12 @@ body {
   background: var(--background);
 }
 
+.features-container {
+  max-width: 2000px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
 .section-header {
   text-align: center;
   margin-bottom: 4rem;
@@ -523,7 +547,7 @@ body {
 .section-header p {
   font-size: 1.125rem;
   color: var(--text-secondary);
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
@@ -583,6 +607,12 @@ body {
   background: var(--surface);
 }
 
+.how-it-works-container {
+  max-width: 2000px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
 .steps-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -626,6 +656,12 @@ body {
 .testimonials-section {
   padding: 6rem 0;
   background: var(--background);
+}
+
+.testimonials-container {
+  max-width: 2000px;
+  margin: 0 auto;
+  padding: 0 2rem;
 }
 
 .testimonials-grid {
@@ -697,6 +733,12 @@ body {
   background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   color: white;
   text-align: center;
+}
+
+.cta-container {
+  max-width: 2000px;
+  margin: 0 auto;
+  padding: 0 2rem;
 }
 
 .cta-content h2 {
@@ -817,6 +859,15 @@ body {
   
   .hero-visual {
     height: 300px;
+  }
+  
+  .floating-cards {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .card-1, .card-2, .card-3 {
+    grid-column: 1;
   }
   
   .nav-actions {

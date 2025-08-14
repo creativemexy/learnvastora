@@ -71,6 +71,10 @@ export default function TutorsPage() {
   const [loadingAvailability, setLoadingAvailability] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string>('');
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState<string>('');
+  const [videoLoading, setVideoLoading] = useState<{[key: string]: boolean}>({});
+  const [videoError, setVideoError] = useState<{[key: string]: boolean}>({});
   const { data: session } = useSession();
   const router = useRouter();
   const { t } = useTranslation();
@@ -194,6 +198,31 @@ export default function TutorsPage() {
       times.push(`${hour.toString().padStart(2, '0')}:30`);
     }
     return times;
+  };
+
+  // Video handling functions
+  const handleVideoLoad = (tutorId: string) => {
+    setVideoLoading(prev => ({ ...prev, [tutorId]: false }));
+    setVideoError(prev => ({ ...prev, [tutorId]: false }));
+  };
+
+  const handleVideoError = (tutorId: string) => {
+    setVideoLoading(prev => ({ ...prev, [tutorId]: false }));
+    setVideoError(prev => ({ ...prev, [tutorId]: true }));
+  };
+
+  const handleVideoClick = (videoUrl: string) => {
+    setSelectedVideo(videoUrl);
+    setVideoModalOpen(true);
+  };
+
+  const closeVideoModal = () => {
+    setVideoModalOpen(false);
+    setSelectedVideo('');
+  };
+
+  const handleVideoLoadStart = (tutorId: string) => {
+    setVideoLoading(prev => ({ ...prev, [tutorId]: true }));
   };
 
   // Update fetchTutorAvailability to include generated data
@@ -667,36 +696,51 @@ export default function TutorsPage() {
                   <div className="tutor-video-section">
                   {tutor.tutorProfile?.introVideoUrl ? (
                       <div className="video-container">
-                      <video 
+                        {videoLoading[tutor.id] && (
+                          <div className="video-loading">
+                            <i className="fas fa-spinner"></i>
+                          </div>
+                        )}
+                        {videoError[tutor.id] && (
+                          <div className="video-error">
+                            <i className="fas fa-exclamation-triangle"></i>
+                            <div className="video-error-text">Video unavailable</div>
+                          </div>
+                        )}
+                        <video 
                           className="intro-video"
-                        preload="metadata"
-                        muted
-                        onMouseEnter={(e) => {
-                          const video = e.target as HTMLVideoElement;
-                            video.play().catch(() => {});
-                        }}
-                        onMouseLeave={(e) => {
-                          const video = e.target as HTMLVideoElement;
-                          video.pause();
-                          video.currentTime = 0;
-                        }}
-                        onClick={(e) => {
-                          const video = e.target as HTMLVideoElement;
-                          if (video.paused) {
-                            video.play().catch(() => {
-                                toast.error(t('tutors.video_playback_error'));
-                            });
-                          } else {
-                            video.pause();
-                          }
-                        }}
-                      >
-                        <source src={tutor.tutorProfile.introVideoUrl} type="video/mp4" />
+                          preload="metadata"
+                          muted
+                          onLoadStart={() => handleVideoLoadStart(tutor.id)}
+                          onLoadedData={() => handleVideoLoad(tutor.id)}
+                          onError={() => handleVideoError(tutor.id)}
+                          onMouseEnter={(e) => {
+                            if (!videoError[tutor.id]) {
+                              const video = e.target as HTMLVideoElement;
+                              video.play().catch(() => {});
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (!videoError[tutor.id]) {
+                              const video = e.target as HTMLVideoElement;
+                              video.pause();
+                              video.currentTime = 0;
+                            }
+                          }}
+                          onClick={() => {
+                            if (!videoError[tutor.id] && tutor.tutorProfile?.introVideoUrl) {
+                              handleVideoClick(tutor.tutorProfile.introVideoUrl);
+                            }
+                          }}
+                        >
+                          <source src={tutor.tutorProfile.introVideoUrl} type="video/mp4" />
                           {t('tutors.video_not_supported')}
-                      </video>
-                        <div className="video-overlay">
-                          <i className="fas fa-play play-icon"></i>
-                        </div>
+                        </video>
+                        {!videoLoading[tutor.id] && !videoError[tutor.id] && (
+                          <div className="video-overlay">
+                            <i className="fas fa-play play-icon"></i>
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <div className="video-placeholder">
@@ -994,6 +1038,25 @@ export default function TutorsPage() {
                 {t('tutors.close')}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Video Modal */}
+      {videoModalOpen && (
+        <div className="video-modal" onClick={closeVideoModal}>
+          <div className="video-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="video-modal-close" onClick={closeVideoModal}>
+              <i className="fas fa-times"></i>
+            </button>
+            <video 
+              className="video-modal-video"
+              controls
+              autoPlay
+              src={selectedVideo}
+            >
+              Your browser does not support the video tag.
+            </video>
           </div>
         </div>
       )}

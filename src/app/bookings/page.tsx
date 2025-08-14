@@ -335,6 +335,16 @@ export default function StudentBookings() {
                     <p className="stat-label">{t('bookings.languages_learned')}</p>
                   </div>
                 </div>
+                
+                <div className={`premium-stat-card ${animateCards ? 'animate-in' : ''}`} style={{ animationDelay: '0.5s' }}>
+                  <div className="stat-icon">
+                    <i className="bi bi-star"></i>
+                  </div>
+                  <div className="stat-content">
+                    <h3 className="stat-number">{formatNumber(cancelledBookings.length)}</h3>
+                    <p className="stat-label">{t('bookings.cancelled_sessions_count')}</p>
+                  </div>
+                </div>
               </div>
             </div>
 

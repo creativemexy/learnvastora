@@ -306,7 +306,7 @@ export default function LandingPage() {
 
       {/* Stats Section */}
       <section className="stats-section">
-        <div className="container">
+        <div className="stats-container">
           <div className="stats-grid">
             <div className="stat-item">
               <div className="stat-icon">👨‍🏫</div>
@@ -334,7 +334,7 @@ export default function LandingPage() {
 
       {/* Features Section */}
       <section className="features-section">
-        <div className="container">
+        <div className="features-container">
           <div className="section-header">
             <h2>{t('why_choose')}</h2>
             <p>{t('why_choose_subtitle')}</p>
@@ -367,7 +367,7 @@ export default function LandingPage() {
 
       {/* How It Works */}
       <section className="how-it-works-section">
-        <div className="container">
+        <div className="how-it-works-container">
           <div className="section-header">
             <h2>{t('how_it_works_title')}</h2>
             <p>{t('how_it_works_subtitle')}</p>
@@ -400,7 +400,7 @@ export default function LandingPage() {
 
       {/* Testimonials */}
       <section className="testimonials-section">
-        <div className="container">
+        <div className="testimonials-container">
           <div className="section-header">
             <h2>{t('testimonials_title')}</h2>
             <p>{t('testimonials_subtitle')}</p>
@@ -473,7 +473,7 @@ export default function LandingPage() {
 
       {/* CTA Section */}
       <section className="cta-section">
-        <div className="container">
+        <div className="cta-container">
           <div className="cta-content">
           <h2>{t('cta_title')}</h2>
           <p>{t('cta_subtitle')}</p>

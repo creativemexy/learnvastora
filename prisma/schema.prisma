@@ -69,6 +69,7 @@ model User {
   reviewsReceived   Review[]           @relation("TutorReviews")
   sessions          Session[]
   sessionRecordings SessionRecording[]
+  sessionFiles      SessionFile[]
   slots             Slot[]
   tutorProfile      TutorProfile?
   userAchievements  UserAchievement[]
@@ -115,6 +116,7 @@ model Booking {
   payment           Payment?
   review            Review?            @relation("BookingReview")
   sessionRecordings SessionRecording[]
+  sessionFiles      SessionFile[]
 }
 
 model Payment {
@@ -382,6 +384,25 @@ model UserAchievement {
   @@index([achievementId])
 }
 
+model SessionFile {
+  id           String   @id @default(cuid())
+  bookingId    String
+  uploadedBy   String
+  originalName String
+  filename     String
+  filePath     String
+  fileSize     Int
+  mimeType     String
+  description  String?
+  uploadedAt   DateTime @default(now())
+  booking      Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  uploadedByUser User   @relation(fields: [uploadedBy], references: [id], onDelete: Cascade)
+
+  @@index([bookingId])
+  @@index([uploadedBy])
+  @@index([uploadedAt])
+}
+
 enum Role {
   STUDENT
   TUTOR
@@ -454,7 +475,7 @@ enum BadgeCategory {
   MILESTONE
   SPECIAL
   SEASONAL
-}
+} 
 
 enum crdb_internal_region {
   gcp_europe_west1 @map("gcp-europe-west1")

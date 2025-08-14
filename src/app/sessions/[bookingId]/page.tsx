@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import Link from "next/link";
+import "./session-styles.css";
 
 const SIGNAL_SERVER_URL = process.env.NEXT_PUBLIC_SIGNAL_URL || "http://localhost:4000";
 
@@ -25,6 +26,7 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
   const [participants, setParticipants] = useState<Array<{id: string, name: string, role: string}>>([]);
   const [isRecording, setIsRecording] = useState(false);
   const [showWhiteboard, setShowWhiteboard] = useState(false);
+  const [activeTab, setActiveTab] = useState('chat');
   const [sessionTime, setSessionTime] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -37,7 +39,7 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
   const [showChat, setShowChat] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
   const [isVideoOff, setIsVideoOff] = useState(false);
-  const [activeSidebar, setActiveSidebar] = useState('chat');
+  const [activeSidebar, setActiveSidebar] = useState('chat'); // 'chat' or 'participants'
 
   // Session timer
   useEffect(() => {
@@ -282,7 +284,7 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Initializing Session</h2>
@@ -294,8 +296,8 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="max-w-md w-full bg-white rounded-xl shadow-xl p-8 text-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
           <div className="text-red-500 mb-6">
             <svg className="w-16 h-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
@@ -310,11 +312,11 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
                 setRetryCount(0);
                 initializeVideoCall();
               }}
-              className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
+              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
             >
               Retry Connection
             </button>
-            <Link href="/dashboard" className="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors font-medium">
+            <Link href="/dashboard" className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
               Return to Dashboard
             </Link>
           </div>
@@ -324,94 +326,99 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
   }
 
   return (
-    <div className="h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex">
-      {/* Left Sidebar */}
-      <div className="w-20 bg-white shadow-lg flex flex-col items-center py-6">
+    <div className="session-container">
+      {/* Left Navigation Sidebar */}
+      <div className="nav-sidebar">
         {/* Logo */}
-        <div className="mb-8">
-          <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-            <span className="text-white font-bold text-lg">LV</span>
+        <div className="nav-logo">
+          <div className="nav-logo-inner">
+            <span className="nav-logo-text">LV</span>
           </div>
         </div>
 
         {/* Navigation Icons */}
-        <div className="flex-1 flex flex-col items-center space-y-6">
-          <button className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors">
-            <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="nav-icons">
+          <button className="nav-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </button>
           
-          <button className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors">
-            <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button className="nav-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
           </button>
           
-          <button className="w-12 h-12 rounded-xl bg-blue-500 flex items-center justify-center shadow-lg">
-            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          <button className="nav-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </button>
           
-          <button className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors">
-            <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button className="nav-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
             </svg>
           </button>
           
-          <button className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors">
-            <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button className="nav-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+          </button>
+          
+          <button className="nav-icon active">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
             </svg>
           </button>
         </div>
 
         {/* User Avatar */}
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
-          <span className="text-white font-medium text-sm">
+        <div className="user-avatar">
+          <span>
             {(session?.user as any)?.name?.charAt(0) || 'U'}
           </span>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <div className="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <button onClick={() => router.back()} className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
-                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      {/* Main Content Area */}
+      <div className="main-content">
+        {/* Top Header */}
+        <div className="top-header">
+          <div className="header-content">
+            <div className="header-left">
+              <button onClick={() => router.back()} className="back-button">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
               
               <div>
-                <h1 className="text-xl font-semibold text-gray-800">
+                <h1 className="session-title">
                   {booking?.subject || 'Learning Session'}
                 </h1>
-                <div className="flex items-center space-x-4 text-sm text-gray-600">
-                  <span className="text-green-600 font-medium">Participants: {participants.length}</span>
-                  <span className="text-gray-500">•</span>
-                  <span className="text-blue-600 font-medium">{formatTime(sessionTime)}</span>
+                <div className="session-info">
+                  <span className="participant-count">Invited to the call: {participants.length}</span>
+                  <span className="absent-count">Absent people: 0</span>
                 </div>
               </div>
             </div>
             
-            <div className="flex items-center space-x-3">
-              <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex items-center space-x-2">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="header-right">
+              <button className="team-button">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                 </svg>
                 <span>Team</span>
               </button>
               
-              <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center space-x-2">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <button className="add-user-button">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
-                <span>Add User</span>
+                <span>Add user to the call</span>
               </button>
             </div>
           </div>
@@ -421,7 +428,7 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
         <div className="flex-1 flex">
           {/* Main Video Area */}
           <div className="flex-1 flex flex-col">
-            <div className="flex-1 relative bg-gray-900 rounded-xl m-4 overflow-hidden shadow-2xl">
+            <div className="flex-1 relative bg-gray-900 rounded-lg m-4 overflow-hidden">
               {/* Main Video */}
               <video
                 ref={remoteVideo}
@@ -431,7 +438,7 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
               />
               
               {/* Local Video (Picture-in-Picture) */}
-              <div className="absolute top-4 right-4 w-48 h-36 bg-black rounded-lg overflow-hidden border-2 border-white shadow-lg">
+              <div className="absolute top-4 right-4 w-48 h-36 bg-black rounded-lg overflow-hidden border-2 border-white">
                 <video
                   ref={localVideo}
                   autoPlay
@@ -536,15 +543,15 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
             </div>
 
             {/* Audio Waveform/Transcript */}
-            <div className="mx-4 mb-4 p-4 bg-white rounded-xl border border-gray-200 shadow-sm">
+            <div className="mx-4 mb-4 p-4 bg-white rounded-lg border border-gray-200">
               <div className="flex items-center space-x-3">
                 <div className="flex space-x-1">
                   {[...Array(20)].map((_, i) => (
-                    <div key={i} className="w-1 bg-blue-500 rounded-full" style={{ height: `${Math.random() * 20 + 5}px` }}></div>
+                    <div key={i} className="w-1 bg-green-500 rounded-full" style={{ height: `${Math.random() * 20 + 5}px` }}></div>
                   ))}
                 </div>
                 <span className="text-sm text-gray-600">
-                  "Thanks for sending all those completed transcripts through - we've been really happy..."
+                  &quot;Thanks for sending all those completed transcripts through - we&apos;ve been really happy...&quot;
                 </span>
               </div>
             </div>
@@ -558,7 +565,7 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
                 onClick={() => setActiveSidebar('chat')}
                 className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
                   activeSidebar === 'chat' 
-                    ? 'text-blue-600 border-b-2 border-blue-600' 
+                    ? 'text-green-600 border-b-2 border-green-600' 
                     : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
@@ -568,7 +575,7 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
                 onClick={() => setActiveSidebar('participants')}
                 className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
                   activeSidebar === 'participants' 
-                    ? 'text-blue-600 border-b-2 border-blue-600' 
+                    ? 'text-green-600 border-b-2 border-green-600' 
                     : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
@@ -621,11 +628,11 @@ export default function SessionPage({ params }: { params: { bookingId: string } 
                       onChange={(e) => setNewMessage(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                       placeholder="Write your message..."
-                      className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     />
                     <button
                       onClick={sendMessage}
-                      className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                      className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

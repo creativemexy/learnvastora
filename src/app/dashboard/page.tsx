@@ -248,7 +248,16 @@ export default function StudentDashboard() {
       <div className="premium-bg">
         <StudentNavbar />
         <div className="premium-loading-container">
-          <div className="premium-spinner"></div>
+          <div className="premium-spinner">
+            <div className="book">
+              <div className="book-spine"></div>
+              <div className="pages">
+                <div className="page"></div>
+                <div className="page"></div>
+                <div className="page"></div>
+              </div>
+            </div>
+          </div>
           <p className="premium-loading-text">{t('loading_dashboard')}</p>
         </div>
       </div>
@@ -283,12 +292,9 @@ export default function StudentDashboard() {
       <StudentNavbar />
       
       {/* Premium Header Section */}
-      <div className="dashboard-header">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-          <div>
-            <h1 className="premium-title">{t('dashboard_title')}</h1>
-          </div>
-        </div>
+      <div className="premium-header-box">
+        <h1 className="premium-title">{t('dashboard_title')}</h1>
+        <p className="premium-subtitle">{t('dashboard_subtitle')}</p>
       </div>
 
       <div className="container" style={{ position: 'relative', zIndex: 10 }}>
@@ -345,7 +351,7 @@ export default function StudentDashboard() {
                 </Link>
                 <Link href="/notifications" className="premium-action-btn">
                   <i className="fas fa-bell"></i>
-                  {t('notifications')}
+                  {t('notifications.title')}
                   {unreadCount > 0 && (
                     <span className="notification-badge-small">{unreadCount}</span>
                   )}
