@@ -46,7 +46,7 @@ const languages = [
   { code: 'pcm', name: 'Pidgin', flag: '🇳🇬' }
 ];
 
-export default function StudentNavbar({ title = "LearnVastora" }: StudentNavbarProps) {
+export default function StudentNavbar({ title = "Vastora" }: StudentNavbarProps) {
   const { data: session } = useSession();
   const pathname = usePathname();
   const router = useRouter();
@@ -155,7 +155,7 @@ export default function StudentNavbar({ title = "LearnVastora" }: StudentNavbarP
       <nav className="premium-navbar">
         <div className="navbar-container">
           <div className="navbar-logo">
-            <span className="logo-text">LearnVastora</span>
+            <span className="logo-text">Vastora</span>
           </div>
           <div className="navbar-menu">
             {/* Placeholder for SSR */}
@@ -170,7 +170,7 @@ export default function StudentNavbar({ title = "LearnVastora" }: StudentNavbarP
       <div className="navbar-container">
         {/* Logo */}
         <div className="navbar-logo">
-          <span className="logo-text">LearnVastora</span>
+          <span className="logo-text">Vastora</span>
         </div>
         
         {/* Navigation Menu */}

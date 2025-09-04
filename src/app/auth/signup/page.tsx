@@ -195,14 +195,14 @@ export default function SignUpPage() {
       {/* Premium Footer */}
       <footer className="premium-signup-footer">
         <div className="container">
-          <div className="premium-footer-brand">LearnVastora</div>
+          <div className="premium-footer-brand">Vastora</div>
           <div className="premium-footer-links">
             <Link href="/" className="premium-footer-link">{t('footer_about')}</Link>
             <Link href="/privacy" className="premium-footer-link">{t('footer_privacy')}</Link>
             <Link href="/terms" className="premium-footer-link">{t('footer_terms')}</Link>
           </div>
           <div className="premium-footer-copyright">
-            &copy; {new Date().getFullYear()} LearnVastora. {t('footer_android_ios_coming')}
+            &copy; {new Date().getFullYear()} Vastora. {t('footer_android_ios_coming')}
           </div>
         </div>
       </footer>

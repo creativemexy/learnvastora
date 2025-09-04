@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "cockroachdb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -282,6 +282,8 @@ model TeachingResource {
   language    String
   ageGroup    AgeGroup
   tags        String[]
+  subject     String?
+  module      String?
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
   isActive    Boolean            @default(true)

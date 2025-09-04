@@ -80,7 +80,7 @@ export default function TutorNavBar() {
     }}>
       <div className="container-fluid">
         {/* Left side - Logo */}
-        <Link href="/" className="navbar-brand cambly-logo fw-bold" onClick={() => handleNavClick('/')}>LearnVastora</Link>
+        <Link href="/" className="navbar-brand cambly-logo fw-bold" onClick={() => handleNavClick('/')}>Vastora</Link>
         
         {/* Center - Navigation tabs */}
         <ul className="navbar-nav flex-row gap-2 mx-auto">

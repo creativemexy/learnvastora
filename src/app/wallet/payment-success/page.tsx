@@ -100,7 +100,7 @@ export default function PaymentSuccessPage() {
         <header className="learnvastora-header">
           <nav className="learnvastora-navbar">
             <Link href="/" className="learnvastora-logo">
-              LearnVastora
+              Vastora
             </Link>
             
             <ul className="learnvastora-nav-menu">

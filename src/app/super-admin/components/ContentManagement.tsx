@@ -59,6 +59,28 @@ export default function ContentManagement({ showNotification }: ContentManagemen
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+
+  const clearNewResource = () => {
+    setFormError(null);
+    (newResource as any)._file = undefined;
+    setNewResource({
+      title: '',
+      description: '',
+      type: '',
+      category: '',
+      difficulty: '',
+      duration: 60,
+      language: '',
+      ageGroup: '',
+      tags: [],
+      thumbnail: '',
+      url: '',
+      subject: '',
+      module: '',
+      isActive: true
+    } as any);
+  };
   const [newResource, setNewResource] = useState({
     title: '',
     description: '',
@@ -71,6 +93,8 @@ export default function ContentManagement({ showNotification }: ContentManagemen
     tags: [] as string[],
     thumbnail: '',
     url: '',
+    subject: '',
+    module: '',
     isActive: true
   });
   const [editResource, setEditResource] = useState({
@@ -85,6 +109,8 @@ export default function ContentManagement({ showNotification }: ContentManagemen
     tags: [] as string[],
     thumbnail: '',
     url: '',
+    subject: '',
+    module: '',
     isActive: true
   });
 
@@ -106,12 +132,37 @@ export default function ContentManagement({ showNotification }: ContentManagemen
         isActive: filters.isActive
       });
 
-      const response = await fetch(`/api/super-admin/content?${params}`);
+      const response = await fetch(`/api/admin/library?${params}`);
       const data = await response.json();
 
       if (data.success && data.data) {
-        setResources(data.data.resources);
-        setStatistics(data.data.statistics);
+        const mappedResources = (data.data.resources || []).map((r: any) => ({
+          id: r.id,
+          title: r.title,
+          description: r.description,
+          type: r.type,
+          category: r.category,
+          difficulty: r.difficulty,
+          duration: r.duration,
+          thumbnail: r.thumbnail,
+          url: r.url,
+          language: r.language,
+          ageGroup: r.ageGroup,
+          subject: r.subject || '',
+          module: r.module || '',
+          tags: r.tags || [],
+          isActive: r.isActive,
+          createdAt: r.createdAt,
+          updatedAt: r.updatedAt,
+          stats: {
+            downloads: r.downloadCount ?? 0,
+            favorites: r.favoriteCount ?? 0,
+            averageRating: r.averageRating ?? 0,
+            totalRatings: r.ratingCount ?? 0,
+          },
+        }));
+
+        setResources(mappedResources);
         setTotalPages(data.data.pagination.totalPages);
       } else {
         showNotification('error', 'Failed to fetch content data');
@@ -130,12 +181,47 @@ export default function ContentManagement({ showNotification }: ContentManagemen
 
   const handleCreateResource = async () => {
     try {
-      const response = await fetch('/api/super-admin/content', {
+      setFormError(null);
+
+      // Basic client-side validation aligned with API
+      if (!newResource.title.trim()) return setFormError('Title is required');
+      if (!newResource.description.trim()) return setFormError('Description is required');
+      if (!newResource.type) return setFormError('Type is required');
+      if (!newResource.difficulty) return setFormError('Difficulty is required');
+      if (!newResource.language.trim()) return setFormError('Language is required');
+      if (!newResource.ageGroup) return setFormError('Age Group is required');
+      if (!newResource.duration || Number.isNaN(newResource.duration) || newResource.duration <= 0) {
+        return setFormError('Duration must be a positive number');
+      }
+
+      // Validate file if present
+      const file = (newResource as any)._file as File | undefined;
+      if (file) {
+        const maxSize = 15 * 1024 * 1024; // 15MB
+        const allowed = ['application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!allowed.includes(file.type)) {
+          return setFormError('File type not allowed. Use PDF, JPG, PNG, GIF, or WebP.');
+        }
+        if (file.size > maxSize) {
+          return setFormError('File too large. Max size is 15MB.');
+        }
+      }
+
+      const formData = new FormData();
+      Object.entries(newResource).forEach(([key, value]) => {
+        if (key === 'tags') {
+          formData.append('tags', JSON.stringify(value));
+        } else if (value !== undefined && value !== null) {
+          formData.append(key, String(value));
+        }
+      });
+      if (file instanceof File) {
+        formData.append('file', file);
+      }
+
+      const response = await fetch('/api/admin/library', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newResource),
+        body: formData,
       });
 
       const data = await response.json();
@@ -155,8 +241,12 @@ export default function ContentManagement({ showNotification }: ContentManagemen
           tags: [],
           thumbnail: '',
           url: '',
+          subject: '',
+          module: '',
           isActive: true
-        });
+        } as any);
+        // Clear any selected file
+        (newResource as any)._file = undefined;
         fetchContentData();
       } else {
         showNotification('error', data.message || 'Failed to create resource');
@@ -233,6 +323,8 @@ export default function ContentManagement({ showNotification }: ContentManagemen
       tags: resource.tags,
       thumbnail: resource.thumbnail || '',
       url: resource.url || '',
+      subject: (resource as any).subject || '',
+      module: (resource as any).module || '',
       isActive: resource.isActive
     });
     setShowEditModal(true);
@@ -251,6 +343,8 @@ export default function ContentManagement({ showNotification }: ContentManagemen
       tags: [],
       thumbnail: '',
       url: '',
+      subject: '',
+      module: '',
       isActive: true
     });
     setShowAddModal(true);
@@ -543,6 +637,11 @@ export default function ContentManagement({ showNotification }: ContentManagemen
           <div className="modal-content">
             <h2>Add New Resource</h2>
             <div className="modal-form">
+              {formError && (
+                <div className="error-message" style={{ marginBottom: '12px', color: 'var(--danger, #d11)' }}>
+                  {formError}
+                </div>
+              )}
               <div className="form-group">
                 <label>Title *</label>
                 <input
@@ -597,6 +696,27 @@ export default function ContentManagement({ showNotification }: ContentManagemen
                   />
                 </div>
               </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Subject</label>
+                  <input
+                    type="text"
+                    value={(newResource as any).subject}
+                    onChange={(e) => setNewResource({ ...newResource, subject: e.target.value } as any)}
+                    placeholder="e.g., English, Math, Science"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Module</label>
+                  <input
+                    type="text"
+                    value={(newResource as any).module}
+                    onChange={(e) => setNewResource({ ...newResource, module: e.target.value } as any)}
+                    placeholder="e.g., Module 1: Basics"
+                  />
+                </div>
+              </div>
               
               <div className="form-row">
                 <div className="form-group">
@@ -645,10 +765,10 @@ export default function ContentManagement({ showNotification }: ContentManagemen
                     required
                   >
                     <option value="">Select Age Group</option>
-                    <option value="CHILDREN">Children</option>
-                    <option value="TEENAGERS">Teenagers</option>
+                    <option value="KIDS">Kids</option>
+                    <option value="TEENS">Teens</option>
                     <option value="ADULTS">Adults</option>
-                    <option value="SENIORS">Seniors</option>
+                    <option value="ALL">All</option>
                   </select>
                 </div>
               </div>
@@ -672,6 +792,35 @@ export default function ContentManagement({ showNotification }: ContentManagemen
                   placeholder="Enter resource URL"
                 />
               </div>
+
+              <div className="form-group">
+                <label>Or Upload File (PDF, JPG, PNG)</label>
+                <input
+                  type="file"
+                  accept=".pdf,image/jpeg,image/png,image/jpg,image/webp"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setNewResource({ ...(newResource as any), _file: file } as any);
+                    }
+                  }}
+                />
+                {(newResource as any)._file && (
+                  <div className="file-chip" style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span>{(newResource as any)._file?.name}</span>
+                    <button
+                      type="button"
+                      className="modal-btn secondary"
+                      onClick={() => {
+                        (newResource as any)._file = undefined;
+                        setNewResource({ ...(newResource as any) });
+                      }}
+                    >
+                      Remove File
+                    </button>
+                  </div>
+                )}
+              </div>
               
               <div className="form-group">
                 <label>
@@ -692,10 +841,17 @@ export default function ContentManagement({ showNotification }: ContentManagemen
               >
                 Cancel
               </button>
+              <button
+                className="modal-btn secondary"
+                onClick={clearNewResource}
+                title="Clear all fields"
+              >
+                Clear
+              </button>
               <button 
                 className="modal-btn primary"
                 onClick={handleCreateResource}
-                disabled={!newResource.title || !newResource.description || !newResource.type || !newResource.difficulty || !newResource.language || !newResource.ageGroup}
+                disabled={!newResource.title || !newResource.description || !newResource.type || !newResource.difficulty || !newResource.language || !newResource.ageGroup || !newResource.duration}
               >
                 Create Resource
               </button>
@@ -812,10 +968,10 @@ export default function ContentManagement({ showNotification }: ContentManagemen
                     required
                   >
                     <option value="">Select Age Group</option>
-                    <option value="CHILDREN">Children</option>
-                    <option value="TEENAGERS">Teenagers</option>
+                    <option value="KIDS">Kids</option>
+                    <option value="TEENS">Teens</option>
                     <option value="ADULTS">Adults</option>
-                    <option value="SENIORS">Seniors</option>
+                    <option value="ALL">All</option>
                   </select>
                 </div>
               </div>

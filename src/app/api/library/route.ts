@@ -56,8 +56,8 @@ export async function GET(req: Request) {
     // Build where clause with proper sanitization
     let whereClause: any = { 
       isActive: true,
-      // Only show resources appropriate for students
-      type: { in: ['VIDEO', 'AUDIO', 'INTERACTIVE', 'QUIZ'] }
+      // Show common learning resource types for students including docs and images
+      type: { in: ['VIDEO', 'AUDIO', 'INTERACTIVE', 'QUIZ', 'LESSON_PLAN', 'WORKSHEET', 'PRESENTATION', 'GUIDE'] }
     };
 
     if (category && category !== 'all') {
